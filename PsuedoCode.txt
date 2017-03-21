@@ -1,0 +1,17 @@
+Universe Simulator Psuedocode
+
+Gravitational Force = G*M1*M2 / d^2
+Gravitational Acceleration of a planet = GM / r^2
+G-Force = Great movie about gerbils ft. Nicolas Cage
+Orbital Speed Equation = √(G * M1 / r) 
+Orbital Period Equation = (T^2)/(R^3) = (4 * pi^2)/GM
+
+G = gravitational constant (6.673 x 10^-11 Nm^2/kg^2)
+M1, M2 = mass of the planet
+d = distance between planets
+r = radius of planet
+T = period of the satellite
+R = average radius of orbit
+
+
+
