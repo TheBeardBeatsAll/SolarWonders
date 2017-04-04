@@ -4,28 +4,25 @@ import processing.core.PApplet;
 
 public class SolarWonders extends PApplet
 {
-	float x,y,z; 
-	
+	Planet mover;
 	public void setup()
 	{
-		background(0);
-		x = width/2;
-		y = height/2;
-		z = 0;
+		smooth();
+		  // Make Mover object
+		  mover = new Planet(this);
 	}
 	
 	public void draw()
 	{
-		translate(x,y,z);
-		rotateX(PI/8);
-		rotateY(PI/8);
-		rectMode(CENTER);
-		rect(0,0,100,100);
+		background(0);
+		mover.update();
+		mover.checkEdges();
+		mover.display();
 	}
 	
 	public void settings()
 	{
-		size(1024, 512, P3D);
+		size(200, 200, P3D);
 	}
 	
     public static void main(String[] args)
@@ -33,3 +30,5 @@ public class SolarWonders extends PApplet
         PApplet.main("ie.dit.SolarWonders");
     }
 }
+
+
