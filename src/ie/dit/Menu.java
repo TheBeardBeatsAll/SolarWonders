@@ -1,14 +1,15 @@
 package ie.dit;
 import java.util.ArrayList;
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.core.PImage;
+import processing.core.PShape;
 
 public class Menu 
 {	
 	ArrayList<Star> stars = new ArrayList<Star>();
 	Star star;
 	PApplet parent;
+	PShape planet;
 	PImage img;
 	float height, width;
 	float rot;
@@ -22,8 +23,14 @@ public class Menu
 		height = p.height;
 		rot = 0;
 	}
+	public void Menu()
+	{
+		Planets();
+		star();
+		//text();
+	}
 	
-	public void MenPlanets()
+	public void Planets()
 	{
 		parent.directionalLight(255, 255 , 255, 0, 5, -10);
 		
@@ -45,9 +52,6 @@ public class Menu
 		parent.popMatrix();
 		
 		rot += .0005;
-		
-		star();
-		text();
 	}
 	
 	public void star()
@@ -94,7 +98,5 @@ public class Menu
 		parent.text("Play", width/2-180, height/2-50);
 		parent.text("Instructions", width/2-180, height/2+50);
 		parent.text("Exit", width/2-180, height/2+150);
-		
-		
 	}
 }
