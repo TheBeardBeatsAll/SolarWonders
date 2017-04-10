@@ -25,5 +25,4 @@ public class Star {
 		parent.sphere(size);
 		parent.popMatrix();
 	}
-
 }

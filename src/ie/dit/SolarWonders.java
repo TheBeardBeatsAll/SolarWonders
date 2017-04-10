@@ -39,14 +39,12 @@ public class SolarWonders extends PApplet
 	public void Finn()
 	{
 		background(45, 20, 55);
-		//background(0);
-		directionalLight(255, 255 , 255, 0, 5, -10);
 		menu.MenPlanets();
 	}
 	
 	public void settings()
 	{
-		size(700, 500, P3D);
+		fullScreen(P3D);
 	}
 	
     public static void main(String[] args)
