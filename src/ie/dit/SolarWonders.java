@@ -14,9 +14,14 @@ public class SolarWonders extends PApplet
 	
 	public void draw()
 	{
-		Max();
+		//Max();
 		Lorcan();
-		Finn();
+		//Finn();
+	}
+	
+	public void mousePressed()
+	{
+		mover.check();
 	}
 	
 	public void Max()
@@ -29,7 +34,11 @@ public class SolarWonders extends PApplet
 	
 	public void Lorcan()
 	{
-		
+		background(0);
+		//mover.update();
+		mover.checkEdges();
+		mover.display();
+		mover.info();
 	}
 	
 	public void Finn()

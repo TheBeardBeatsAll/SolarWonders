@@ -12,7 +12,8 @@ public class Planet
 	  PVector acceleration;
 	  // The variable, topspeed, will limit the magnitude of velocity.
 	  float topspeed, width, height;
-	  float size_w;
+	  float size_w, infoBox;
+	  boolean clicked;
 
 	  Planet(PApplet p) 
 	  {
@@ -24,6 +25,8 @@ public class Planet
 	    acceleration = new PVector(0.01f,0.01f,0.01f);
 	    topspeed = 4;
 	    size_w = 50;
+	    clicked = false;
+	    infoBox = size_w * 2;
 	  }
 
 	  public void update() 
@@ -42,6 +45,32 @@ public class Planet
 	    parent.stroke(255);
 	    parent.sphere(size_w);
 	    parent.popMatrix();
+	  }
+	  
+	  public void check()
+	  {
+		  if (parent.mouseX > location.x - size_w && parent.mouseX < location.x + size_w &&
+				  parent.mouseY > location.y - size_w && parent.mouseY < location.y + size_w)
+		{
+			if (clicked)
+			{
+				clicked = false;
+			}
+			else
+			{
+				clicked = true;
+			}
+		}
+	  }
+	  
+	  public void info()
+	  {
+		  if (clicked)
+		  {
+			  parent.stroke(0, 0, 255);
+			  parent.fill(255);
+			  parent.rect(location.x + size_w*1.5f, location.y - size_w*1.5f, infoBox, infoBox);
+		  }
 	  }
 
 	  public void checkEdges() 
