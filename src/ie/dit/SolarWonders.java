@@ -8,11 +8,18 @@ public class SolarWonders extends PApplet
 	public void setup()
 	{
 		smooth();
-		  // Make Mover object
-		  mover = new Planet(this);
+		// Make Mover object
+		mover = new Planet(this);
 	}
 	
 	public void draw()
+	{
+		Max();
+		Lorcan();
+		Finn();
+	}
+	
+	public void Max()
 	{
 		background(0);
 		mover.update();
@@ -20,9 +27,19 @@ public class SolarWonders extends PApplet
 		mover.display();
 	}
 	
+	public void Lorcan()
+	{
+		
+	}
+	
+	public void Finn()
+	{
+		
+	}
+	
 	public void settings()
 	{
-		size(200, 200, P3D);
+		fullScreen(P3D);
 	}
 	
     public static void main(String[] args)

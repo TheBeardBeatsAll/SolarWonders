@@ -5,8 +5,8 @@ import processing.core.PVector;
 
 public class Planet 
 {
-	PApplet parent;
-	PVector location;
+	  PApplet parent;
+	  PVector location;
 	  PVector velocity;
 	  // Acceleration is the key!
 	  PVector acceleration;
@@ -23,7 +23,7 @@ public class Planet
 	    velocity = new PVector(0f,0f,0f);
 	    acceleration = new PVector(0.01f,0.01f,0.01f);
 	    topspeed = 4;
-	    size_w = 20;
+	    size_w = 50;
 	  }
 
 	  public void update() 
