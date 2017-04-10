@@ -1,12 +1,12 @@
 package ie.dit;
 import java.util.ArrayList;
-
 import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Menu {
 	
-	ArrayList<Menu> Star = new ArrayList<Menu>();
+	ArrayList<Star> stars = new ArrayList<Star>();
+	Star star;
 	PApplet parent;
 	PImage img;
 	float height, width;
@@ -23,7 +23,7 @@ public class Menu {
 		g = 0;
 	}
 	
-	void MenPlanets()
+	public void MenPlanets()
 	{
 		parent.pushMatrix();
 		parent.translate(width/2 + 250, height/2 - 125, -150);
@@ -39,33 +39,41 @@ public class Menu {
 		parent.rotateY((rot));
 		parent.stroke(0, 100);
 		parent.fill(0, 255, 255);
-		parent.beginShape();
 		parent.sphere(300);
-		parent.endShape();
 		parent.popMatrix();
 		
 		rot += .0005;
 		
 		star();
+		
 	}
 	
-	void star()
+	public void star()
 	{
+		float size, x, y, z;
+		
 		parent.ambientLight(255, 255, 255, width/2, height/2, 0);
 
 		if( starCheck == false)
 		{
 			for(int i=-250; i < width+250; i += 15)
-			{
-				parent.pushMatrix();
-				parent.translate(i, parent.random(-150, height+150), -250);
-				parent.noStroke();
-				parent.fill(255);
-				parent.sphere(parent.random(0, 5));
-				parent.popMatrix();
+			{	
+				x = i;
+				y = parent.random(-150, height+150);
+				z = -250;
+				size = parent.random(0, 5);
+				
+				star = new Star(x, y ,z, size, parent);
+				stars.add(star);
 			}
 			
-			//starCheck = true;
+			starCheck = true;
+		}
+		
+		for(int i=0; i < stars.size(); i++)
+		{
+			Star s = stars.get(i);
+			s.display();
 		}
 	}
 }
