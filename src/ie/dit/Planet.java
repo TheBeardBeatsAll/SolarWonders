@@ -1,6 +1,7 @@
 package ie.dit;
 
 import processing.core.PApplet;
+import processing.core.PShape;
 import processing.core.PVector;
 
 public class Planet 
@@ -8,9 +9,8 @@ public class Planet
 	  PApplet parent;
 	  PVector location;
 	  PVector velocity;
-	  // Acceleration is the key!
 	  PVector acceleration;
-	  // The variable, topspeed, will limit the magnitude of velocity.
+	  PShape planet;
 	  float topspeed, width, height;
 	  float size_w;
 

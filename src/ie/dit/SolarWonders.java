@@ -5,36 +5,27 @@ import processing.core.PApplet;
 public class SolarWonders extends PApplet
 {
 	Planet mover;
+	Sun sun;
 	public void setup()
 	{
 		smooth();
 		// Make Mover object
 		mover = new Planet(this);
+		sun = new Sun(this);
 	}
 	
 	public void draw()
 	{
 		Max();
-		Lorcan();
-		Finn();
 	}
 	
 	public void Max()
 	{
 		background(0);
+		sun.display();
 		mover.update();
 		mover.checkEdges();
 		mover.display();
-	}
-	
-	public void Lorcan()
-	{
-		
-	}
-	
-	public void Finn()
-	{
-		
 	}
 	
 	public void settings()
