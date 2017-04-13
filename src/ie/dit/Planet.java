@@ -13,8 +13,9 @@ public class Planet
 	  PVector acceleration;
 	  PVector adjacent;
 	  PShape planet;
+	  int x_check, z_check;
 	  float width, height;
-	  float size, mass;
+	  float size, mass, period;
 	  double theta, grav;
 	  Sun sun;
 
@@ -24,21 +25,43 @@ public class Planet
 		  this.parent = parent;
 		  width = parent.width;
 		  height = parent.height;
-	      location = new PVector(width/8f,height/8f, 0f);
+	      location = new PVector(width/6f, 0f, 0f);
 	      velocity = new PVector(0f,0f,0f);
-	      acceleration = new PVector(0.01f,0.01f,0.01f);
-	      size = 30;
+	      acceleration = new PVector(0f,0f,0f);
+	      size = 30f;
 	      grav = 6.67384 * Math.pow(10, -11);
-	      mass = 100;
+	      mass = 100f;
 	      planet = parent.createShape(PConstants.SPHERE, size);
 		  planet.setStroke(255);
+		  planet.setFill(parent.color(125, 125, 125));
+		  period = 0.25f;
+		  x_check = z_check = -1;
 	  }
 
 	  public void acceleration_cal()
 	  {
 		  adjacent = new PVector(location.x, 0, 0);
 		  theta = Math.acos(adjacent.mag()/location.mag());
-		  
+		  acceleration.x = (float) (x_check * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
+		  acceleration.z = (float) (z_check * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
+		  acceleration.normalize();
+		  acceleration.mult(period);
+		  if(location.x <= 0 && location.z > 0 && acceleration.z > 0)
+		  {
+			  z_check = -1;
+		  }
+		  else if(location.x < 0 && location.z <= 0 && acceleration.x < 0)
+		  {
+			  x_check = 1;
+		  }
+		  else if(location.x >= 0 && location.z < 0 && acceleration.z < 0)
+		  {
+			  z_check = 1;
+		  }
+		  else if(location.x > 0 && location.z >= 0 && acceleration.x > 0)
+		  {
+			  x_check = -1;
+		  }
 	  }
 	  
 	  public void update() 
