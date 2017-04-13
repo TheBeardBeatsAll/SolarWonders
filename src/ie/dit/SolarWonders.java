@@ -4,13 +4,12 @@ import processing.core.PApplet;
 
 public class SolarWonders extends PApplet
 {
-	Planet mover;
+	Planet test;
 	Sun sun;
 	public void setup()
 	{
 		smooth();
-		// Make Mover object
-		mover = new Planet(this);
+		test = new Planet(this);
 		sun = new Sun(this);
 	}
 	
@@ -22,10 +21,13 @@ public class SolarWonders extends PApplet
 	public void Max()
 	{
 		background(0);
+		pushMatrix();
+		translate(width/2f, height* 2f/3f, -width/2f);
 		sun.display();
-		mover.update();
-		mover.checkEdges();
-		mover.display();
+		test.update();
+		test.checkEdges();
+		test.display();
+		popMatrix();
 	}
 	
 	public void settings()

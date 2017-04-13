@@ -1,6 +1,7 @@
 package ie.dit;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PShape;
 import processing.core.PVector;
 
@@ -11,26 +12,32 @@ public class Planet
 	  PVector velocity;
 	  PVector acceleration;
 	  PShape planet;
-	  float topspeed, width, height;
-	  float size_w;
+	  float width, height;
+	  float size, mass;
 
 	  Planet(PApplet p) 
 	  {
 		parent = p;
 		width = p.width;
 		height = p.height;
-	    location = new PVector(width/2f,height/2f, 0f);
+	    location = new PVector(width/8f,height/8f, 0f);
 	    velocity = new PVector(0f,0f,0f);
 	    acceleration = new PVector(0.01f,0.01f,0.01f);
-	    topspeed = 4;
-	    size_w = 50;
+	    size = 30;
+	    mass = 100;
+	    planet = parent.createShape(PConstants.SPHERE, size);
+		planet.setStroke(255);
 	  }
 
+	  public void acceleration_cal()
+	  {
+		  
+	  }
+	  
 	  public void update() 
 	  {
-	    // Velocity change by acceleration and is limited by topspeed.
+		acceleration_cal();
 	    velocity.add(acceleration);
-	    velocity.limit(topspeed);
 	    location.add(velocity);
 	  }
 
@@ -38,28 +45,7 @@ public class Planet
 	  {
 	    parent.pushMatrix();
 	    parent.translate(location.x, location.y, location.z);
-	    parent.noFill();
-	    parent.stroke(255);
-	    parent.sphere(size_w);
+	    parent.shape(planet);
 	    parent.popMatrix();
-	  }
-
-	  public void checkEdges() 
-	  {
-
-	    if (location.x + size_w >width || location.x  - size_w< 0) {
-	      velocity.x = -velocity.x;
-	      acceleration.x = -acceleration.x;
-	    }
-	    
-	    if (location.y  + size_w > height || location.y - size_w < 0) {
-	      velocity.y = -velocity.y;
-	      acceleration.y = -acceleration.y;
-	    }
-
-	    if (location.z  + size_w > 50 || location.z - size_w < -50) {
-		      velocity.z = -velocity.z;
-		      acceleration.z = -acceleration.z;
-		    }
 	  }
 }
