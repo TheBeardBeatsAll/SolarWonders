@@ -42,26 +42,26 @@ public class Planet
 	  {
 		  adjacent = new PVector(location.x, 0, 0);
 		  theta = Math.acos(adjacent.mag()/location.mag());
-		  acceleration.x = (float) (x_check * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
-		  acceleration.z = (float) (z_check * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
-		  acceleration.normalize();
-		  acceleration.mult(period);
-		  if(location.x <= 0 && location.z > 0 && acceleration.z > 0)
+		  if(location.x <= 0 && location.z > 0 && z_check == 1)
 		  {
 			  z_check = -1;
 		  }
-		  else if(location.x < 0 && location.z <= 0 && acceleration.x < 0)
+		  else if(location.x < 0 && location.z <= 0 && x_check == -1)
 		  {
 			  x_check = 1;
 		  }
-		  else if(location.x >= 0 && location.z < 0 && acceleration.z < 0)
+		  else if(location.x >= 0 && location.z < 0 && z_check == -1)
 		  {
 			  z_check = 1;
 		  }
-		  else if(location.x > 0 && location.z >= 0 && acceleration.x > 0)
+		  else if(location.x > 0 && location.z >= 0 && x_check == 1)
 		  {
 			  x_check = -1;
 		  }
+		  acceleration.x = (float) (x_check * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
+		  acceleration.z = (float) (z_check * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
+		  acceleration.normalize();
+		  acceleration.mult(period);  
 	  }
 	  
 	  public void update() 
