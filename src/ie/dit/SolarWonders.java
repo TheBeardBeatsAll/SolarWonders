@@ -6,11 +6,12 @@ public class SolarWonders extends PApplet
 {
 	Planet test;
 	Sun sun;
+	
 	public void setup()
 	{
 		smooth();
-		test = new Planet(this);
 		sun = new Sun(this);
+		test = new Planet(this, sun);
 	}
 	
 	public void draw()
@@ -25,7 +26,6 @@ public class SolarWonders extends PApplet
 		translate(width/2f, height* 2f/3f, -width/2f);
 		sun.display();
 		test.update();
-		test.checkEdges();
 		test.display();
 		popMatrix();
 	}

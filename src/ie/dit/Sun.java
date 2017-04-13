@@ -12,15 +12,15 @@ public class Sun
 	
 	  Sun(PApplet p) 
 	  {
-		parent = p;
-		size = 100;
-		mass = 1000;
-		sun = parent.createShape(PConstants.SPHERE, size);
-		sun.setStroke(255);
+		  parent = p;
+		  size = 100;
+		  mass = 1000;
+		  sun = parent.createShape(PConstants.SPHERE, size);
+		  sun.setStroke(255);
 	  }
 
 	  public void display() 
 	  {
-	    parent.shape(sun);
+	      parent.shape(sun);
 	  }
 }
