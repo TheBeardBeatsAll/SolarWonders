@@ -107,8 +107,12 @@ public class Menu
 				
 		if(cometCheck == false)
 		{
-			startposx = parent.random(-300, 1600);
-			startposy = parent.random(-300, 1000);
+			//startposx = parent.random(-300, 1600);
+			//startposy = parent.random(-300, 1000);
+			
+			startposx = 1600;
+			startposy = 200;
+					
 					
 			if((startposx < -200 || startposx > 1500) || (startposy < -200 || startposy > 900))
 			{
@@ -132,7 +136,7 @@ public class Menu
 				{
 					Star c = comets.get(i);
 					c.display();
-					c.trail();
+					c.trail(1);
 					c.x += 40;
 					c.y += 2;
 					
@@ -149,9 +153,9 @@ public class Menu
 				{
 					Star c = comets.get(i);
 					c.display();
-					c.trail();
-					c.x += 40;
-					c.y -= 20;
+					c.trail(2);
+					//c.x += 40;
+					//c.y -= 20;
 					
 					if(c.x > 1500)
 					{
@@ -165,7 +169,7 @@ public class Menu
 				{
 					Star c = comets.get(i);
 					c.display();
-					c.trail();
+					c.trail(3);
 					c.x -= 40;
 					c.y -= 2;
 					
@@ -181,7 +185,7 @@ public class Menu
 				{
 					Star c = comets.get(i);
 					c.display();
-					c.trail();
+					c.trail(4);
 					c.x -= 40;
 					c.y -= 20;
 					

@@ -26,31 +26,82 @@ public class Star {
 		parent.popMatrix();
 	}
 	
-	public void trail()
+	public void trail(int check)
 	{	
 		//x = parent.width/2;
 		//y = parent.height/2;
 		
-		parent.pushMatrix();
-		parent.translate(0, 0, 0);
-		parent.fill(0, 100, 255, 100);
-		parent.beginShape();
-		parent.vertex(x, y-12, z-12);
-		parent.vertex(x, y-12, z+12);
-		parent.vertex(x-100, y, z);
-		
-		parent.vertex(x, y-12, z+12);
-		parent.vertex(x, y+12, z+12);
-		parent.vertex(x-100, y, z);
-		
-		//parent.vertex(x, y+12, z+12);
-		parent.vertex(x, y+12, z-12);
-		//parent.vertex(x-100, y, z);
-		
-		parent.vertex(x, y+12, z-15);
-		parent.vertex(x, y-12, z-15);
-		parent.vertex(x-100, y, z);
-		parent.endShape();
-		parent.popMatrix();		
+		if(check == 1)
+		{
+			parent.pushMatrix();
+			parent.translate(0, 0, 0);
+			parent.fill(0, 100, 255, 100);
+			parent.beginShape();
+			parent.vertex(x, y-12, z-12);
+			parent.vertex(x, y-12, z+12);
+			parent.vertex(x-100, y, z);
+			
+			parent.vertex(x, y-12, z+12);
+			parent.vertex(x, y+12, z+12);
+			parent.vertex(x-100, y, z);
+			
+			//parent.vertex(x, y+12, z+12);
+			parent.vertex(x, y+12, z-12);
+			//parent.vertex(x-100, y, z);
+			
+			parent.vertex(x, y+12, z-15);
+			parent.vertex(x, y-12, z-15);
+			parent.vertex(x-100, y, z);
+			parent.endShape();
+			parent.popMatrix();
+		}
+		else if(check == 2)
+		{
+			parent.pushMatrix();
+			parent.translate(0, 0, 0);
+			parent.fill(0, 100, 255, 100);
+			parent.beginShape();
+			parent.vertex(x, y-12, z-12);
+			parent.vertex(x, y-12, z+12);
+			parent.vertex(x-100, y, z);
+			
+			parent.vertex(x, y-12, z+12);
+			parent.vertex(x, y+12, z+12);
+			parent.vertex(x-100, y, z);
+			
+			parent.vertex(x, y+12, z-12);
+			
+			parent.vertex(x, y+12, z-15);
+			parent.vertex(x, y-12, z-15);
+			parent.vertex(x-100, y, z);
+			parent.endShape();
+			parent.popMatrix();
+		}
+		else if(check == 3)
+		{
+			parent.pushMatrix();
+			parent.translate(0, 0, 0);
+			parent.fill(0, 100, 255, 100);
+			parent.beginShape();
+			parent.vertex(x, y-12, z-12);
+			parent.vertex(x, y-12, z+12);
+			parent.vertex(x+100, y, z);
+			
+			parent.vertex(x, y-12, z+12);
+			parent.vertex(x, y+12, z+12);
+			parent.vertex(x+100, y, z);
+			
+			parent.vertex(x, y+12, z-12);
+			
+			parent.vertex(x, y+12, z-15);
+			parent.vertex(x, y-12, z-15);
+			parent.vertex(x+100, y, z);
+			parent.endShape();
+			parent.popMatrix();
+		}
+		else if(check == 4)
+		{
+			
+		}
 	}
 }
