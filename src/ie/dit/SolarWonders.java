@@ -1,15 +1,20 @@
 package ie.dit;
 
+import java.util.ArrayList;
 import processing.core.PApplet;
 
 public class SolarWonders extends PApplet
 {
 	Planet mover;
+	AddPlanet button;
+	ArrayList<Planet> solarSystem;
 	public void setup()
 	{
 		smooth();
 		// Make Mover object
 		mover = new Planet(this);
+		button = new AddPlanet(this);
+		solarSystem = new ArrayList<Planet>();
 	}
 	
 	public void draw()
@@ -21,7 +26,7 @@ public class SolarWonders extends PApplet
 	
 	public void mousePressed()
 	{
-		mover.check();
+		//mover.check();
 	}
 	
 	public void Max()
@@ -39,6 +44,7 @@ public class SolarWonders extends PApplet
 		mover.checkEdges();
 		mover.display();
 		mover.info();
+		button.display();
 	}
 	
 	public void Finn()
