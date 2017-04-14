@@ -23,7 +23,7 @@ public class SolarWonders extends PApplet
 	{
 		background(0);
 		pushMatrix();
-		translate(width/2f, height * 2f/3f, -width/2f);
+		translate(width/2f, height/2f, -width/2f);
 		sun.display();
 		test.update();
 		test.display();
