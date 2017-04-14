@@ -13,6 +13,7 @@ public class Menu
 	PShape planet, cloud;
 	PImage img;
 	float height, width, startposx = 0, startposy = 0;
+	int timer = 0;
 ;
 	float rot;
 	boolean starCheck = false, cometCheck = false;
@@ -107,22 +108,25 @@ public class Menu
 				
 		if(cometCheck == false)
 		{
-			startposx = parent.random(-300, 1600);
-			startposy = parent.random(-300, 1000);
-					
-					
-			if((startposx < -200 || startposx > 1500) || (startposy < -200 || startposy > 900))
+			if(parent.millis() - timer >= 4000)
 			{
-					comet = new Star(startposx, startposy, -180, 15, parent);
-					comets.add(comet);
-					
-					comet = new Star(startposx + parent.random(80, 110), startposy - 90, -180, 15, parent);
-					comets.add(comet);
-					
-					comet = new Star(startposx - parent.random(120, 150), startposy - 125, -180, 15, parent);
-					comets.add(comet);
-					
-					cometCheck = true;
+				startposx = parent.random(-300, 1600);
+				startposy = parent.random(-300, 1000);
+						
+						
+				if((startposx < -200 || startposx > 1500) || (startposy < -200 || startposy > 900))
+				{
+						comet = new Star(startposx, startposy, -180, 15, parent);
+						comets.add(comet);
+						
+						comet = new Star(startposx + parent.random(80, 110), startposy - 90, -180, 15, parent);
+						comets.add(comet);
+						
+						comet = new Star(startposx - parent.random(120, 150), startposy - 125, -180, 15, parent);
+						comets.add(comet);
+						
+						cometCheck = true;
+				}
 			}
 		}
 		else
@@ -137,7 +141,7 @@ public class Menu
 					c.x += 40;
 					c.y += 2;
 					
-					if(c.x > 1500)
+					if(c.x > 1600)
 					{
 						comets.remove(i);
 					}
@@ -154,7 +158,7 @@ public class Menu
 					c.x += 40;
 					c.y -= 20;
 					
-					if(c.x > 1500)
+					if(c.x > 1600)
 					{
 						comets.remove(i);
 					}
@@ -170,7 +174,7 @@ public class Menu
 					c.x -= 40;
 					c.y -= 2;
 					
-					if(c.x < -200)
+					if(c.x < -300)
 					{
 						comets.remove(i);
 					}
@@ -186,7 +190,7 @@ public class Menu
 					c.x -= 40;
 					c.y -= 20;
 					
-					if(c.x < -200)
+					if(c.x < -300)
 					{
 						comets.remove(i);
 					}
@@ -195,6 +199,7 @@ public class Menu
 						
 			if(comets.size() == 0)
 			{
+				timer = parent.millis();
 				cometCheck = false;
 			}
 		}
