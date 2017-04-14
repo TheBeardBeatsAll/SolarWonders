@@ -68,10 +68,10 @@ public class Planet
 		  {
 			  parent.stroke(0, 0, 255);
 			  parent.fill(255);
-			  parent.rect(width*.01f, width*.3f, width*.15f, height*.5f);
+			  parent.rect(width*.01f, width*.2f, width*.15f, height*.5f);
 		  }
 	  }
-
+	  
 	  public void checkEdges() 
 	  {
 

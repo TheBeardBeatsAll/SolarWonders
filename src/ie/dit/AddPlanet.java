@@ -48,6 +48,23 @@ public class AddPlanet
 		{
 			Planet planet = new Planet(parent);
 			sSystem.add(planet);
+			if (sSystem.size() >= 2)
+			{
+				Planet p = sSystem.get(sSystem.size() - 2);
+				planet.location.x = p.location.x + 150;
+				adjustCamera();
+			}
 		}
 	}
+	
+	public void adjustCamera()
+    {
+    	if (sSystem.size() >= 2)
+		{
+	    	Planet first = sSystem.get(0);
+			Planet last = sSystem.get(sSystem.size() - 1);
+			parent.camera((first.location.x + last.location.x) / 2, height / 2f, (float) ((height/2.0) / Math.tan(Math.PI / 6)), 
+					(first.location.x + last.location.x) / 2, height / 2f, 0, 0, 1, 0);
+		}
+    }
 }

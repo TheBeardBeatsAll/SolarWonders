@@ -12,7 +12,7 @@ public class SolarWonders extends PApplet
 	{
 		smooth();
 		// Make Mover object
-		mover = new Planet(this);
+		//mover = new Planet(this);
 		solarSystem = new ArrayList<Planet>();
 		button = new AddPlanet(this, solarSystem);
 	}
@@ -31,7 +31,7 @@ public class SolarWonders extends PApplet
 		System.out.println(solarSystem.size());
 		if (solarSystem.size() > 0)
 		{
-			for (int i = solarSystem.size() - 1; i >= 0; i --)
+			for (int i = solarSystem.size() - 1; i >= 0; i--)
 		    {
 				Planet p = solarSystem.get(i);
 				p.check();
