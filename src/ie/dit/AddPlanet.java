@@ -1,5 +1,6 @@
 package ie.dit;
 
+import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -10,8 +11,9 @@ public class AddPlanet
 	PVector location;
 	PVector size;
 	int clicked, clickOnce;
+	ArrayList<Planet> sSystem;
 	
-	AddPlanet(PApplet p)
+	AddPlanet(PApplet p, ArrayList<Planet> sSystem)
 	{
 		parent = p;
 		width = p.width;
@@ -19,6 +21,7 @@ public class AddPlanet
 		location = new PVector(width*.01f, width*.01f, 0f);
 		size = new PVector(width*.1f, height*.075f);
 		clicked = clickOnce;
+		this.sSystem = sSystem; 
 	}
 	
 	public void display()
@@ -44,12 +47,7 @@ public class AddPlanet
 		if (clicked == 1 && clicked != clickOnce)
 		{
 			Planet planet = new Planet(parent);
-			parent.solarSystem.add(planet);
+			sSystem.add(planet);
 		}
-	}
-	
-	public void add()
-	{
-		
 	}
 }

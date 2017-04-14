@@ -7,14 +7,14 @@ public class SolarWonders extends PApplet
 {
 	Planet mover;
 	AddPlanet button;
-	ArrayList<Planet> solarSystem;
+	public ArrayList<Planet> solarSystem;
 	public void setup()
 	{
 		smooth();
 		// Make Mover object
 		mover = new Planet(this);
-		button = new AddPlanet(this);
 		solarSystem = new ArrayList<Planet>();
+		button = new AddPlanet(this, solarSystem);
 	}
 	
 	public void draw()
@@ -27,6 +27,16 @@ public class SolarWonders extends PApplet
 	public void mousePressed()
 	{
 		//mover.check();
+		button.check();
+		System.out.println(solarSystem.size());
+		if (solarSystem.size() > 0)
+		{
+			for (int i = solarSystem.size() - 1; i >= 0; i --)
+		    {
+				Planet p = solarSystem.get(i);
+				p.check();
+		    }
+		}
 	}
 	
 	public void Max()
@@ -41,10 +51,16 @@ public class SolarWonders extends PApplet
 	{
 		background(0);
 		//mover.update();
-		mover.checkEdges();
-		mover.display();
-		mover.info();
+		//mover.checkEdges();
+		//mover.display();
+		//mover.info();
 		button.display();
+		for (int i = solarSystem.size() - 1; i >= 0; i--)
+	    {
+			Planet p = solarSystem.get(i);
+			p.display();
+			p.info();
+	    }
 	}
 	
 	public void Finn()
@@ -55,6 +71,7 @@ public class SolarWonders extends PApplet
 	public void settings()
 	{
 		fullScreen(P3D);
+		//size(750, 500, P3D);
 	}
 	
     public static void main(String[] args)
