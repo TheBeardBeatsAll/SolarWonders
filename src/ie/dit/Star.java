@@ -63,17 +63,17 @@ public class Star {
 			parent.beginShape();
 			parent.vertex(x, y-12, z-12);
 			parent.vertex(x, y-12, z+12);
-			parent.vertex(x-100, y, z);
+			parent.vertex(x-100, y+40, z);
 			
 			parent.vertex(x, y-12, z+12);
 			parent.vertex(x, y+12, z+12);
-			parent.vertex(x-100, y, z);
+			parent.vertex(x-100, y+40, z);
 			
 			parent.vertex(x, y+12, z-12);
 			
 			parent.vertex(x, y+12, z-15);
 			parent.vertex(x, y-12, z-15);
-			parent.vertex(x-100, y, z);
+			parent.vertex(x-100, y+40, z);
 			parent.endShape();
 			parent.popMatrix();
 		}
@@ -101,7 +101,25 @@ public class Star {
 		}
 		else if(check == 4)
 		{
+			parent.pushMatrix();
+			parent.translate(0, 0, 0);
+			parent.fill(0, 100, 255, 100);
+			parent.beginShape();
+			parent.vertex(x, y-12, z-12);
+			parent.vertex(x, y-12, z+12);
+			parent.vertex(x+100, y+40, z);
 			
+			parent.vertex(x, y-12, z+12);
+			parent.vertex(x, y+12, z+12);
+			parent.vertex(x+100, y+40, z);
+			
+			parent.vertex(x, y+12, z-12);
+			
+			parent.vertex(x, y+12, z-15);
+			parent.vertex(x, y-12, z-15);
+			parent.vertex(x+100, y+40, z);
+			parent.endShape();
+			parent.popMatrix();
 		}
 	}
 }
