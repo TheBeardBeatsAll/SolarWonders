@@ -39,7 +39,7 @@ public class SolarWonders extends PApplet
 	public void Finn()
 	{
 		background(45, 20, 55);
-		menu.Menu();
+		menu.menu();
 	}
 	
 	public void settings()

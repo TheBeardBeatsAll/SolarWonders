@@ -7,13 +7,15 @@ import processing.core.PShape;
 public class Menu 
 {	
 	ArrayList<Star> stars = new ArrayList<Star>();
-	Star star;
+	ArrayList<Star> comets = new ArrayList<Star>();
+	Star star, comet, trail;
 	PApplet parent;
-	PShape planet;
+	PShape planet, cloud;
 	PImage img;
-	float height, width;
+	float height, width, startposx = 0, startposy = 0;
+;
 	float rot;
-	boolean starCheck = false;
+	boolean starCheck = false, cometCheck = false;
 	
 	Menu(PApplet p, PImage img)
 	{
@@ -23,10 +25,12 @@ public class Menu
 		height = p.height;
 		rot = 0;
 	}
-	public void Menu()
+	
+	public void menu()
 	{
 		Planets();
 		star();
+		comets();
 		//text();
 	}
 	
@@ -49,6 +53,14 @@ public class Menu
 		parent.stroke(0, 100);
 		parent.fill(0, 255, 255);
 		parent.sphere(450);
+		parent.popMatrix();
+		
+		parent.pushMatrix();
+		parent.translate(width - width/5, height/2 - 150, 0);
+		parent.rotateY((rot));
+		parent.stroke(0, 100);
+		parent.fill(140, 110, 60);
+		parent.sphere(50);
 		parent.popMatrix();
 		
 		rot += .0005;
@@ -85,6 +97,108 @@ public class Menu
 			s.display();
 		}
 	}
+	
+	public void comets()
+	{
+		boolean tl = (startposx < width/2 && startposy < height/2);
+		boolean bl = (startposx < width/2 && startposy > height/2);
+		boolean tr = (startposx > width/2 && startposy < height/2);
+		boolean br = (startposx > width/2 && startposy > height/2);
+				
+		if(cometCheck == false)
+		{
+			startposx = parent.random(-300, 1600);
+			startposy = parent.random(-300, 1000);
+					
+			if((startposx < -200 || startposx > 1500) || (startposy < -200 || startposy > 900))
+			{
+					comet = new Star(startposx, startposy, -180, 15, parent);
+					comets.add(comet);
+					
+					comet = new Star(startposx + parent.random(80, 110), startposy - 90, -180, 15, parent);
+					comets.add(comet);
+					
+					comet = new Star(startposx - parent.random(120, 150), startposy - 125, -180, 15, parent);
+					comets.add(comet);
+					
+					cometCheck = true;
+			}
+		}
+		else
+		{
+			if(tl)
+			{
+				for(int i=0; i < comets.size(); i++)
+				{
+					Star c = comets.get(i);
+					c.display();
+					c.trail();
+					c.x += 40;
+					c.y += 2;
+					
+					if(c.x > 1500)
+					{
+						comets.remove(i);
+					}
+				}
+				
+			}
+			else if(bl)
+			{				
+				for(int i=0; i < comets.size(); i++)
+				{
+					Star c = comets.get(i);
+					c.display();
+					c.trail();
+					c.x += 40;
+					c.y -= 20;
+					
+					if(c.x > 1500)
+					{
+						comets.remove(i);
+					}
+				}
+			}
+			else if(tr)
+			{
+				for(int i=0; i < comets.size(); i++)
+				{
+					Star c = comets.get(i);
+					c.display();
+					c.trail();
+					c.x -= 40;
+					c.y -= 2;
+					
+					if(c.x < -200)
+					{
+						comets.remove(i);
+					}
+				}
+			}
+			else if(br)
+			{
+				for(int i=0; i < comets.size(); i++)
+				{
+					Star c = comets.get(i);
+					c.display();
+					c.trail();
+					c.x -= 40;
+					c.y -= 20;
+					
+					if(c.x < -200)
+					{
+						comets.remove(i);
+					}
+				}
+			}
+						
+			if(comets.size() == 0)
+			{
+				cometCheck = false;
+			}
+		}
+	}
+
 	
 	public void text()
 	{
