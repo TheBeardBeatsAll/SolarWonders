@@ -13,11 +13,12 @@ public class Planet
 	  PVector acceleration;
 	  PVector adjacent;
 	  PShape planet;
+	  int x_start, y_start, x_accel, y_accel;
 	  float width, height;
 	  float size, mass, period;
-	  double theta, grav;
+	  double theta, grav, vel;
 	  Sun sun;
-	  PVector bug;
+	  PVector orbit;
 
 	  Planet(PApplet parent, Sun sun) 
 	  {
@@ -26,8 +27,8 @@ public class Planet
 		  width = parent.width;
 		  height = parent.height;
 	      location = new PVector(width/6f, width/6f, 0f);
-	      velocity = new PVector(0f,0f,0f);
-	      acceleration = new PVector(0f,0f,0f);
+	      velocity = new PVector(0f, 0f, 0f);
+	      acceleration = new PVector(0f, 0f, 0f);
 	      size = 30f;
 	      grav = 6.67384 * Math.pow(10, -11);
 	      mass = 100f;
@@ -35,53 +36,77 @@ public class Planet
 		  planet.setStroke(255);
 		  planet.setFill(parent.color(125, 125, 125));
 		  period = 0.05f;
-		  bug = new PVector(width/6f, width/6f, 0f);
+		  orbit = new PVector(location.x, location.y, 0f);
+		  initialise_vel();
 	  }
-
-	  public void acceleration_cal(int x, int y)
+	  
+	  public void initialise_vel()
 	  {
-		  //if((location.x <= 0 && location.y > 0) || (location.x >= 0 && location.y < 0))
-		  //{
+		  acceleration_cal();
+		  vel = Math.sqrt(acceleration.mag() * location.mag());
+		  if(location.x <= 0 && location.y > 0)
+		  {
+			  x_start = y_start = 1;
+		  }
+		  else if(location.x >= 0 && location.y < 0)
+		  {
+			  x_start = y_start = -1;
+		  }
+		  else if(location.x < 0 && location.y <= 0)
+		  {
+			  x_start = -1;
+			  y_start = 1;
+		  }
+		  else if(location.x > 0 && location.y >= 0)
+		  {
+			  x_start = 1;
+			  y_start = -1;
+		  }
+		  velocity.x = (float) (x_start * vel * Math.cos(theta));
+		  velocity.y = (float) (y_start * vel * Math.sin(theta));
+	  }
+	  
+	  public void acceleration_cal()
+	  {
+		  if(location.x <= 0 && location.y > 0)
+		  {
+			  x_accel = 1;
+			  y_accel = -1;
+		  }
+		  else if(location.x >= 0 && location.y < 0)
+		  {
+			  x_accel = -1;
+			  y_accel = 1;
+		  }
+		  else if(location.x < 0 && location.y <= 0)
+		  {
+			  x_accel = y_accel = 1;
+		  }
+		  else if(location.x > 0 && location.y >= 0)
+		  {
+			  x_accel = y_accel = -1;
+		  }
+		  if((location.x <= 0 && location.y > 0) || (location.x >= 0 && location.y < 0))
+		  {
 			  adjacent = new PVector(location.x, 0, 0);
 			  theta = Math.acos(adjacent.mag()/location.mag());
-			  acceleration.x = (float) (x * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
-			  acceleration.y = (float) (y * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
-		  /*}
+			  acceleration.x = (float) (x_accel * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
+			  acceleration.y = (float) (y_accel * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
+		  }
 		  else if((location.x < 0 && location.y <= 0) || (location.x > 0 && location.y >= 0))
 		  {
 			  adjacent = new PVector(0, location.y, 0);
 			  theta = Math.acos(adjacent.mag()/location.mag());
-			  acceleration.y = (float) (y * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
-			  acceleration.x = (float) (x * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
-		  }*/
-		  System.out.println("sin(theta): " + Math.sin(theta));
-		  System.out.println("cos(theta): " + Math.cos(theta));
-		  System.out.println("acc(x): " + acceleration.x);
-		  System.out.println("acc(y): " + acceleration.y);
-		  System.out.println("theta: " + theta);
-		  System.out.println("mag: " + acceleration.mag());
+			  acceleration.y = (float) (x_accel * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
+			  acceleration.x = (float) (y_accel * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
+		  }
 		  acceleration.normalize();
-		  acceleration.mult(period); 
+		  acceleration.mult(period);
 	  }
 	  
 	  public void update() 
 	  {
-		  if(location.x <= 0 && location.y > 0)
-		  {
-			  acceleration_cal(1, -1);
-		  }
-		  else if(location.x < 0 && location.y <= 0)
-		  {
-			  acceleration_cal(1, -1);
-		  }
-		  else if(location.x >= 0 && location.y < 0)
-		  {
-			  acceleration_cal(1, -1);
-		  }
-		  else if(location.x > 0 && location.y >= 0)
-		  {
-			  acceleration_cal(1, -1);
-		  }
+		  acceleration_cal();
 	      velocity.add(acceleration);
 	      location.add(velocity);
 	  }
@@ -90,11 +115,10 @@ public class Planet
 	  {
 	      parent.pushMatrix();
 	      parent.translate(location.x, location.y, location.z);
-	      //System.out.println("X: " + location.x + ", Y: " + location.y + ", Z:" + location.z);
 	      parent.shape(planet);
 	      parent.popMatrix();
 	      parent.stroke(255);
 	      parent.noFill();
-	      parent.ellipse(0, 0, bug.mag()*2, bug.mag()*2);
+	      parent.ellipse(0, 0, orbit.mag()*2, orbit.mag()*2);
 	  }
 }
