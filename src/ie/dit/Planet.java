@@ -26,7 +26,7 @@ public class Planet
 		  this.parent = parent;
 		  width = parent.width;
 		  height = parent.height;
-	      location = new PVector(width/6f, width/6f, 0f);
+	      location = new PVector(width/6f, width/6f, 0);
 	      velocity = new PVector(0f, 0f, 0f);
 	      acceleration = new PVector(0f, 0f, 0f);
 	      size = 30f;
@@ -36,7 +36,7 @@ public class Planet
 		  planet.setStroke(255);
 		  planet.setFill(parent.color(125, 125, 125));
 		  period = 0.05f;
-		  orbit = new PVector(location.x, location.y, 0f);
+		  orbit = new PVector(location.x, location.y, 0);
 		  initialise_vel();
 	  }
 	  
@@ -86,20 +86,10 @@ public class Planet
 		  {
 			  x_accel = y_accel = -1;
 		  }
-		  if((location.x <= 0 && location.y > 0) || (location.x >= 0 && location.y < 0))
-		  {
-			  adjacent = new PVector(location.x, 0, 0);
-			  theta = Math.acos(adjacent.mag()/location.mag());
-			  acceleration.x = (float) (x_accel * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
-			  acceleration.y = (float) (y_accel * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
-		  }
-		  else if((location.x < 0 && location.y <= 0) || (location.x > 0 && location.y >= 0))
-		  {
-			  adjacent = new PVector(0, location.y, 0);
-			  theta = Math.acos(adjacent.mag()/location.mag());
-			  acceleration.y = (float) (x_accel * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
-			  acceleration.x = (float) (y_accel * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
-		  }
+		  adjacent = new PVector(location.x, 0, 0);
+		  theta = Math.acos(adjacent.mag()/location.mag());
+		  acceleration.x = (float) (x_accel * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
+		  acceleration.y = (float) (y_accel * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
 		  acceleration.normalize();
 		  acceleration.mult(period);
 	  }
