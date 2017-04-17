@@ -70,8 +70,8 @@ public class SolarWonders extends PApplet
 	
 	public void settings()
 	{
-		fullScreen(P3D);
-		//size(750, 500, P3D);
+		//fullScreen(P3D);
+		size(750, 500, P3D);
 	}
 	
     public static void main(String[] args)
@@ -79,5 +79,3 @@ public class SolarWonders extends PApplet
         PApplet.main("ie.dit.SolarWonders");
     }
 }
-
-

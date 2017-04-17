@@ -28,7 +28,7 @@ public class AddPlanet
 	{
 		parent.stroke(0, 0, 255);
 		parent.fill(255);
-		parent.rect(location.x, location.y, size.x, size.y);
+		parent.rect(location.x + -(parent.screenX(0, 0)), location.y + -(parent.screenY(0, 0)), size.x, size.y);
 	}
 	
 	public void check()
