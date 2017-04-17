@@ -13,7 +13,7 @@ public class Planet
 	  PVector acceleration;
 	  PVector adjacent;
 	  PShape planet;
-	  int x_start, y_start, x_accel, y_accel;
+	  int x_start, z_start, x_accel, z_accel;
 	  float width, height;
 	  float size, mass, period;
 	  double theta, grav, vel;
@@ -26,7 +26,7 @@ public class Planet
 		  this.parent = parent;
 		  width = parent.width;
 		  height = parent.height;
-	      location = new PVector(width/6f, width/6f, 0);
+	      location = new PVector(width/3f, 0, width/3f);
 	      velocity = new PVector(0f, 0f, 0f);
 	      acceleration = new PVector(0f, 0f, 0f);
 	      size = 30f;
@@ -35,8 +35,8 @@ public class Planet
 	      planet = parent.createShape(PConstants.SPHERE, size);
 		  planet.setStroke(255);
 		  planet.setFill(parent.color(125, 125, 125));
-		  period = 0.05f;
-		  orbit = new PVector(location.x, location.y, 0);
+		  period = 0.1f;
+		  orbit = new PVector(location.x, location.y, location.z);
 		  initialise_vel();
 	  }
 	  
@@ -44,52 +44,52 @@ public class Planet
 	  {
 		  acceleration_cal();
 		  vel = Math.sqrt(acceleration.mag() * location.mag());
-		  if(location.x <= 0 && location.y > 0)
+		  if(location.x <= 0 && location.z > 0)
 		  {
-			  x_start = y_start = 1;
+			  x_start = z_start = 1;
 		  }
-		  else if(location.x >= 0 && location.y < 0)
+		  else if(location.x >= 0 && location.z < 0)
 		  {
-			  x_start = y_start = -1;
+			  x_start = z_start = -1;
 		  }
-		  else if(location.x < 0 && location.y <= 0)
+		  else if(location.x < 0 && location.z <= 0)
 		  {
 			  x_start = -1;
-			  y_start = 1;
+			  z_start = 1;
 		  }
-		  else if(location.x > 0 && location.y >= 0)
+		  else if(location.x > 0 && location.z >= 0)
 		  {
 			  x_start = 1;
-			  y_start = -1;
+			  z_start = -1;
 		  }
 		  velocity.x = (float) (x_start * vel * Math.cos(theta));
-		  velocity.y = (float) (y_start * vel * Math.sin(theta));
+		  velocity.z = (float) (z_start * vel * Math.sin(theta));
 	  }
 	  
 	  public void acceleration_cal()
 	  {
-		  if(location.x <= 0 && location.y > 0)
+		  if(location.x <= 0 && location.z > 0)
 		  {
 			  x_accel = 1;
-			  y_accel = -1;
+			  z_accel = -1;
 		  }
-		  else if(location.x >= 0 && location.y < 0)
+		  else if(location.x >= 0 && location.z < 0)
 		  {
 			  x_accel = -1;
-			  y_accel = 1;
+			  z_accel = 1;
 		  }
-		  else if(location.x < 0 && location.y <= 0)
+		  else if(location.x < 0 && location.z <= 0)
 		  {
-			  x_accel = y_accel = 1;
+			  x_accel = z_accel = 1;
 		  }
-		  else if(location.x > 0 && location.y >= 0)
+		  else if(location.x > 0 && location.z >= 0)
 		  {
-			  x_accel = y_accel = -1;
+			  x_accel = z_accel = -1;
 		  }
 		  adjacent = new PVector(location.x, 0, 0);
 		  theta = Math.acos(adjacent.mag()/location.mag());
 		  acceleration.x = (float) (x_accel * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
-		  acceleration.y = (float) (y_accel * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
+		  acceleration.z = (float) (z_accel * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
 		  acceleration.normalize();
 		  acceleration.mult(period);
 	  }
@@ -107,8 +107,11 @@ public class Planet
 	      parent.translate(location.x, location.y, location.z);
 	      parent.shape(planet);
 	      parent.popMatrix();
+	      parent.pushMatrix();
+	      parent.rotateX((float) (Math.PI/2));
 	      parent.stroke(255);
 	      parent.noFill();
 	      parent.ellipse(0, 0, orbit.mag()*2, orbit.mag()*2);
+	      parent.popMatrix();
 	  }
 }
