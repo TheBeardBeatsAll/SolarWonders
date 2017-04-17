@@ -46,7 +46,7 @@ public class AddPlanet
 		
 		if (clicked == 1 && clicked != clickOnce)
 		{
-			Planet planet = new Planet(parent);
+			Planet planet = new Planet(parent, sSystem);
 			sSystem.add(planet);
 			if (sSystem.size() >= 2)
 			{

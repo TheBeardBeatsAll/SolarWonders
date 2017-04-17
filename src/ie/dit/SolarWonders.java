@@ -2,12 +2,14 @@ package ie.dit;
 
 import java.util.ArrayList;
 import processing.core.PApplet;
+import processing.core.PFont;
 
 public class SolarWonders extends PApplet
 {
 	Planet mover;
 	AddPlanet button;
 	public ArrayList<Planet> solarSystem;
+	PFont font;
 	public void setup()
 	{
 		smooth();
@@ -15,6 +17,7 @@ public class SolarWonders extends PApplet
 		//mover = new Planet(this);
 		solarSystem = new ArrayList<Planet>();
 		button = new AddPlanet(this, solarSystem);
+		font = createFont("Calibri", 60);
 	}
 	
 	public void draw()
@@ -34,7 +37,7 @@ public class SolarWonders extends PApplet
 			for (int i = solarSystem.size() - 1; i >= 0; i--)
 		    {
 				Planet p = solarSystem.get(i);
-				p.check();
+				p.check(i);
 		    }
 		}
 	}

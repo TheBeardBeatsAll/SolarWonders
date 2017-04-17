@@ -1,5 +1,7 @@
 package ie.dit;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -14,8 +16,11 @@ public class Planet
 	  float topspeed, width, height;
 	  float size_w;
 	  boolean clicked;
+	  PVector infoLocation, infoSize;
+	  ArrayList<Planet> sSystem;
+	  int current;
 
-	  Planet(PApplet p) 
+	  Planet(PApplet p, ArrayList<Planet> sSystem)
 	  {
 		parent = p;
 		width = p.width;
@@ -26,6 +31,9 @@ public class Planet
 	    topspeed = 4;
 	    size_w = 50;
 	    clicked = false;
+	    infoLocation = new PVector(width*.01f, width*.2f);
+	    infoSize = new PVector(width*.15f, height*.5f);
+	    this.sSystem = sSystem;
 	  }
 
 	  public void update() 
@@ -46,20 +54,23 @@ public class Planet
 	    parent.popMatrix();
 	  }
 	  
-	  public void check()
+	  public void check(int selected)
 	  {
-		  if (parent.mouseX > location.x - size_w && parent.mouseX < location.x + size_w &&
-				  parent.mouseY > location.y - size_w && parent.mouseY < location.y + size_w)
-		{
-			if (clicked)
-			{
-				clicked = false;
-			}
-			else
-			{
-				clicked = true;
-			}
-		}
+		  if (parent.mouseX > location.x - size_w + (parent.screenX(0, 0))
+				  && parent.mouseX < location.x + size_w + (parent.screenX(0, 0)) 
+				  && parent.mouseY > location.y - size_w + (parent.screenY(0, 0))
+				  && parent.mouseY < location.y + size_w + (parent.screenY(0, 0)))
+		  {
+			  if (clicked)
+			  {
+				  clicked = false;
+			  }
+			  else
+			  {
+				  clicked = true;
+				  current = selected;
+			  }
+		  }
 	  }
 	  
 	  public void info()
@@ -68,7 +79,11 @@ public class Planet
 		  {
 			  parent.stroke(0, 0, 255);
 			  parent.fill(255);
-			  parent.rect(width*.01f, width*.2f, width*.15f, height*.5f);
+			  parent.rect(infoLocation.x + -(parent.screenX(0, 0)), infoLocation.y + -(parent.screenY(0, 0)), infoSize.x, infoSize.y);
+			  parent.fill(0);
+			  parent.textSize(10);
+			  parent.text("Planet No. " + current, (infoLocation.x + infoSize.x / 3) + -(parent.screenX(0, 0)), 
+					  (infoLocation.y + infoSize.y / 2) + -(parent.screenY(0, 0)));
 		  }
 	  }
 	  
