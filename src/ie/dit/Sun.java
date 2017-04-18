@@ -13,7 +13,7 @@ public class Sun
 	  Sun(PApplet p) 
 	  {
 		  parent = p;
-		  size = 100;
+		  size = 50;
 		  mass = 1000;
 		  sun = parent.createShape(PConstants.SPHERE, size);
 		  sun.setStroke(255);

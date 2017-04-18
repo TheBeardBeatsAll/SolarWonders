@@ -1,5 +1,7 @@
 package ie.dit;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 public class SolarWonders extends PApplet
@@ -7,12 +9,13 @@ public class SolarWonders extends PApplet
 	Planet test;
 	Sun sun;
 	Boolean moon;
+	ArrayList<Planet> planets = new ArrayList<Planet>();
 	
 	public void setup()
 	{
 		smooth();
 		sun = new Sun(this);
-		test = new Planet(this, sun.mass, width/3f, 0, width/3f, 50, 100);
+		test = new Planet(this, sun.mass, width/3f, width/3f, 30, 100, 0.7);
 		moon = true;
 	}
 	
@@ -27,10 +30,10 @@ public class SolarWonders extends PApplet
 		pushMatrix();
 		translate(width/2f, height * 3f/4f, -width * 2f/3f);
 		sun.display();
-		test.update(sun.mass);
+		//test.update();
 		if(moon)
 		{
-			test.add_moon(test.x_coord/3f, test.y_coord, test.z_coord/3f, 10, 10);
+			//test.add_moon(width/12f, width/12f, 10, 10, 0);
 			moon = false;
 		}
 		test.display();
