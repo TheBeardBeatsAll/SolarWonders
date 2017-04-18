@@ -222,6 +222,9 @@ public class Menu
 		parent.fill(255, 75);
 		parent.rect(width/2 - 200, height/2 - 150, 400, 350);
 		
+		parent.stroke(255);
+		parent.line(width/2 - 190, height/2 - 95, width/2 + 190, height/2 - 95);
+		
 		parent.fill(255, 225);
 		parent.textSize(45);
 		parent.text("SolarWonders", width/2-190, height/2-100);
