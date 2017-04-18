@@ -15,40 +15,47 @@ public class Planet extends Sun
 	  PVector adjacent;
 	  PShape planet;
 	  int x_start, z_start, x_accel, z_accel;
-	  float width, height;
+	  float x_coord, y_coord, z_coord;
 	  float period;
 	  double theta, grav, vel;
 	  Sun sun;
 	  PVector orbit;
 	  ArrayList<Planet> moons = new ArrayList<Planet>();
 
-	  Planet(PApplet parent, float sun_mass) 
+	  Planet(PApplet parent, float sun_mass, float x_coord, float y_coord, float z_coord,
+			  float size, float mass) 
 	  {
 		  super(parent);
 		  this.parent = parent;
-		  width = parent.width;
-		  height = parent.height;
-	      location = new PVector(width/3f, 0, width/3f);
+		  this.x_coord = x_coord;
+		  this.y_coord = y_coord;
+		  this.z_coord = z_coord;
+		  this.size = size;
+		  this.mass = mass;
+		  init_planet();
+		  init_vel(sun_mass);
+	  }
+	  
+	  private void init_planet()
+	  {
+		  location = new PVector(x_coord, y_coord, z_coord);
 	      velocity = new PVector(0f, 0f, 0f);
 	      acceleration = new PVector(0f, 0f, 0f);
-	      size = 50f;
 	      grav = 6.67384 * Math.pow(10, -11);
-	      mass = 100f;
 	      planet = parent.createShape(PConstants.SPHERE, size);
 		  planet.setStroke(255);
 		  planet.setFill(parent.color(125, 125, 125));
 		  period = 0.1f;
 		  orbit = new PVector(location.x, location.y, location.z);
-		  initialise_vel(sun_mass);
 	  }
 	  
-	  public void add_moon()
+	  public void add_moon(float m_x, float m_y, float m_z, float m_size, float m_mass)
 	  {
-		  Planet p = new Planet(parent, this.mass);
+		  Planet p = new Planet(parent, this.mass, m_x, m_y, m_z, m_size, m_mass);
 		  moons.add(p);
 	  }
 	  
-	  public void initialise_vel(float mass)
+	  private void init_vel(float mass)
 	  {
 		  acceleration_cal(mass);
 		  vel = Math.sqrt(acceleration.mag() * location.mag());
@@ -74,7 +81,7 @@ public class Planet extends Sun
 		  velocity.z = (float) (z_start * vel * Math.sin(theta));
 	  }
 	  
-	  public void acceleration_cal(float mass)
+	  private void acceleration_cal(float mass)
 	  {
 		  if(location.x <= 0 && location.z > 0)
 		  {
@@ -125,7 +132,7 @@ public class Planet extends Sun
 	      parent.rotateX((float) (Math.PI/2));
 	      parent.stroke(255);
 	      parent.noFill();
-	      parent.ellipse(0, 0, orbit.mag()*2, orbit.mag()*2);
+	      parent.ellipse(0, 0, location.mag()*2, location.mag()*2);
 	      parent.popMatrix();
 	  }
 }
