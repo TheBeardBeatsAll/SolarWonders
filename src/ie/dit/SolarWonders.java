@@ -9,6 +9,7 @@ public class SolarWonders extends PApplet
 	Planet mover;
 	AddPlanet button;
 	public ArrayList<Planet> solarSystem;
+	public ArrayList<Scrollbar> scrollers;
 	PFont font;
 	public void setup()
 	{
@@ -16,7 +17,8 @@ public class SolarWonders extends PApplet
 		// Make Mover object
 		//mover = new Planet(this);
 		solarSystem = new ArrayList<Planet>();
-		button = new AddPlanet(this, solarSystem);
+		scrollers = new ArrayList<Scrollbar>();
+		button = new AddPlanet(this, solarSystem, scrollers);
 		font = createFont("Calibri", 60);
 	}
 	

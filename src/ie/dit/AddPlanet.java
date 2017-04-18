@@ -12,8 +12,9 @@ public class AddPlanet
 	PVector size;
 	int clicked, clickOnce;
 	ArrayList<Planet> sSystem;
+	ArrayList<Scrollbar> sBars;
 	
-	AddPlanet(PApplet p, ArrayList<Planet> sSystem)
+	AddPlanet(PApplet p, ArrayList<Planet> sSystem, ArrayList<Scrollbar> sBars)
 	{
 		parent = p;
 		width = p.width;
@@ -21,7 +22,8 @@ public class AddPlanet
 		location = new PVector(width*.01f, width*.01f, 0f);
 		size = new PVector(width*.1f, height*.075f);
 		clicked = clickOnce;
-		this.sSystem = sSystem; 
+		this.sSystem = sSystem;
+		this.sBars = sBars;
 	}
 	
 	public void display()
@@ -46,12 +48,14 @@ public class AddPlanet
 		
 		if (clicked == 1 && clicked != clickOnce)
 		{
-			Planet planet = new Planet(parent, sSystem);
+			Planet planet = new Planet(parent, sSystem, sBars);
 			sSystem.add(planet);
+			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1);
+			sBars.add(scrollbar);
 			if (sSystem.size() >= 2)
 			{
 				Planet p = sSystem.get(sSystem.size() - 2);
-				planet.location.x = p.location.x + 150;
+				planet.location.x = p.location.x + height * .3f;
 				adjustCamera();
 			}
 		}

@@ -18,9 +18,10 @@ public class Planet
 	  boolean clicked;
 	  PVector infoLocation, infoSize;
 	  ArrayList<Planet> sSystem;
+	  ArrayList<Scrollbar> sBars;
 	  int current;
 
-	  Planet(PApplet p, ArrayList<Planet> sSystem)
+	  Planet(PApplet p, ArrayList<Planet> sSystem, ArrayList<Scrollbar> sBars)
 	  {
 		parent = p;
 		width = p.width;
@@ -29,11 +30,12 @@ public class Planet
 	    velocity = new PVector(0f,0f,0f);
 	    acceleration = new PVector(0.01f,0.01f,0.01f);
 	    topspeed = 4;
-	    size_w = 50;
+	    size_w = height / 10;
 	    clicked = false;
 	    infoLocation = new PVector(width*.01f, width*.2f);
 	    infoSize = new PVector(width*.15f, height*.5f);
 	    this.sSystem = sSystem;
+	    this.sBars = sBars;
 	  }
 
 	  public void update() 
@@ -84,6 +86,8 @@ public class Planet
 			  parent.textSize(10);
 			  parent.text("Planet No. " + current, (infoLocation.x + infoSize.x / 3) + -(parent.screenX(0, 0)), 
 					  (infoLocation.y + infoSize.y / 2) + -(parent.screenY(0, 0)));
+			  Scrollbar s = sBars.get(current);
+			  s.display(infoLocation.x, infoLocation.y, infoSize.x, infoSize.y);
 		  }
 	  }
 	  
