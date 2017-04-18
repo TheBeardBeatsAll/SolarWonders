@@ -1,6 +1,7 @@
 package ie.dit;
 import java.util.ArrayList;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PShape;
 
@@ -10,21 +11,37 @@ public class Menu
 	ArrayList<Star> comets = new ArrayList<Star>();
 	Star star, comet, trail;
 	PApplet parent;
-	PShape planet, cloud;
-	PImage img;
+	PShape rplanet, bplanet, moon;
+	PImage red, blue, coarse;
+	PFont font;
 	float height, width, startposx = 0, startposy = 0;
 	int timer = 0;
-;
+	
 	float rot;
 	boolean starCheck = false, cometCheck = false;
 	
-	Menu(PApplet p, PImage img)
+	Menu(PApplet p, PImage red, PImage blue, PImage coarse, PFont font)
 	{
 		parent = p;
-		img = this.img;
+		this.red = red;
+		this.blue = blue;
+		this.coarse = coarse;
+		this.font = font;
 		width = p.width;
 		height = p.height;
 		rot = 0;
+		
+		parent.noStroke();
+		rplanet = parent.createShape(parent.SPHERE, 200);
+		rplanet.setTexture(red);
+		
+		parent.noStroke();
+		bplanet = parent.createShape(parent.SPHERE, 450);
+		bplanet.setTexture(blue);
+		
+		parent.noStroke();
+		moon = parent.createShape(parent.SPHERE, 50);
+		moon.setTexture(coarse);
 	}
 	
 	public void menu()
@@ -32,7 +49,7 @@ public class Menu
 		Planets();
 		star();
 		comets();
-		//text();
+		text();
 	}
 	
 	public void Planets()
@@ -42,26 +59,19 @@ public class Menu
 		parent.pushMatrix();
 		parent.translate(width - width/5, height/2 - 150, -200);
 		parent.rotateY(rot);
-		parent.noStroke();
-		parent.stroke(0, 100);
-		parent.fill(200, 100, 0);
-		parent.sphere(200);
+		parent.shape(rplanet);
 		parent.popMatrix();
 		
 		parent.pushMatrix();
 		parent.translate(50, height, 200);
 		parent.rotateY((rot));
-		parent.stroke(0, 100);
-		parent.fill(0, 255, 255);
-		parent.sphere(450);
+		parent.shape(bplanet);
 		parent.popMatrix();
 		
 		parent.pushMatrix();
 		parent.translate(width - width/5, height/2 - 150, 0);
 		parent.rotateY((rot));
-		parent.stroke(0, 100);
-		parent.fill(140, 110, 60);
-		parent.sphere(50);
+		parent.shape(moon);
 		parent.popMatrix();
 		
 		rot += .0005;
@@ -208,15 +218,17 @@ public class Menu
 	
 	public void text()
 	{
+		parent.textFont(font);
 		parent.fill(255, 75);
-		parent.rect(width/2 - 200, height/2 - 250, 400, 500);
+		parent.rect(width/2 - 200, height/2 - 150, 400, 350);
 		
 		parent.fill(255, 225);
-		parent.textSize(55);
-		parent.text("SolarWonders", width/2-180, height/2-200);
+		parent.textSize(45);
+		parent.text("SolarWonders", width/2-190, height/2-100);
 		
-		parent.text("Play", width/2-180, height/2-50);
+		parent.textSize(35);
+		parent.text("Play", width/2-180, height/2);
 		parent.text("Instructions", width/2-180, height/2+50);
-		parent.text("Exit", width/2-180, height/2+150);
+		parent.text("Exit", width/2-180, height/2+100);
 	}
 }
