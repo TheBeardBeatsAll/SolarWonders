@@ -1,47 +1,43 @@
 package ie.dit;
 
-import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PShape;
 import processing.core.PVector;
 
-public class Planet
+public class Moon 
 {
 	  PApplet parent;
 	  PVector location;
 	  PVector velocity;
 	  PVector acceleration;
 	  PVector adjacent;
-	  PShape planet;
+	  PShape moon;
 	  int x_start, z_start, x_accel, z_accel;
 	  float width, height;
 	  float size, mass, period;
 	  double theta, grav, vel;
-	  Sun sun;
+	  Planet planet;
 	  PVector orbit;
-	  ArrayList<Moon> moons = new ArrayList<Moon>();
 
-	  Planet(PApplet parent, Sun sun) 
+	  Moon(PApplet parent, Planet planet) 
 	  {
-		  this.sun = sun;
+		  this.planet = planet;
 		  this.parent = parent;
 		  width = parent.width;
 		  height = parent.height;
-	      location = new PVector(width/3f, 0, width/3f);
+	      location = new PVector(width/12f, 0, width/12f);
 	      velocity = new PVector(0f, 0f, 0f);
 	      acceleration = new PVector(0f, 0f, 0f);
-	      size = 50f;
+	      size = 10f;
 	      grav = 6.67384 * Math.pow(10, -11);
-	      mass = 100f;
-	      planet = parent.createShape(PConstants.SPHERE, size);
-		  planet.setStroke(255);
-		  planet.setFill(parent.color(125, 125, 125));
+	      mass = 10f;
+	      moon = parent.createShape(PConstants.SPHERE, size);
+	      moon.setStroke(255);
+	      moon.setFill(parent.color(125, 125, 125));
 		  period = 0.1f;
 		  orbit = new PVector(location.x, location.y, location.z);
 		  initialise_vel();
-		  Moon m = new Moon(parent, this);
-		  moons.add(m);
 	  }
 	  
 	  public void initialise_vel()
@@ -92,8 +88,8 @@ public class Planet
 		  }
 		  adjacent = new PVector(location.x, 0, 0);
 		  theta = Math.acos(adjacent.mag()/location.mag());
-		  acceleration.x = (float) (x_accel * grav * sun.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
-		  acceleration.z = (float) (z_accel * grav * sun.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
+		  acceleration.x = (float) (x_accel * grav * planet.mass * Math.cos(theta) / Math.pow(location.mag(), 2));
+		  acceleration.z = (float) (z_accel * grav * planet.mass * Math.sin(theta) / Math.pow(location.mag(), 2));
 		  acceleration.normalize();
 		  acceleration.mult(period);
 	  }
@@ -102,18 +98,14 @@ public class Planet
 	  {
 		  acceleration_cal();
 	      velocity.add(acceleration);
-	      //location.add(velocity);
+	      location.add(velocity);
 	  }
-	  
+
 	  public void display() 
 	  {
 	      parent.pushMatrix();
 	      parent.translate(location.x, location.y, location.z);
-	      parent.shape(planet);
-	      for(Moon m : moons)
-		  {
-			  m.display();
-		  }
+	      parent.shape(moon);
 	      parent.popMatrix();
 	      parent.pushMatrix();
 	      parent.rotateX((float) (Math.PI/2));
