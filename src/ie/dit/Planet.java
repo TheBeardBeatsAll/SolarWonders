@@ -87,7 +87,9 @@ public class Planet
 			  parent.text("Planet No. " + current, (infoLocation.x + infoSize.x / 3) + -(parent.screenX(0, 0)), 
 					  (infoLocation.y + infoSize.y / 2) + -(parent.screenY(0, 0)));
 			  Scrollbar s = sBars.get(current);
-			  s.display(infoLocation.x, infoLocation.y, infoSize.x, infoSize.y);
+			  s.setValues(infoLocation.x, infoLocation.y, infoSize.x, infoSize.y);
+			  s.update();
+			  s.display();
 		  }
 	  }
 	  
