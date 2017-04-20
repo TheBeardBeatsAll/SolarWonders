@@ -12,7 +12,7 @@ public class Menu
 	Star star, comet, trail;
 	PApplet parent;
 	PShape rplanet, bplanet, moon;
-	PImage red, blue, coarse;
+	PImage[] textures = new PImage[12];
 	PFont font;
 	float height, width, startposx = 0, startposy = 0;
 	int timer = 0;
@@ -20,12 +20,10 @@ public class Menu
 	float rot;
 	boolean starCheck = false, cometCheck = false;
 	
-	Menu(PApplet p, PImage red, PImage blue, PImage coarse, PFont font)
+	Menu(PApplet p, PImage[] textures, PFont font)
 	{
 		parent = p;
-		this.red = red;
-		this.blue = blue;
-		this.coarse = coarse;
+		this.textures = textures;
 		this.font = font;
 		width = p.width;
 		height = p.height;
@@ -33,15 +31,15 @@ public class Menu
 		
 		parent.noStroke();
 		rplanet = parent.createShape(parent.SPHERE, 200);
-		rplanet.setTexture(red);
+		rplanet.setTexture(textures[0]);
 		
 		parent.noStroke();
 		bplanet = parent.createShape(parent.SPHERE, 450);
-		bplanet.setTexture(blue);
+		bplanet.setTexture(textures[1]);
 		
 		parent.noStroke();
 		moon = parent.createShape(parent.SPHERE, 50);
-		moon.setTexture(coarse);
+		moon.setTexture(textures[2]);
 	}
 	
 	public void menu()

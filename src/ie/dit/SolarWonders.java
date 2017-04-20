@@ -12,7 +12,7 @@ public class SolarWonders extends PApplet
  	Planet mover;
 	Menu menu;
 	Textures tex;
-	PImage red, blue, coarse;
+	String[] fnames = {"red", "blue", "coarse", "brown"};
 	PImage[] imgs = new PImage[15];
 	PFont font;
 	boolean check = false;
@@ -21,21 +21,18 @@ public class SolarWonders extends PApplet
 	public void setup()
 	{
 		smooth();
-
-		imgs[0] = loadImage("red.png");
-		imgs[1] = loadImage("blue.png");
-		imgs[2] = loadImage("coarse.jpg");
 		
+		for(int i=0; i < fnames.length; i++)
+		{
+			imgs[i] = loadImage(fnames[i] + ".png");
+		}
 		
-		/*red = loadImage("red.png");
-		blue = loadImage("blue.png");
-		coarse = loadImage("coarse.jpg");*/
 		
 		font = createFont("font.ttf", 25);
 		
 		// Make Mover object
 		mover = new Planet(this);
-		menu = new Menu(this, red, blue, coarse, font);
+		menu = new Menu(this, imgs, font);
 		tex = new Textures(this, imgs);
 	}
 	
