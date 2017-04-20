@@ -12,7 +12,7 @@ public class SolarWonders extends PApplet
  	Planet mover;
 	Menu menu;
 	Textures tex;
-	String[] fnames = {"red", "blue", "coarse", "brown"};
+	String[] fnames = {"red", "blue", "coarse", "brown", "water", "purple", "toxic", "earth", "gas"};
 	PImage[] imgs = new PImage[15];
 	PFont font;
 	boolean check = false;
