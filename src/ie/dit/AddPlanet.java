@@ -13,6 +13,7 @@ public class AddPlanet
 	int clicked, clickOnce;
 	ArrayList<Planet> sSystem;
 	ArrayList<Scrollbar> sBars;
+	PVector infoLocation, infoSize;
 	
 	AddPlanet(PApplet p, ArrayList<Planet> sSystem, ArrayList<Scrollbar> sBars)
 	{
@@ -24,6 +25,8 @@ public class AddPlanet
 		clicked = clickOnce;
 		this.sSystem = sSystem;
 		this.sBars = sBars;
+		infoLocation = new PVector(width*.01f, width*.2f);
+	    infoSize = new PVector(width*.15f, height*.5f);
 	}
 	
 	public void display()
@@ -50,7 +53,7 @@ public class AddPlanet
 		{
 			Planet planet = new Planet(parent, sSystem, sBars);
 			sSystem.add(planet);
-			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1);
+			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y);
 			sBars.add(scrollbar);
 			if (sSystem.size() >= 2)
 			{

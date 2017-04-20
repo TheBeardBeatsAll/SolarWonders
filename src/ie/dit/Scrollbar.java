@@ -16,70 +16,46 @@ public class Scrollbar
 	boolean over;					// is the mouse over the slider
 	boolean locked;
 	float barWidth, barMinLoc, barMaxLoc, barYLoc;
-	boolean start = true;
 	
-	Scrollbar(PApplet p, int id)
+	Scrollbar(PApplet p, int id, float iLocX, float iLocY, float iSizeX, float iSizeY)
 	{
 		parent = p;
 		width = p.width;
 		height = p.height;
 		this.id = id;
-		infoLocation = new PVector(0,0);
-		infoSize = new PVector(0,0);
-	}
-	
-	public void setValues(float iLocX, float iLocY, float iSizeX, float iSizeY)
-	{
+		infoLocation = new PVector(iLocX, iLocY);
+		infoSize = new PVector(iSizeX, iSizeY);
 		infoLocation.x = iLocX;
 		infoLocation.y = iLocY;
 		infoSize.x = iSizeX;
 		infoSize.y = iSizeY;
-		barMinLoc = infoLocation.x + infoSize.x * .25f + -(parent.screenX(0, 0));
-		barMaxLoc = infoLocation.x + infoSize.x * .75f + -(parent.screenX(0, 0));
-		barYLoc = infoLocation.y + infoSize.y * .2f + -(parent.screenY(0, 0));
+		barMinLoc = infoLocation.x + infoSize.x * .25f;
+		barMaxLoc = infoLocation.x + infoSize.x * .75f;
+		barYLoc = infoLocation.y + infoSize.y * .2f;
 		barWidth = barMaxLoc - barMinLoc;
-		sPos = barMinLoc + barWidth / 2;
-		if (start)
-		{
-			newSPos = sPos;
-		}
 		sPosMin = barMinLoc;
 		sPosMax = barMaxLoc;
-		parent.stroke(0, 0, 0);
-		parent.strokeWeight(1);
-		parent.line(barMinLoc, barYLoc, barMaxLoc, barYLoc);
+		sPos = barMinLoc + barWidth / 2;
+		newSPos = sPos;
 	}
 	
 	public void display()
 	{
-		//if (start)
-		//{
-			if (over || locked)
-			{
-				parent.fill(0);
-				parent.ellipse(newSPos, barYLoc, 10, 10);
-			}
-			else
-			{
-				parent.fill(255);
-				parent.ellipse(newSPos, barYLoc, 10, 10);
-			}
-			System.out.println("newSPos = "+ newSPos);
-		//}
-		/*
+		parent.stroke(0, 0, 0);
+		parent.strokeWeight(1);
+		parent.line(barMinLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)),
+				barMaxLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)));
+		
+		if (over || locked)
+		{
+			parent.fill(0);
+			parent.ellipse(sPos + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)), 10, 10);
+		}
 		else
 		{
-			if (over || locked)
-			{
-				parent.fill(0);
-				parent.ellipse(sPos + -(parent.screenX(0, 0)), barYLoc, 10, 10);
-			}
-			else
-			{
-				parent.fill(255);
-				parent.ellipse(sPos + -(parent.screenX(0, 0)), barYLoc, 10, 10);
-			}
-		}*/
+			parent.fill(255);
+			parent.ellipse(sPos + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)), 10, 10);
+		}
 	}
 	
 	public void update()
@@ -96,7 +72,6 @@ public class Scrollbar
 		if (parent.mousePressed && over)
 		{
 			locked = true;
-			start = false;
 		}
 		
 		if (!parent.mousePressed)
@@ -106,17 +81,17 @@ public class Scrollbar
 		
 		if (locked) 
 		{
-			newSPos = parent.mouseX + -(parent.screenX(0, 0));
+			newSPos = parent.mouseX;
 	    }
 		sPos = newSPos;
 	}
 	
 	public boolean overEvent()
 	{
-		if (parent.mouseX + -(parent.screenX(0, 0)) > newSPos - 10
-					&& parent.mouseX + -(parent.screenX(0, 0)) < newSPos + 10
-					&& parent.mouseY + -(parent.screenY(0, 0)) > barYLoc - 10
-					&& parent.mouseY + -(parent.screenY(0, 0)) < barYLoc + 10)
+		if (parent.mouseX + -(parent.screenX(0, 0)) > sPos + -(parent.screenX(0, 0)) - 10
+					&& parent.mouseX + -(parent.screenX(0, 0)) < sPos + -(parent.screenX(0, 0)) + 10
+					&& parent.mouseY + -(parent.screenY(0, 0)) > barYLoc + -(parent.screenY(0, 0)) - 10
+					&& parent.mouseY + -(parent.screenY(0, 0)) < barYLoc + -(parent.screenY(0, 0)) + 10)
 		{
 			return true;
 		}
