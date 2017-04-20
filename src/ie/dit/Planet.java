@@ -52,7 +52,9 @@ public class Planet
 	    parent.translate(location.x, location.y, location.z);
 	    parent.noFill();
 	    parent.stroke(255);
-	    parent.sphere(size_w);
+	    Scrollbar s = sBars.get(current);
+	    Planet p = sSystem.get(current);
+	    parent.sphere(size_w + (s.sPos - s.sliderStart()));
 	    parent.popMatrix();
 	  }
 	  
