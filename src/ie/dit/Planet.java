@@ -20,6 +20,7 @@ public class Planet
 	  ArrayList<Planet> sSystem;
 	  ArrayList<Scrollbar> sBars;
 	  int current;
+	  int addPos, checkAddPos;
 
 	  Planet(PApplet p, ArrayList<Planet> sSystem, ArrayList<Scrollbar> sBars)
 	  {
@@ -36,6 +37,7 @@ public class Planet
 	    infoSize = new PVector(width*.15f, height*.5f);
 	    this.sSystem = sSystem;
 	    this.sBars = sBars;
+	    addPos = checkAddPos;
 	  }
 
 	  public void update() 
@@ -52,9 +54,34 @@ public class Planet
 	    parent.translate(location.x, location.y, location.z);
 	    parent.noFill();
 	    parent.stroke(255);
-	    Scrollbar s = sBars.get(current);
+	    // exception must be made for second planet in the ArrayList
+	    if (current == 1)
+    	{
+	    	Scrollbar s = sBars.get(current + 1);
+		    parent.sphere(size_w + (s.sPos - s.sliderStart()));
+    	}
+	    else
+	    {
+	    	Scrollbar s = sBars.get(current * 2);
+		    parent.sphere(size_w + (s.sPos - s.sliderStart()));
+	    }
+	    // to change distances between planets
+	    Scrollbar s2 = sBars.get(current * 2 + 1);
 	    Planet p = sSystem.get(current);
-	    parent.sphere(size_w + (s.sPos - s.sliderStart()));
+	    if (s2.locked)
+	    {
+	    	addPos = 1;
+	    }
+	    else
+	    {
+	    	addPos = 0;
+	    	checkAddPos = addPos;
+	    }
+	    
+	    if (addPos == 1 && addPos != checkAddPos)
+		{
+			p.location.x = p.location.x + (s2.sPos - s2.sliderStart()) / 10;
+		}
 	    parent.popMatrix();
 	  }
 	  
@@ -88,9 +115,15 @@ public class Planet
 			  parent.textSize(10);
 			  parent.text("Planet No. " + current, (infoLocation.x + infoSize.x / 3) + -(parent.screenX(0, 0)), 
 					  (infoLocation.y + infoSize.y / 2) + -(parent.screenY(0, 0)));
-			  Scrollbar s = sBars.get(current);
-			  s.update();
-			  s.display();
+			  for (int i = sBars.size() - 1; i >= 0; i--)
+			  {
+				  Scrollbar s = sBars.get(i);
+				  if (s.id == current)
+				  {
+					  s.update();
+					  s.display();
+				  }
+			  }
 		  }
 	  }
 	  

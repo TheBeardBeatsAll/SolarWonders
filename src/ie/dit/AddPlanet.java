@@ -53,8 +53,12 @@ public class AddPlanet
 		{
 			Planet planet = new Planet(parent, sSystem, sBars);
 			sSystem.add(planet);
-			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y);
+			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
+					infoLocation.y + infoSize.y * .2f);
+			Scrollbar scrollbar2 = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
+					infoLocation.y + infoSize.y * .4f);
 			sBars.add(scrollbar);
+			sBars.add(scrollbar2);
 			if (sSystem.size() >= 2)
 			{
 				Planet p = sSystem.get(sSystem.size() - 2);

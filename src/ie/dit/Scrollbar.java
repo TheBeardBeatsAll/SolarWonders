@@ -16,7 +16,7 @@ public class Scrollbar
 	boolean over, locked;
 	float barWidth, barMinLoc, barMaxLoc, barYLoc;
 	
-	Scrollbar(PApplet p, int id, float iLocX, float iLocY, float iSizeX, float iSizeY)
+	Scrollbar(PApplet p, int id, float iLocX, float iLocY, float iSizeX, float iSizeY, float barYLoc)
 	{
 		parent = p;
 		width = p.width;
@@ -30,7 +30,7 @@ public class Scrollbar
 		infoSize.y = iSizeY;
 		barMinLoc = infoLocation.x + infoSize.x * .25f;
 		barMaxLoc = infoLocation.x + infoSize.x * .75f;
-		barYLoc = infoLocation.y + infoSize.y * .2f;
+		this.barYLoc = barYLoc;
 		barWidth = barMaxLoc - barMinLoc;
 		sPosMin = barMinLoc;
 		sPosMax = barMaxLoc;
@@ -41,8 +41,11 @@ public class Scrollbar
 	
 	public void display()
 	{
+		parent.fill(0);
 		parent.text("Size:", infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0)),
 				infoLocation.y + infoSize.y * .1f + -(parent.screenY(0, 0)));
+		parent.text("Dist:", infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0)),
+				infoLocation.y + infoSize.y * .3f + -(parent.screenY(0, 0)));
 		parent.stroke(0, 0, 0);
 		parent.strokeWeight(1);
 		parent.line(barMinLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)),
@@ -102,8 +105,6 @@ public class Scrollbar
 	{
 		return barMinLoc + barWidth / 2;
 	}
-	
-	
 	
 	public boolean overEvent()
 	{

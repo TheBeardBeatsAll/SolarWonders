@@ -33,7 +33,6 @@ public class SolarWonders extends PApplet
 	{
 		//mover.check();
 		button.check();
-		System.out.println(solarSystem.size());
 		if (solarSystem.size() > 0)
 		{
 			for (int i = solarSystem.size() - 1; i >= 0; i--)
