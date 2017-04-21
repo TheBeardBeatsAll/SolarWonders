@@ -33,7 +33,7 @@ public class SolarWonders extends PApplet
 		// Make Mover object
 		mover = new Planet(this);
 		menu = new Menu(this, imgs, font);
-		tex = new Textures(this, imgs);
+		tex = new Textures(this, imgs, font);
 	}
 	
 	public void draw()
