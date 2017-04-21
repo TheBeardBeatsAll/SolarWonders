@@ -14,9 +14,8 @@ public class Planet extends Sun
 	  int x_start, z_start, x_accel, z_accel, trailSize;
 	  float x_coord, z_coord, y_coord;
 	  float period_acc, parent_mass, period_vel;
-	  double major, minor, acc;
-	  double major_x, major_z, alpha;
-	  double theta, grav, vel, eccentricity;
+	  double major, acc, eccentricity;
+	  double theta, grav, vel;
 	  ArrayList<Planet> moons = new ArrayList<Planet>();
 	  ArrayList<PVector> trail = new ArrayList<PVector>();
 
@@ -34,17 +33,7 @@ public class Planet extends Sun
 		  this.parent_mass = parent_mass;
 		  init_planet();
 		  calculate_theta();
-		  init_ellip();
 		  init_vel();
-	  }
-	  
-	  private void init_ellip()
-	  {
-		  alpha = -theta;
-		  major = location.mag() / (1 + eccentricity);
-		  minor = major * Math.sqrt(1 - Math.pow(eccentricity, 2));
-		  major_x = major * Math.cos(theta) * eccentricity;
-		  major_z = major * Math.sin(theta) * eccentricity;
 	  }
 	  
 	  private void init_planet()
@@ -75,6 +64,7 @@ public class Planet extends Sun
 	  
 	  private void init_vel()
 	  {
+		  major = location.mag() / (1 + eccentricity);
 		  //a = v*v/d --> v = sqrt(a*d)
 		  vel = Math.sqrt((parent_mass * grav) * ((2f / location.mag()) -  (1 / major)));
 		  if(location.x <= 0 && location.z > 0)
