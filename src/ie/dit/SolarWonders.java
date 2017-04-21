@@ -1,3 +1,11 @@
+/* 
+Things to do:
+	- camera:
+		-> when you click on a planet, focus on that planet
+		-> ability to zoom in and out when not focused on a planet
+ 	- make it look nicer
+ 	- add names
+*/
 package ie.dit;
 
 import java.util.ArrayList;
@@ -74,8 +82,8 @@ public class SolarWonders extends PApplet
 	
 	public void settings()
 	{
-		//fullScreen(P3D);
-		size(750, 500, P3D);
+		fullScreen(P3D);
+		//size(750, 500, P3D);
 	}
 	
     public static void main(String[] args)

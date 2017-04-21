@@ -3,6 +3,8 @@ package ie.dit;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
+import processing.core.PGraphics;
 import processing.core.PVector;
 
 public class Scrollbar
@@ -41,25 +43,35 @@ public class Scrollbar
 	
 	public void display()
 	{
-		parent.fill(0);
-		parent.text("Size:", infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0)),
+		parent.fill(247, 255, 28);
+		parent.textAlign(PConstants.CENTER);
+		parent.text("SIZE:", infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0)),
 				infoLocation.y + infoSize.y * .1f + -(parent.screenY(0, 0)));
-		parent.text("Dist:", infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0)),
+		parent.text("DIST:", infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0)),
 				infoLocation.y + infoSize.y * .3f + -(parent.screenY(0, 0)));
-		parent.stroke(0, 0, 0);
-		parent.strokeWeight(1);
-		parent.line(barMinLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)),
-				barMaxLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)));
 		
 		if (over || locked)
 		{
-			parent.fill(0);
+			parent.strokeWeight(2);
+			parent.stroke(247, 255, 28);
+			parent.fill(247, 255, 28);
 			parent.ellipse(sPos + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)), r, r);
+			parent.stroke(0, 157, 219);
+			parent.strokeWeight(2);
+			parent.line(barMinLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)),
+					barMaxLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)));
 		}
 		else
 		{
-			parent.fill(255);
+
+			parent.strokeWeight(2);
+			parent.stroke(247, 255, 28);
+			parent.fill(119, 112, 127);
 			parent.ellipse(sPos + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)), r, r);
+			parent.stroke(0, 157, 219);
+			parent.strokeWeight(2);
+			parent.line(barMinLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)),
+					barMaxLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)));
 		}
 	}
 	
