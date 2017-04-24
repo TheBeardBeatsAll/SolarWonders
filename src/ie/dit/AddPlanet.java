@@ -16,7 +16,7 @@ public class AddPlanet
 	ArrayList<Planet> sSystem;
 	ArrayList<Scrollbar> sBars;
 	PVector infoLocation, infoSize;
-	float tSize;
+	float tSize, zoom;
 	PFont font;
 	
 	AddPlanet(PApplet p, ArrayList<Planet> sSystem, ArrayList<Scrollbar> sBars)
@@ -31,34 +31,73 @@ public class AddPlanet
 		this.sBars = sBars;
 		infoLocation = new PVector(width*.01f, width*.1f);
 	    infoSize = new PVector(width*.15f, height*.5f);
-	    tSize = height / 40;
+	    tSize = height / 41;
 	    font = p.createFont("Individigital.ttf", 25);
 	}
 	
 	public void display()
 	{
-		parent.textFont(font);
-		parent.noStroke();
-		parent.fill(0, 157, 219);
-		parent.rect(location.x / 2 + -(parent.screenX(0, 0)), location.y / 2 + -(parent.screenY(0, 0)),
-				size.x + location.x, size.y + location.y);
-		parent.strokeWeight(2);
-		parent.stroke(247, 255, 28);
-		if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
-				parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
+		boolean focused = false;
+		for (int i = sSystem.size() - 1; i >= 0; i--)
+	    {
+			Planet p = sSystem.get(i);
+			zoom = p.getZoom();
+			if (p.clicked)
+			{
+				focused = true;
+			}
+	    }
+		if (focused)
 		{
-			parent.fill(200);
+			parent.textFont(font);
+			parent.noStroke();
+			parent.fill(0, 157, 219);
+			parent.rect((location.x / 2 + -(parent.screenX(0, 0))) * zoom, (location.y / 2 + -(parent.screenY(0, 0))) * zoom,
+					(size.x + location.x) * zoom, (size.y + location.y) * zoom);
+			parent.strokeWeight(2);
+			parent.stroke(247, 255, 28);
+			if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
+					parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
+			{
+				parent.fill(200);
+			}
+			else
+			{
+				parent.fill(119, 112, 127);
+			}
+			parent.rect((location.x + -(parent.screenX(0, 0))) * zoom, (location.y + -(parent.screenY(0, 0))) * .5f,
+					size.x * zoom, size.y * zoom);
+			parent.textAlign(PConstants.CENTER, PConstants.CENTER);
+			parent.textSize(tSize * zoom);
+			parent.fill(247, 255, 28);
+			parent.text("Add Planet", (location.x + size.x / 2 + -(parent.screenX(0, 0))) * zoom,
+					(location.y + size.y / 2 + -(parent.screenY(0, 0))) * zoom);
 		}
 		else
 		{
-			parent.fill(119, 112, 127);
+			parent.textFont(font);
+			parent.noStroke();
+			parent.fill(0, 157, 219);
+			parent.rect(location.x / 2 + -(parent.screenX(0, 0)), location.y / 2 + -(parent.screenY(0, 0)),
+					size.x + location.x, size.y + location.y);
+			parent.strokeWeight(2);
+			parent.stroke(247, 255, 28);
+			if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
+					parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
+			{
+				parent.fill(200);
+			}
+			else
+			{
+				parent.fill(119, 112, 127);
+			}
+			parent.rect(location.x + -(parent.screenX(0, 0)), location.y + -(parent.screenY(0, 0)), size.x, size.y);
+			parent.textAlign(PConstants.CENTER, PConstants.CENTER);
+			parent.textSize(tSize);
+			parent.fill(247, 255, 28);
+			parent.text("Add Planet", location.x + size.x / 2 + -(parent.screenX(0, 0)),
+					location.y + size.y / 2 + -(parent.screenY(0, 0)));
 		}
-		parent.rect(location.x + -(parent.screenX(0, 0)), location.y + -(parent.screenY(0, 0)), size.x, size.y);
-		parent.textAlign(PConstants.CENTER, PConstants.CENTER);
-		parent.textSize(tSize);
-		parent.fill(247, 255, 28);
-		parent.text("Add Planet", location.x + size.x / 2 + -(parent.screenX(0, 0)),
-				location.y + size.y / 2 + -(parent.screenY(0, 0)));
 	}
 	
 	public void check()
@@ -87,7 +126,7 @@ public class AddPlanet
 			if (sSystem.size() >= 2)
 			{
 				Planet p = sSystem.get(sSystem.size() - 2);
-				planet.location.x = p.location.x + height * .3f;
+				planet.location.x = p.location.x + height * .5f;
 				adjustCamera();
 			}
 		}

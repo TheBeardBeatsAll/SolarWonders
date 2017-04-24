@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
-import processing.core.PGraphics;
 import processing.core.PVector;
 
 public class Scrollbar
@@ -17,6 +16,7 @@ public class Scrollbar
 	float sPosMin, sPosMax;
 	boolean over, locked;
 	float barWidth, barMinLoc, barMaxLoc, barYLoc;
+	float zoom;
 	
 	Scrollbar(PApplet p, int id, float iLocX, float iLocY, float iSizeX, float iSizeY, float barYLoc)
 	{
@@ -43,40 +43,41 @@ public class Scrollbar
 	
 	public void display()
 	{
+		
 		parent.fill(247, 255, 28);
 		parent.textAlign(PConstants.CENTER);
-		parent.text("SIZE:", infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0)),
-				infoLocation.y + infoSize.y * .1f + -(parent.screenY(0, 0)));
-		parent.text("DIST:", infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0)),
-				infoLocation.y + infoSize.y * .3f + -(parent.screenY(0, 0)));
+		parent.text("SIZE:", (infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0))) * zoom,
+				(infoLocation.y + infoSize.y * .1f + -(parent.screenY(0, 0))) * zoom);
+		parent.text("DIST:", (infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0))) * zoom,
+				(infoLocation.y + infoSize.y * .3f + -(parent.screenY(0, 0))) * zoom);
 		
 		if (over || locked)
 		{
+			parent.stroke(0, 157, 219);
+			parent.strokeWeight(2);
+			parent.line((barMinLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom,
+					(barMaxLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom);
 			parent.strokeWeight(2);
 			parent.stroke(247, 255, 28);
 			parent.fill(247, 255, 28);
-			parent.ellipse(sPos + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)), r, r);
-			parent.stroke(0, 157, 219);
-			parent.strokeWeight(2);
-			parent.line(barMinLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)),
-					barMaxLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)));
+			parent.ellipse((sPos + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom, r * zoom, r * zoom);
 		}
 		else
 		{
-
+			parent.stroke(0, 157, 219);
+			parent.strokeWeight(2);
+			parent.line((barMinLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom,
+					(barMaxLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom);
 			parent.strokeWeight(2);
 			parent.stroke(247, 255, 28);
 			parent.fill(119, 112, 127);
-			parent.ellipse(sPos + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)), r, r);
-			parent.stroke(0, 157, 219);
-			parent.strokeWeight(2);
-			parent.line(barMinLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)),
-					barMaxLoc + -(parent.screenX(0, 0)), barYLoc + -(parent.screenY(0, 0)));
+			parent.ellipse((sPos + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom, r * zoom, r * zoom);
 		}
 	}
 	
-	public void update()
+	public void update(float focus)
 	{
+		zoom = focus;
 		if (overEvent())
 		{
 			over = true;

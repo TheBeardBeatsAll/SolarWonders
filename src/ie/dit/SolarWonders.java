@@ -3,7 +3,7 @@ Things to do:
 	- camera:
 		-> when you click on a planet, focus on that planet
 		-> ability to zoom in and out when not focused on a planet
- 	- make it look nicer
+ 	- make it look nicer....done
  	- add names
 */
 package ie.dit;
@@ -61,6 +61,7 @@ public class SolarWonders extends PApplet
 	
 	public void Lorcan()
 	{
+		int count = 0;
 		background(0);
 		//mover.update();
 		//mover.checkEdges();
@@ -71,7 +72,25 @@ public class SolarWonders extends PApplet
 	    {
 			Planet p = solarSystem.get(i);
 			p.display();
-			p.info();
+			//p.info();
+	    }
+		for (int i = solarSystem.size() - 1; i >= 0; i--)
+	    {
+			Planet p = solarSystem.get(i);
+			if (p.clicked)
+			{
+				p.info();
+				System.out.println("Planet " + i + " is clicked");
+			}
+			else
+			{
+				count++;
+			}
+			
+			if (count == solarSystem.size())
+			{
+				p.adjustCamera();
+			}
 	    }
 	}
 	
