@@ -5,5 +5,11 @@
 	<classpathentry kind="lib" path="C:/College/2nd year/processing-3.3/core/library/core.jar"/>
 	<classpathentry kind="lib" path="C:/College/2nd year/processing-3.3/core/library/jogl-all.jar"/>
 	<classpathentry kind="lib" path="C:/College/2nd year/processing-3.3/core/library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="C:/College/2nd year/Object Oriented Programming - Semester 1/libraries/minim/library/minim.jar"/>
+	<classpathentry kind="lib" path="C:/College/2nd year/Object Oriented Programming - Semester 1/libraries/minim/library/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/College/2nd year/Object Oriented Programming - Semester 1/libraries/minim/library/jsminim.jar"/>
+	<classpathentry kind="lib" path="C:/College/2nd year/Object Oriented Programming - Semester 1/libraries/minim/library/mp3spi1.9.5.jar"/>
+	<classpathentry kind="lib" path="C:/College/2nd year/Object Oriented Programming - Semester 1/libraries/minim/library/tritonus_aos.jar"/>
+	<classpathentry kind="lib" path="C:/College/2nd year/Object Oriented Programming - Semester 1/libraries/minim/library/tritonus_share.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
