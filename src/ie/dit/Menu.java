@@ -72,7 +72,7 @@ public class Menu
 		parent.shape(moon);
 		parent.popMatrix();
 		
-		rot += .0005;
+		rot += .0006;
 	}
 	
 	public void star()
@@ -216,9 +216,11 @@ public class Menu
 	
 	public void text()
 	{
+		int play = 255, ins = 255, exit = 255;
+		
 		parent.textFont(font);
 		parent.fill(255, 75);
-		parent.rect(width/2 - 200, height/2 - 150, 400, 350);
+		parent.rect(width/2 - 200, height/2 - 150, 400, 275);
 		
 		parent.stroke(255);
 		parent.line(width/2 - 190, height/2 - 95, width/2 + 190, height/2 - 95);
@@ -227,9 +229,28 @@ public class Menu
 		parent.textSize(45);
 		parent.text("SolarWonders", width/2-190, height/2-100);
 		
-		parent.textSize(35);
-		parent.text("Play", width/2-180, height/2);
-		parent.text("Instructions", width/2-180, height/2+50);
-		parent.text("Exit", width/2-180, height/2+100);
+		parent.textSize(40);
+		parent.fill(255, play);
+		parent.text("Play", width/2-50, height/2-25);
+		parent.fill(255, ins);
+		parent.text("Instructions", width/2-130, height/2+25);
+		parent.fill(255, exit);
+		parent.text("Exit", width/2-42, height/2+75);
+		
+		if((parent.mouseX > width/2-50 && parent.mouseX < width/2+55) && (parent.mouseY > height/2-55 && parent.mouseY < height/2-20) )
+		{
+			parent.noFill();
+			parent.rect(width/2-50, height/2-55, 105, 35);
+		}
+		if((parent.mouseX > width/2-130 && parent.mouseX < width/2+140) && (parent.mouseY > height/2-5 && parent.mouseY < height/2+30))
+		{
+			parent.noFill();
+			parent.rect(width/2-130, height/2-5, 270, 35);
+		}
+		if((parent.mouseX > width/2-42 && parent.mouseX < width/2+48) && (parent.mouseY > height/2+45 && parent.mouseY < height/2+80) )
+		{
+			parent.noFill();
+			parent.rect(width/2-42, height/2+45, 90, 35);
+		}
 	}
 }
