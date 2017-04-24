@@ -15,7 +15,7 @@ public class SolarWonders extends PApplet
 	{
 		smooth();
 		sun = new Sun(this);
-		test = new Planet(this, sun.mass, width/3f, width/3f, 0, 30, 100, 0.4);
+		test = new Planet(this, sun.mass, width/3f, width/3f, -width/3f, 30, 100, 0.4);
 		moon = true;
 	}
 	

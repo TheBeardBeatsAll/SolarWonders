@@ -15,7 +15,7 @@ public class Planet extends Sun
 	  float x_coord, z_coord, y_coord;
 	  float period_acc, parent_mass, period_vel;
 	  double major, acc, eccentricity;
-	  double theta, grav, vel;
+	  double theta, grav, vel, sigma;
 	  ArrayList<Planet> moons = new ArrayList<Planet>();
 	  ArrayList<PVector> trail = new ArrayList<PVector>();
 
@@ -48,6 +48,12 @@ public class Planet extends Sun
 		  planet.setFill(parent.color(125, 125, 125));
 		  period_acc = 3f;
 		  period_vel = (float) Math.sqrt(period_acc);//you multiply acc by x then you multiply vel by sqrt(x)
+		  adjacent = new PVector(0, y_coord, 0);
+		  sigma = Math.asin(adjacent.mag()/location.mag());
+		  if(y_coord > 0)
+		  {
+			  sigma *= -1;
+		  }
 	  }
 	  
 	  public void add_moon(float m_x, float m_z, float m_y, float m_size, float m_mass, double eccentricity)
@@ -149,6 +155,8 @@ public class Planet extends Sun
 	  public void display() 
 	  {
 	      parent.pushMatrix();
+	      parent.rotateX((float) sigma);
+	      trails();
 	      parent.translate(location.x, location.y, location.z);
 	      parent.shape(planet);
 	      for(Planet p : moons)
@@ -157,7 +165,6 @@ public class Planet extends Sun
 	    	  p.update();
 			  p.display();
 		  }  
-	      parent.popMatrix();
-	      trails(); 
+	      parent.popMatrix();      
 	  }
 }
