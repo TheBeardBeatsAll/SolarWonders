@@ -12,7 +12,7 @@ public class SolarWonders extends PApplet
  	Planet mover;
 	Menu menu;
 	Textures tex;
-	String[] fnames = {"red", "blue", "coarse", "brown", "water", "purple", "toxic", "earth", "moon"};
+	String[] fnames = {"earth", "blue", "brown", "magma", "water", "gas", "ice", "red", "coarse", "sun", "moon", "moon2", "moon3"};
 	PImage[] imgs = new PImage[15];
 	PFont font;
 	boolean check = false;
@@ -55,8 +55,8 @@ public class SolarWonders extends PApplet
 	{
 		//background(45, 20, 55);
 		background(0);
-		menu.menu();
-		//tex.planet();
+		//menu.menu();
+		tex.planet();
 	}
 	
 	public void settings()
