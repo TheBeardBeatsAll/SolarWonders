@@ -12,15 +12,14 @@ public class Textures {
 	PImage[] imgs;
 	PShape planet;
 	PShape[] textures = new PShape[12];
-	int check = 1;
+	int check = 0;
 	float rot = 0;
 	boolean create_chk = false;
 	
-	Textures(PApplet p, PImage[] images, PFont font)
+	Textures(PApplet p, PImage[] images)
 	{
 		this.parent = p;
 		this.imgs = images;
-		this.font = font;
 	}
 	
 	public void textures()
@@ -58,20 +57,13 @@ public class Textures {
 	{
 		int rec = 0, j = 0;
 
-		
 		textures();
-		
 		
 		parent.pushMatrix();
 		parent.translate(parent.width/2, parent.height/2);
 		parent.rotateY(rot);
 		parent.shape(planet);
 		parent.popMatrix();
-		
-		
-		parent.textFont(font);
-		parent.fill(255);
-		parent.text(rot, 1000, parent.height/2);
 		
 		rot += .002;
 		
@@ -85,7 +77,7 @@ public class Textures {
 			parent.shape(textures[i]);
 		}
 		
-		if(parent.mousePressed && ( (parent.mouseX > 50 && parent.mouseX < 300) && (parent.mouseY > 50 && parent.mouseY < 250) ) )
+		if( parent.mousePressed && ( (parent.mouseX > 50 && parent.mouseX < 300) && (parent.mouseY > 50 && parent.mouseY < 250) ) )
 		{
 			for(int i=0; i < 9; i++)
 			{	
@@ -105,6 +97,6 @@ public class Textures {
 					}
 				}
 			}//end for
-		}//end mousePressed if
+		}//end mousePressed if	
 	}
 }

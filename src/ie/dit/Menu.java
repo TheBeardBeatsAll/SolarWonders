@@ -31,15 +31,15 @@ public class Menu
 		
 		parent.noStroke();
 		rplanet = parent.createShape(parent.SPHERE, 200);
-		rplanet.setTexture(textures[0]);
+		rplanet.setTexture(textures[6]);
 		
 		parent.noStroke();
 		bplanet = parent.createShape(parent.SPHERE, 450);
-		bplanet.setTexture(textures[1]);
+		bplanet.setTexture(textures[4]);
 		
 		parent.noStroke();
 		moon = parent.createShape(parent.SPHERE, 50);
-		moon.setTexture(textures[2]);
+		moon.setTexture(textures[8]);
 	}
 	
 	public void menu()
