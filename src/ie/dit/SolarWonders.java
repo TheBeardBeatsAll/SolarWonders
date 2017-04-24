@@ -10,7 +10,7 @@ public class SolarWonders extends PApplet
 	Planet test;
 	Sun sun;
 	Boolean moon;
-	int music_menu;
+	int music_menu, pause;
 	ArrayList<Planet> planets = new ArrayList<Planet>();
 	Minim minim;
 	AudioPlayer[] songs = new AudioPlayer[7]; 
@@ -55,6 +55,7 @@ public class SolarWonders extends PApplet
 		music[5] = "Only of the Universe - F. Y.";
 		music[0] = "Out of Space - The Prodigy";
 		music_menu = -1;
+		pause = 0;
 	}
 	
 	public void draw()
@@ -96,13 +97,22 @@ public class SolarWonders extends PApplet
 		{
 			music_menu = -music_menu;
 		}
-		
-		for(int i = 0; i < 7; i++)
+		else if(music_menu == 1)
 		{
-			if(mouseCheck(width * 0.8f, (width * 0.2f) - (height * 0.025f), (height * 0.055f) + (i * (height * 0.03f)), (height * 0.03f)))
+			music_menu = -music_menu;
+			for(int i = 0; i < 7; i++)
 			{
-				playing = music[i];
-				music_menu = -music_menu;
+				if(mouseCheck(width * 0.8f, (width * 0.2f) - (height * 0.025f), (height * 0.055f) + (i * (height * 0.03f)), (height * 0.03f)))
+				{
+					songs[pause].pause();
+					playSound(songs[i]);
+					pause = i;
+					if(i == 6)
+					{
+						songs[6].pause();
+					}
+					playing = music[i];
+				}
 			}
 		}
 	}
@@ -164,7 +174,7 @@ public class SolarWonders extends PApplet
 		stroke(0);
 		textSize(12);
 		textAlign(CENTER, CENTER);
-		text("Music: " + playing, ((width * 0.2f) - (height * 0.025f))/2f, height * 0.015f);
+		text("Music: " + playing, (((width * 0.2f) - (height * 0.025f) - (width * 0.02f))/2f) + (width * 0.02f), height * 0.015f);
 		popMatrix();
 		hint(ENABLE_DEPTH_TEST);
 	}
