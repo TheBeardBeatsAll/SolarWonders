@@ -78,7 +78,7 @@ public class Textures
 			parent.shape(textures[i]);
 		}
 		
-		if( parent.mousePressed && ( (parent.mouseX > 50 && parent.mouseX < 300) && (parent.mouseY > 50 && parent.mouseY < 250) ) )
+		if(parent.mousePressed && ( (parent.mouseX > 50 && parent.mouseX < 300) && (parent.mouseY > 50 && parent.mouseY < 250) ) )
 		{
 			for(int i=0; i < 9; i++)
 			{	

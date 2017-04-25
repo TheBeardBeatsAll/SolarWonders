@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 import ddf.minim.*;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PImage;
-import processing.core.PShape;
+import processing.core.PVector;
 
 public class SolarWonders extends PApplet
 {
@@ -39,18 +40,18 @@ public class SolarWonders extends PApplet
 	boolean starCheck, fade, cometCheck, musicCheck;
 	
 	/////////////
-	AddPlanet button;
-	public ArrayList<Scrollbar> scrollers = new ArrayList<Scrollbar>();
+	PVector infoLocation, infoSize, location, size;
+	float tSize, zoom, focus, set;
 	/////////////
 	
 	public void setup()
 	{
 		smooth();
 		loadData();
-		sun = new Sun(this, imgs[9]);
-		rPlanet = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8]);
-		lPlanet = new Planet(this, sun.mass, width/27, width/6, 0, 450, 100, 0, imgs[4]);
-		rPlanet.add_moon(0, width/7, 0, 50, 100, 0, imgs[11]);
+		sun = new Sun(this, imgs[9], sSystem);
+		rPlanet = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8], sSystem);
+		lPlanet = new Planet(this, sun.mass, width/27, width/6, 0, 450, 100, 0, imgs[4], sSystem);
+		rPlanet.add_moon(0, width/7, 0, 50, 100, 0, imgs[11], sSystem);
 		playing = music[6];
 		music_menu = -1;
 		pause = timer = 0;
@@ -62,7 +63,11 @@ public class SolarWonders extends PApplet
 		textFont(font);
 
 		////////////
-		button = new AddPlanet(this, sSystem, scrollers);
+		location = new PVector(width*.01f, width*.01f, 0f);
+		size = new PVector(width*.1f, height*.075f);
+		infoLocation = new PVector(width*.01f, width*.1f);
+	    infoSize = new PVector(width*.15f, height*.5f);
+	    tSize = height / 45;
 		///////////
 	}
 	
@@ -105,6 +110,7 @@ public class SolarWonders extends PApplet
 			}
 			case 3:
 			{
+				songs[6].close();
 				background(0);
 				pushMatrix();
 				translate(width/2f, height * 3f/4f, -width * 2f/3f);
@@ -125,39 +131,37 @@ public class SolarWonders extends PApplet
 	
 	public void Lorcan()
 	{
-		int count = 0;
-		background(0);
-		button.display();
+		noStroke();
+		fill(0, 157, 219);
+		rect(location.x/2f, location.y/2f,
+				(size.x + location.x), (size.y + location.y));
+		strokeWeight(2);
+		stroke(247, 255, 28);
+
+		if(mouseCheck(location.x, size.x, location.y, size.y))
+		{
+			fill(200);
+		}
+		else
+		{
+			fill(119, 112, 127);
+		}
+		rect((location.x), (location.y),
+				size.x, size.y);
+		textAlign(PConstants.CENTER, PConstants.CENTER);
+		textSize(tSize);
+		fill(247, 255, 28);
+		text("Add Planet", location.x + size.x,
+				location.y + size.y / 2);
+		
 		for (int i = sSystem.size() - 1; i >= 0; i--)
 	    {
 			Planet p = sSystem.get(i);
-			p.display();
-			//p.info();
-	    }
-		for (int i = sSystem.size() - 1; i >= 0; i--)
-	    {
-			Planet p = sSystem.get(i);
-			if (p.clicked)
+			if(p.clicked)
 			{
 				p.info();
-				System.out.println("Planet " + i + " is clicked");
-			}
-			else
-			{
-				count++;
-			}
-			
-			if (count == sSystem.size())
-			{
-				p.adjustCamera();
 			}
 	    }
-		if (sSystem.size() > 0)
-		{
-			Planet p = sSystem.get(0);
-			p.zoomIn();
-			p.zoomOut();
-		}
 	}
 	
 	public void menu_background()
@@ -472,7 +476,22 @@ public class SolarWonders extends PApplet
 					}
 				}
 			}
+			
+			if(mouseCheck(location.x, size.x, location.y, size.y) && sSystem.size() < 10)
+			{
+				Planet planet = new Planet(this, sun.mass, width/3, width/3, 0, 50, 100, 0, imgs[(int) random(0, 8)], sSystem);
+				planet.bars();
+				sSystem.add(planet);
+			}
+			if(sSystem.size() > 0)
+			{
+				for(Planet p: sSystem)
+			    {
+					p.check();
+			    }
+			}
 		}
+		
 		if(menu_choice == 1)
 		{
 			if(mouseCheck(width/2-50, 105, height/2-55, 35))
