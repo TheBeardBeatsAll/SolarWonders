@@ -92,6 +92,12 @@ public class SolarWonders extends PApplet
 				p.adjustCamera();
 			}
 	    }
+		if (solarSystem.size() > 0)
+		{
+			Planet p = solarSystem.get(0);
+			p.zoomIn();
+			p.zoomOut();
+		}
 	}
 	
 	public void Finn()

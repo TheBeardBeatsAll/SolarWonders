@@ -16,7 +16,7 @@ public class AddPlanet
 	ArrayList<Planet> sSystem;
 	ArrayList<Scrollbar> sBars;
 	PVector infoLocation, infoSize;
-	float tSize, zoom;
+	float tSize, zoom, focus;
 	PFont font;
 	
 	AddPlanet(PApplet p, ArrayList<Planet> sSystem, ArrayList<Scrollbar> sBars)
@@ -38,15 +38,24 @@ public class AddPlanet
 	public void display()
 	{
 		boolean focused = false;
-		for (int i = sSystem.size() - 1; i >= 0; i--)
-	    {
-			Planet p = sSystem.get(i);
-			zoom = p.getZoom();
-			if (p.clicked)
-			{
-				focused = true;
-			}
-	    }
+		if (sSystem.size() == 0)
+		{
+			focus = 1;
+		}
+		else
+		{
+			for (int i = sSystem.size() - 1; i >= 0; i--)
+		    {
+				Planet p = sSystem.get(i);
+				zoom = p.getZoom();
+				focus = p.getFocus();
+				if (p.clicked)
+				{
+					focused = true;
+				}
+		    }
+		}
+		
 		if (focused)
 		{
 			parent.textFont(font);
@@ -65,7 +74,7 @@ public class AddPlanet
 			{
 				parent.fill(119, 112, 127);
 			}
-			parent.rect((location.x + -(parent.screenX(0, 0))) * zoom, (location.y + -(parent.screenY(0, 0))) * .5f,
+			parent.rect((location.x + -(parent.screenX(0, 0))) * zoom, (location.y + -(parent.screenY(0, 0))) * zoom,
 					size.x * zoom, size.y * zoom);
 			parent.textAlign(PConstants.CENTER, PConstants.CENTER);
 			parent.textSize(tSize * zoom);
@@ -75,6 +84,30 @@ public class AddPlanet
 		}
 		else
 		{
+			parent.textFont(font);
+			parent.noStroke();
+			parent.fill(0, 157, 219);
+			parent.rect((location.x / 2 + -(parent.screenX(0, 0))) * focus, (location.y / 2 + -(parent.screenY(0, 0))) * focus,
+					(size.x + location.x) * focus, (size.y + location.y) * focus);
+			parent.strokeWeight(2);
+			parent.stroke(247, 255, 28);
+			if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
+					parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
+			{
+				parent.fill(200);
+			}
+			else
+			{
+				parent.fill(119, 112, 127);
+			}
+			parent.rect((location.x + -(parent.screenX(0, 0))) * focus, (location.y + -(parent.screenY(0, 0))) * focus,
+					size.x * focus, size.y * focus);
+			parent.textAlign(PConstants.CENTER, PConstants.CENTER);
+			parent.textSize(tSize * focus);
+			parent.fill(247, 255, 28);
+			parent.text("Add Planet", (location.x + size.x / 2 + -(parent.screenX(0, 0))) * focus,
+					(location.y + size.y / 2 + -(parent.screenY(0, 0))) * focus);
+			/*
 			parent.textFont(font);
 			parent.noStroke();
 			parent.fill(0, 157, 219);
@@ -96,7 +129,7 @@ public class AddPlanet
 			parent.textSize(tSize);
 			parent.fill(247, 255, 28);
 			parent.text("Add Planet", location.x + size.x / 2 + -(parent.screenX(0, 0)),
-					location.y + size.y / 2 + -(parent.screenY(0, 0)));
+					location.y + size.y / 2 + -(parent.screenY(0, 0)));*/
 		}
 	}
 	
