@@ -122,10 +122,13 @@ public class Planet
 				  && parent.mouseY > 0 - size_w + (parent.screenY(0, 0))
 				  && parent.mouseY < 0 + size_w + (parent.screenY(0, 0)))
 		  {
+			  // if the planet was already clicked, i.e. if you are already focused on the planet you click it will zoom out of focus
 			  if (pCurrent.clicked)
 			  {
 				  pCurrent.clicked = false;
 			  }
+			  /* if the planet wasn't already clicked, the clicked values for all other planets will be set to false
+			     and the planet that was clicked will be zoomed in to focus */
 			  else
 			  {
 				  for (int i = sSystem.size() - 1; i >= 0; i--)
@@ -139,6 +142,8 @@ public class Planet
 		  parent.popMatrix();
 	  }
 	  
+	  // sets the camera position to zoom in and focus on the chosen planet
+	  // zoom = .5
 	  public void focus()
 	  {
 		  Planet pCurrent = sSystem.get(current);
@@ -146,6 +151,8 @@ public class Planet
 				  pCurrent.location.x, height / 2f, 0, 0, 1, 0);
 	  }
 	  
+	  // when a planets is not chosen, this camera angle is used
+	  // notFocused = 1 initially but can be changed by the user to zoom in and out
 	  public void adjustCamera()
 	  {
 		  Planet first = sSystem.get(0);
@@ -154,51 +161,63 @@ public class Planet
 				  (first.location.x + last.location.x) / 2, height / 2f, 0, 0, 1, 0);
 	  }
 	  
+	  // draws minus zoom button
+	  // zoomMinusLoc = PVector of top left corner position of the box
+	  // zoomSize = height and width of the box
 	  public void zoomOut()
 	  {
-		  // minus button
 		  parent.noStroke();
 		  parent.fill(0, 157, 219);
+		  // draws blue outer box
 		  parent.rect((zoomMinusLoc.x * .99f + -(parent.screenX(0, 0))) * notFocused,
 				  (zoomMinusLoc.y * .99f + -(parent.screenY(0, 0))) * notFocused,
 				  (zoomSize + zoomMinusLoc.x * 0.02f) * notFocused,
 				  (zoomSize + zoomMinusLoc.y * 0.02f) * notFocused);
 		  parent.strokeWeight(2);
 		  parent.stroke(247, 255, 28);
+		  // draws minus figure
 		  parent.line((zoomMinusLoc.x + (zoomSize * .25f) + -(parent.screenX(0, 0))) * notFocused,
 				  (zoomMinusLoc.y + (zoomSize * .5f) + -(parent.screenY(0, 0))) * notFocused,
 				  (zoomMinusLoc.x + (zoomSize * .75f) + -(parent.screenX(0, 0))) * notFocused,
 				  (zoomMinusLoc.y + (zoomSize * .5f) + -(parent.screenY(0, 0))) * notFocused);
+		  // if mouse is within the minus box
 		  if (parent.mouseX > zoomMinusLoc.x && parent.mouseX < zoomMinusLoc.x + zoomSize 
 				  && parent.mouseY > zoomMinusLoc.y && parent.mouseY < zoomMinusLoc.y + zoomSize)
 		  {
 			  parent.fill(200);
+			  // if mouse is pressed within the box, add to notFocused value to zoom out
 			  if (parent.mousePressed)
 			  {
 				  notFocused = notFocused + 0.05f;
 			  }
+			  // re-adjust camera to account for changes to notFocused
 			  adjustCamera();
 		  }
 		  else
 		  {
 			  parent.fill(119, 112, 127);
 		  }
+		  // draw inner grey box
 		  parent.rect((zoomMinusLoc.x + -(parent.screenX(0, 0))) * notFocused,
 				  (zoomMinusLoc.y + -(parent.screenY(0, 0))) * notFocused,
 				  zoomSize * notFocused, zoomSize * notFocused);
 	  }
 	  
+	  // draws plus zoom button
+	  // zoomPlusLoc = PVector of top left corner position of the box
+	  // zoomSize = height and width of the box
 	  public void zoomIn()
 	  {
-		  // plus button
 		  parent.noStroke();
 		  parent.fill(0, 157, 219);
+		  // draws blue outer box
 		  parent.rect((zoomPlusLoc.x * .99f + -(parent.screenX(0, 0))) * notFocused,
 				  (zoomPlusLoc.y * .99f + -(parent.screenY(0, 0))) * notFocused,
 				  (zoomSize + zoomPlusLoc.x * 0.02f) * notFocused,
 				  (zoomSize + zoomPlusLoc.y * 0.02f) * notFocused);
 		  parent.strokeWeight(2);
 		  parent.stroke(247, 255, 28);
+		  // two lines to draw plus figure
 		  parent.line((zoomPlusLoc.x + (zoomSize * .25f) + -(parent.screenX(0, 0))) * notFocused,
 				  (zoomPlusLoc.y + (zoomSize * .5f) + -(parent.screenY(0, 0))) * notFocused,
 				  (zoomPlusLoc.x + (zoomSize * .75f) + -(parent.screenX(0, 0))) * notFocused,
@@ -207,13 +226,17 @@ public class Planet
 				  (zoomPlusLoc.y + (zoomSize * .25f) + -(parent.screenY(0, 0))) * notFocused,
 				  (zoomPlusLoc.x + (zoomSize * .5f) + -(parent.screenX(0, 0))) * notFocused,
 				  (zoomPlusLoc.y + (zoomSize * .75f) + -(parent.screenY(0, 0))) * notFocused);
+		  
+		  // if mouse is within the minus box
 		  if (parent.mouseX > zoomPlusLoc.x && parent.mouseX < zoomPlusLoc.x + zoomSize 
 				  && parent.mouseY > zoomPlusLoc.y && parent.mouseY < zoomPlusLoc.y + zoomSize)
 		  {
+			  // if mouse is pressed within the box, add to notFocused value to zoom out
 			  if (parent.mousePressed && notFocused > 0.5)
 			  {
 				  notFocused = notFocused - 0.05f;
 			  }
+			  // re-adjust camera to account for changes to notFocused
 			  adjustCamera();
 			  parent.fill(200);
 		  }
@@ -221,6 +244,7 @@ public class Planet
 		  {
 			  parent.fill(119, 112, 127);
 		  }
+		  // draw inner grey box
 		  parent.rect((zoomPlusLoc.x + -(parent.screenX(0, 0))) * notFocused,
 				  (zoomPlusLoc.y + -(parent.screenY(0, 0))) * notFocused,
 				  zoomSize * notFocused, zoomSize * notFocused);
@@ -236,39 +260,53 @@ public class Planet
 		  return notFocused;
 	  }
 	  
+	  // draws info box
+	  // infoLocation = PVector of top left corner position of the box
+	  // infoSize = width(.x) and height(.y) of the box
+	  // infoEscLoc = PVector of top left corner position of the exit box within the info box
+	  // infoEscSize = width(.x) and height(.y) of the exit box
 	  public void info()
 	  {
+		  // call method to zoom in
 		  focus();
 		  parent.noStroke();
 		  parent.fill(0, 157, 219);
+		  // drwas blue outer box
 		  parent.rect((infoLocation.x / 2 + -(parent.screenX(0, 0))) * zoom, (infoLocation.y * .95f + -(parent.screenY(0, 0))) * zoom,
 					(infoSize.x + infoLocation.x) * zoom, (infoSize.y + infoLocation.y * .1f) * zoom);
 		  parent.strokeWeight(2);
 		  parent.stroke(247, 255, 28);
 		  parent.fill(119, 112, 127);
+		  // draws inner grey box
 		  parent.rect((infoLocation.x + -(parent.screenX(0, 0))) * zoom, (infoLocation.y + -(parent.screenY(0, 0))) * zoom,
 				  infoSize.x * zoom, infoSize.y * zoom);
 		  parent.fill(247, 255, 28);
 		  parent.textAlign(PConstants.CENTER);
 		  parent.textSize((height / 40) * zoom);
+		  // displays the planet number within array list, was meant to be able to change name but never got the chance to add functionality
 		  parent.text("Planet No. " + current, ((infoLocation.x + infoSize.x / 2) + -(parent.screenX(0, 0))) * zoom, 
 				  ((infoLocation.y + infoSize.y * .75f) + -(parent.screenY(0, 0))) * zoom);
+		  
+		  // draws exit box within info box
 		  if (parent.mouseX > infoEscLoc.x && parent.mouseX < infoEscLoc.x + infoEscSize.x 
 				  && parent.mouseY > infoEscLoc.y && parent.mouseY < infoEscLoc.y + infoEscSize.y)
 		  {
 			  parent.stroke(255, 0, 0);
 			  parent.fill(255, 0, 0);
-			  parent.rect((infoEscLoc.x + -(parent.screenX(0, 0))) * zoom, (infoEscLoc.y + -(parent.screenY(0, 0))) * zoom,
-					  infoEscSize.x * zoom, infoEscSize.y * zoom);
+		  }
+		  else
+		  {
+			  parent.stroke(255, 0, 0);
+			  parent.fill(255);
+		  }
+		  parent.rect((infoEscLoc.x + -(parent.screenX(0, 0))) * zoom, (infoEscLoc.y + -(parent.screenY(0, 0))) * zoom,
+				  infoEscSize.x * zoom, infoEscSize.y * zoom);
+		  
+		  if (parent.mouseX > infoEscLoc.x && parent.mouseX < infoEscLoc.x + infoEscSize.x 
+				  && parent.mouseY > infoEscLoc.y && parent.mouseY < infoEscLoc.y + infoEscSize.y)
+		  {
 			  parent.stroke(255);
-			  parent.line((infoEscLoc.x + (infoEscSize.x * .25f) + -(parent.screenX(0, 0))) * zoom,
-					  (infoEscLoc.y + (infoEscSize.y * .25f) + -(parent.screenY(0, 0))) * zoom,
-					  (infoEscLoc.x + (infoEscSize.x * .75f) + -(parent.screenX(0, 0))) * zoom, 
-					  (infoEscLoc.y + (infoEscSize.y * .75f) + -(parent.screenY(0, 0))) * zoom);
-			  parent.line((infoEscLoc.x + (infoEscSize.x * .25f) + -(parent.screenX(0, 0))) * zoom,
-					  (infoEscLoc.y + (infoEscSize.y * .75f) + -(parent.screenY(0, 0))) * zoom,
-					  (infoEscLoc.x + (infoEscSize.x * .75f) + -(parent.screenX(0, 0))) * zoom, 
-					  (infoEscLoc.y + (infoEscSize.y * .25f) + -(parent.screenY(0, 0))) * zoom);
+			  // zooms out of focus of planet when X is clicked
 			  if (parent.mousePressed)
 			  {
 				  clicked = false;
@@ -277,47 +315,27 @@ public class Planet
 		  else
 		  {
 			  parent.stroke(255, 0, 0);
-			  parent.fill(255);
-			  parent.rect((infoEscLoc.x + -(parent.screenX(0, 0))) * zoom, (infoEscLoc.y + -(parent.screenY(0, 0))) * zoom,
-					  infoEscSize.x * zoom, infoEscSize.y * zoom);
-			  parent.stroke(255, 0, 0);
-			  parent.line((infoEscLoc.x + (infoEscSize.x * .25f) + -(parent.screenX(0, 0))) * zoom,
-					  (infoEscLoc.y + (infoEscSize.y * .25f) + -(parent.screenY(0, 0))) * zoom,
-					  (infoEscLoc.x + (infoEscSize.x * .75f) + -(parent.screenX(0, 0))) * zoom, 
-					  (infoEscLoc.y + (infoEscSize.y * .75f) + -(parent.screenY(0, 0))) * zoom);
-			  parent.line((infoEscLoc.x + (infoEscSize.x * .25f) + -(parent.screenX(0, 0))) * zoom,
-					  (infoEscLoc.y + (infoEscSize.y * .75f) + -(parent.screenY(0, 0))) * zoom,
-					  (infoEscLoc.x + (infoEscSize.x * .75f) + -(parent.screenX(0, 0))) * zoom, 
-					  (infoEscLoc.y + (infoEscSize.y * .25f) + -(parent.screenY(0, 0))) * zoom);
 		  }
+		  // draws X
+		  parent.line((infoEscLoc.x + (infoEscSize.x * .25f) + -(parent.screenX(0, 0))) * zoom,
+				  (infoEscLoc.y + (infoEscSize.y * .25f) + -(parent.screenY(0, 0))) * zoom,
+				  (infoEscLoc.x + (infoEscSize.x * .75f) + -(parent.screenX(0, 0))) * zoom, 
+				  (infoEscLoc.y + (infoEscSize.y * .75f) + -(parent.screenY(0, 0))) * zoom);
+		  parent.line((infoEscLoc.x + (infoEscSize.x * .25f) + -(parent.screenX(0, 0))) * zoom,
+				  (infoEscLoc.y + (infoEscSize.y * .75f) + -(parent.screenY(0, 0))) * zoom,
+				  (infoEscLoc.x + (infoEscSize.x * .75f) + -(parent.screenX(0, 0))) * zoom, 
+				  (infoEscLoc.y + (infoEscSize.y * .25f) + -(parent.screenY(0, 0))) * zoom);
 		  
+		  // displays the scroll bars associated to the current planet selected
 		  for (int i = sBars.size() - 1; i >= 0; i--)
 		  {
 			  Scrollbar s = sBars.get(i);
 			  if (s.id == current)
 			  {
+				  // zoom value passed into scroll bar objects to account for zoom in
 				  s.update(zoom);
 				  s.display();
 			  }
 		  }
-	  }
-	  
-	  public void checkEdges() 
-	  {
-
-	    if (location.x + size_w >width || location.x  - size_w< 0) {
-	      velocity.x = -velocity.x;
-	      acceleration.x = -acceleration.x;
-	    }
-	    
-	    if (location.y  + size_w > height || location.y - size_w < 0) {
-	      velocity.y = -velocity.y;
-	      acceleration.y = -acceleration.y;
-	    }
-
-	    if (location.z  + size_w > 50 || location.z - size_w < -50) {
-		      velocity.z = -velocity.z;
-		      acceleration.z = -acceleration.z;
-		    }
 	  }
 }

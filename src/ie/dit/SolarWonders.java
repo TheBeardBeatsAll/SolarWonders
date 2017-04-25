@@ -47,7 +47,7 @@ public class SolarWonders extends PApplet
 		{
 			for (int i = solarSystem.size() - 1; i >= 0; i--)
 		    {
-				// check if a planet has been clicked
+				// continuously checking if a planet has been clicked
 				Planet p = solarSystem.get(i);
 				p.check(i);
 		    }
