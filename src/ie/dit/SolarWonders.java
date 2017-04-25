@@ -11,8 +11,10 @@ import processing.core.PShape;
 public class SolarWonders extends PApplet
 {
 	Sun sun;
-
-	ArrayList<Planet> planets = new ArrayList<Planet>();
+	Star star, comet, trail;
+	Planet rPlanet, lPlanet;
+	
+	ArrayList<Planet> sSystem = new ArrayList<Planet>();
 	ArrayList<Star> stars = new ArrayList<Star>();
 	ArrayList<Star> comets = new ArrayList<Star>();
 	
@@ -32,18 +34,20 @@ public class SolarWonders extends PApplet
 			"Man on the Moon - R.E.M.", "Only of the Universe - F. Y.", "Nothing Selected"};
 	String[] fnames = {"earth", "blue", "brown", "magma", "water", "gas", "ice", "red", "coarse", "sun", "moon", "moon2", "moon3"};
 	
-	Star star, comet, trail;
-	Planet rPlanet, lPlanet, next;
 	float startposx,  startposy;
 	
 	boolean starCheck, fade, cometCheck, musicCheck;
-	PShape moon, bplanet, rplanet;
+	
+	/////////////
+	AddPlanet button;
+	public ArrayList<Scrollbar> scrollers = new ArrayList<Scrollbar>();
+	/////////////
 	
 	public void setup()
 	{
 		smooth();
-		sun = new Sun(this, imgs[9]);
 		loadData();
+		sun = new Sun(this, imgs[9]);
 		rPlanet = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8]);
 		lPlanet = new Planet(this, sun.mass, width/27, width/6, 0, 450, 100, 0, imgs[4]);
 		rPlanet.add_moon(0, width/7, 0, 50, 100, 0, imgs[11]);
@@ -56,6 +60,10 @@ public class SolarWonders extends PApplet
 		menu_choice = 1;
 		play = ins = exit = 255;
 		textFont(font);
+
+		////////////
+		button = new AddPlanet(this, sSystem, scrollers);
+		///////////
 	}
 	
 	public void loadData()
@@ -101,7 +109,13 @@ public class SolarWonders extends PApplet
 				pushMatrix();
 				translate(width/2f, height * 3f/4f, -width * 2f/3f);
 				sun.display();
+				for(Planet p: sSystem)
+				{
+					p.update();
+					p.display();
+				}
 				popMatrix();
+				Lorcan();
 				songMenu();
 				mouseOver();
 				break;
@@ -109,14 +123,53 @@ public class SolarWonders extends PApplet
 		}
 	}
 	
+	public void Lorcan()
+	{
+		int count = 0;
+		background(0);
+		button.display();
+		for (int i = sSystem.size() - 1; i >= 0; i--)
+	    {
+			Planet p = sSystem.get(i);
+			p.display();
+			//p.info();
+	    }
+		for (int i = sSystem.size() - 1; i >= 0; i--)
+	    {
+			Planet p = sSystem.get(i);
+			if (p.clicked)
+			{
+				p.info();
+				System.out.println("Planet " + i + " is clicked");
+			}
+			else
+			{
+				count++;
+			}
+			
+			if (count == sSystem.size())
+			{
+				p.adjustCamera();
+			}
+	    }
+		if (sSystem.size() > 0)
+		{
+			Planet p = sSystem.get(0);
+			p.zoomIn();
+			p.zoomOut();
+		}
+	}
+	
 	public void menu_background()
 	{
 		background(0);
 		directionalLight(255, 255 , 255, 0, 5, -10);
+		
 		pushMatrix();
 		translate(0, height/2 - 150, 0);
 		rPlanet.display();
 		popMatrix();
+		
 		pushMatrix();
 		translate(0, height, 0);
 		lPlanet.display();
@@ -131,7 +184,6 @@ public class SolarWonders extends PApplet
 		float size, x, y, z;
 		
 		ambientLight(255, 255, 255, width/2, height/2, 0);
-		//parent.directionalLight(255, 255 , 255, width/2, 0, -200); //Deciding between the two
 		
 		//Create stars 
 		if( starCheck == false)
@@ -466,6 +518,7 @@ public class SolarWonders extends PApplet
 		stroke(255);
 		rect(0, 0, (width * 0.2f) - (height * 0.025f), height * 0.03f);
 		
+		textSize(14);
 		if(music_menu == 1)
 		{
 			for(int i = 0; i < 7; i++)
@@ -475,7 +528,7 @@ public class SolarWonders extends PApplet
 				rect(0, (height * 0.03f) + (i * (height * 0.03f)), (width * 0.2f) - (height * 0.025f), height * 0.03f);
 				fill(0);
 				stroke(0);
-				textSize(12);
+				
 				textAlign(CENTER, CENTER);
 				text(music[i], ((width * 0.2f) - (height * 0.025f))/2f, (height * 0.045f) + (i * (height * 0.03f)));
 			}
@@ -493,7 +546,6 @@ public class SolarWonders extends PApplet
 		
 		fill(0);
 		stroke(0);
-		textSize(12);
 		textAlign(CENTER, CENTER);
 		text("Music: " + playing, (((width * 0.2f) - (height * 0.025f) - (width * 0.02f))/2f) + (width * 0.02f), height * 0.015f);
 		popMatrix();
