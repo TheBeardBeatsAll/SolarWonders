@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import ddf.minim.*;
 import processing.core.PApplet;
+import processing.core.PFont;
+import processing.core.PImage;
 
 public class SolarWonders extends PApplet
 {
@@ -18,6 +20,12 @@ public class SolarWonders extends PApplet
 	String playing;
 	int[] mouse_change = new int[7];
 
+	Menu menu;
+	Textures tex;
+	String[] fnames = {"earth", "blue", "brown", "magma", "water", "gas", "ice", "red", "coarse", "sun", "moon", "moon2", "moon3"};
+	PImage[] imgs = new PImage[15];
+	PFont font;
+	boolean check = false;
 	public void loadSounds()
 	{
 	  minim = new Minim(this);       
@@ -56,10 +64,24 @@ public class SolarWonders extends PApplet
 		music[0] = "Out of Space - The Prodigy";
 		music_menu = -1;
 		pause = 0;
+		
+		for(int i=0; i < fnames.length; i++)
+		{
+			imgs[i] = loadImage(fnames[i] + ".png");
+		}
+		
+		font = createFont("font.ttf", 25);
+
+		menu = new Menu(this, imgs, font);
+		tex = new Textures(this, imgs);
 	}
 	
 	public void draw()
 	{
+		background(0);
+		menu.menu();
+		//tex.planet();
+		
 		mouseOver();
 		background(0);
 		pushMatrix();
