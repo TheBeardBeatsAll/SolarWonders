@@ -1,84 +1,63 @@
 package ie.dit;
 
 import java.util.ArrayList;
-import java.awt.Image;
 
 import ddf.minim.*;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
+import processing.core.PShape;
 
 public class SolarWonders extends PApplet
 {
-	Planet test;
 	Sun sun;
-	Boolean moon;
-	int music_menu, pause;
+
 	ArrayList<Planet> planets = new ArrayList<Planet>();
+	ArrayList<Star> stars = new ArrayList<Star>();
+	ArrayList<Star> comets = new ArrayList<Star>();
+	
 	Minim minim;
 	AudioPlayer[] songs = new AudioPlayer[7]; 
-	String[] music = new String[7];
-	String playing;
+	
+	PImage[] imgs = new PImage[13];
+	PFont font;
+	
+	int music_menu, pause, timer;
+	int play, ins, exit;
 	int[] mouse_change = new int[7];
 
-	Menu menu;
-	Textures tex;
+	String playing;
+	String[] music = {"Out of Space - The Prodigy", "Life on Mars - David Bowie", 
+			"Intergalactic - Beastie Boys", "Supernaut - Black Sabbath", 
+			"Man on the Moon - R.E.M.", "Only of the Universe - F. Y.", "Nothing Selected"};
 	String[] fnames = {"earth", "blue", "brown", "magma", "water", "gas", "ice", "red", "coarse", "sun", "moon", "moon2", "moon3"};
-	PImage[] imgs = new PImage[15];
-	PFont font;
-	boolean check = false;
+	
+	Star star, comet, trail;
+	Planet menu1, menu2, menu3;
+	float startposx,  startposy;
+	
+	boolean starCheck, fade, cometCheck, musicCheck;
+	PShape moon, bplanet, rplanet;
 	
 	public void setup()
 	{
 		smooth();
 		sun = new Sun(this);
-		test = new Planet(this, sun.mass, width/3f, width/3f, width/3f, 30, 100, 0);
-		planets.add(test);
-		moon = true;
-		loadSounds();
-		playing = music[6] = "Nothing Selected";
-		music[1] = "Life on Mars - David Bowie";
-		music[2] = "Intergalactic - Beastie Boys";
-		music[3] = "Supernaut - Black Sabbath";
-		music[4] = "Man on the Moon - R.E.M.";
-		music[5] = "Only of the Universe - F. Y.";
-		music[0] = "Out of Space - The Prodigy";
+		loadData();
+		menu1 = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8]);
+		menu2 = new Planet(this, sun.mass, width/27, width/7, 0, 450, 100, 0, imgs[4]);
+		menu3 = new Planet(this, sun.mass, width - width/5, 0, 0, 50, 100, 0, imgs[11]);
+		playing = music[6];
 		music_menu = -1;
-		pause = 0;
-		
-		for(int i=0; i < fnames.length; i++)
-		{
-			imgs[i] = loadImage(fnames[i] + ".png");
-		}
-		
-		font = createFont("font.ttf", 25);
-
-		//menu = new Menu(this, imgs, font);
-		tex = new Textures(this, imgs);
+		pause = timer = 0;
+		startposx = startposy = 0;
+		starCheck = cometCheck = fade = false;
+		musicCheck = true;
+		play = ins = exit = 255;
+		textFont(font);
 	}
 	
-	public void draw()
-	{
-		background(0);
-		//menu.menu();
-		tex.planet();
-		
-//		mouseOver();
-//		pushMatrix();
-//		translate(width/2f, height * 3f/4f, -width * 2f/3f);
-//		sun.display();
-//		test.update();
-//		if(moon)
-//		{
-//			test.add_moon(width/12f, width/12f, 0, 10, 10, 0);
-//			moon = false;
-//		}
-//		test.display();
-//		popMatrix();
-//		songMenu();
-	}
-	
-	public void loadSounds()
+	public void loadData()
 	{
 	  minim = new Minim(this);       
 	  
@@ -86,8 +65,290 @@ public class SolarWonders extends PApplet
 	  {
 		  songs[i] = minim.loadFile("song" + i + ".mp3");
 	  }
+	  for(int i = 0; i < imgs.length; i++)
+	  {
+		  imgs[i] = loadImage(fnames[i] + ".png");
+	  }
+		
+	  font = createFont("font.ttf", 25);
 	}//end loadSounds
+	
+	public void draw()
+	{
+		menu();
+		
+		
+//		mouseOver();
+//		pushMatrix();
+//		translate(width/2f, height * 3f/4f, -width * 2f/3f);
+//		sun.display();
+//		test.update();
+//		test.display();
+//		popMatrix();
+//		songMenu();
+	}
+	
+	public void menu()
+	{
+		if(musicCheck)
+		{
+			playSound(songs[6]);
+			musicCheck = false;
+		}
+		background(0);
 
+		directionalLight(255, 255 , 255, 0, 5, -10);
+		pushMatrix();
+		translate(0, height/2 - 150, 0);
+		menu1.display();
+		menu3.display();
+		popMatrix();
+		pushMatrix();
+		translate(0, height, 0);
+		menu2.display();
+		popMatrix();
+		
+		star();
+		comets();
+		text();
+	}
+	
+	public void star()
+	{
+		float size, x, y, z;
+		
+		ambientLight(255, 255, 255, width/2, height/2, 0);
+		//parent.directionalLight(255, 255 , 255, width/2, 0, -200); //Deciding between the two
+		
+		//Create stars 
+		if( starCheck == false)
+		{
+			for(int i=-350; i < width+350; i += 15)
+			{	
+				x = i;
+				y = random(-150, height+150);
+				z = -300;
+				size = random(0, 5);
+				
+				star = new Star(x, y ,z, size, this);
+				stars.add(star);
+			}
+			
+			starCheck = true;
+		}
+		
+		//Displays stars
+		for(int i=0; i < stars.size(); i++)
+		{
+			Star s = stars.get(i);
+			s.display();
+		}
+	}
+	
+	public void comets()
+	{
+		boolean tl = (startposx < width/2 && startposy < height/2);
+		boolean bl = (startposx < width/2 && startposy > height/2);
+		boolean tr = (startposx > width/2 && startposy < height/2);
+		boolean br = (startposx > width/2 && startposy > height/2);
+				
+		if(cometCheck == false)
+		{
+			if(millis() - timer >= 4000)
+			{
+				startposx = random(-300, 1600);
+				startposy = random(-300, 1000);
+						
+						
+				if((startposx < -200 || startposx > 1500) || (startposy < -200 || startposy > 900))
+				{
+						comet = new Star(startposx, startposy, -180, 15, this);
+						comets.add(comet);
+						
+						comet = new Star(startposx + random(80, 110), startposy - 90, -180, 15, this);
+						comets.add(comet);
+						
+						comet = new Star(startposx - random(120, 150), startposy - 125, -180, 15, this);
+						comets.add(comet);
+						
+						cometCheck = true;
+				}
+			}
+		}
+		else
+		{
+			if(tl)
+			{
+				for(int i=0; i < comets.size(); i++)
+				{
+					Star c = comets.get(i);
+					c.display();
+					c.trail(1);
+					c.x += 40;
+					c.y += 2;
+					
+					if(c.x > 1600)
+					{
+						comets.remove(i);
+					}
+				}
+				
+			}
+			else if(bl)
+			{				
+				for(int i=0; i < comets.size(); i++)
+				{
+					Star c = comets.get(i);
+					c.display();
+					c.trail(2);
+					c.x += 40;
+					c.y -= 20;
+					
+					if(c.x > 1600)
+					{
+						comets.remove(i);
+					}
+				}
+			}
+			else if(tr)
+			{
+				for(int i=0; i < comets.size(); i++)
+				{
+					Star c = comets.get(i);
+					c.display();
+					c.trail(3);
+					c.x -= 40;
+					c.y -= 2;
+					
+					if(c.x < -300)
+					{
+						comets.remove(i);
+					}
+				}
+			}
+			else if(br)
+			{
+				for(int i=0; i < comets.size(); i++)
+				{
+					Star c = comets.get(i);
+					c.display();
+					c.trail(4);
+					c.x -= 40;
+					c.y -= 20;
+					
+					if(c.x < -300)
+					{
+						comets.remove(i);
+					}
+				}
+			}
+						
+			if(comets.size() == 0)
+			{
+				timer = millis();
+				cometCheck = false;
+			}
+		}
+	}
+
+	
+	public void text()
+	{
+		fill(255, 75);
+		rect(width/2 - 200, height/2 - 150, 400, 275);
+		
+		stroke(255);
+		line(width/2 - 190, height/2 - 95, width/2 + 190, height/2 - 95);
+		
+		fill(255, 225);
+		textSize(45);
+		text("SolarWonders", width/2-190, height/2-100);
+		
+		textSize(40);
+		fill(255, play);
+		text("Play", width/2-50, height/2-25);
+		fill(255, ins);
+		text("Instructions", width/2-130, height/2+25);
+		fill(255, exit);
+		text("Exit", width/2-42, height/2+75);
+		
+		if((mouseX > width/2-50 && mouseX < width/2+55) && (mouseY > height/2-55 && mouseY < height/2-20) )
+		{
+			if(fade == false)
+			{
+				play = play - 4;
+				
+				if(play < 50)
+				{
+					fade = true;
+				}
+			}
+			else
+			{
+				play = play + 4;
+				
+				if(play > 250)
+				{
+					fade = false;
+				}
+			}
+		}
+		else
+		{
+			play = 255;
+		}
+		if((mouseX > width/2-130 && mouseX < width/2+140) && (mouseY > height/2-5 && mouseY < height/2+30))
+		{
+			if(fade == false)
+			{
+				ins = ins - 4;
+				
+				if(ins < 50)
+				{
+					fade = true;
+				}
+			}
+			else
+			{
+				ins = ins + 4;
+				
+				if(ins > 250)
+				{
+					fade = false;
+				}
+			}
+		}
+		else
+		{
+			ins = 255;
+		}
+		if((mouseX > width/2-42 && mouseX < width/2+48) && (mouseY > height/2+45 && mouseY < height/2+80) )
+		{
+			if(fade == false)
+			{
+				exit = exit - 4;
+				
+				if(exit < 50)
+				{
+					fade = true;
+				}
+			}
+			else
+			{
+				exit = exit + 4;
+				
+				if(exit > 250)
+				{
+					fade = false;
+				}
+			}
+		}
+		else
+		{
+			exit = 255;
+		}
+	}
+	
 	//method to play the sounds
 	public void playSound(AudioPlayer sound)
 	{

@@ -3,6 +3,7 @@ package ie.dit;
 import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PImage;
 import processing.core.PShape;
 import processing.core.PVector;
 
@@ -11,16 +12,17 @@ public class Planet extends Sun
 	  PApplet parent;
 	  PVector location, velocity, acceleration, adjacent, trailPosition;
 	  PShape planet;
+	  PImage texture;
 	  int x_start, z_start, x_accel, z_accel, trailSize;
 	  float x_coord, z_coord, y_coord;
-	  float period_acc, parent_mass, period_vel;
+	  float period_acc, parent_mass, period_vel, rot;
 	  double major, acc, eccentricity;
 	  double theta, grav, vel, sigma;
 	  ArrayList<Planet> moons = new ArrayList<Planet>();
 	  ArrayList<PVector> trail = new ArrayList<PVector>();
 
 	  Planet(PApplet parent, float parent_mass, float x_coord, float z_coord,
-			  float y_coord, float size, float mass, double eccentricity) 
+			  float y_coord, float size, float mass, double eccentricity, PImage texture) 
 	  {
 		  super(parent);
 		  this.parent = parent;
@@ -31,6 +33,7 @@ public class Planet extends Sun
 		  this.mass = mass;
 		  this.eccentricity = eccentricity;
 		  this.parent_mass = parent_mass;
+		  this.texture = texture;
 		  init_planet();
 		  calculate_theta();
 		  init_vel();
@@ -43,9 +46,11 @@ public class Planet extends Sun
 	      acceleration = new PVector(0f, 0f, 0f);
 	      grav = 6.67384;
 	      trailSize = 200;
+	      rot = 0;
+	      parent.noStroke();
 	      planet = parent.createShape(PConstants.SPHERE, size);
-		  planet.setStroke(255);
-		  planet.setFill(parent.color(125, 125, 125));
+		  planet.setTexture(texture);
+		  
 		  period_acc = 3f;
 		  period_vel = (float) Math.sqrt(period_acc);//you multiply acc by x then you multiply vel by sqrt(x)
 		  adjacent = new PVector(0, y_coord, 0);
@@ -56,9 +61,9 @@ public class Planet extends Sun
 		  }
 	  }
 	  
-	  public void add_moon(float m_x, float m_z, float m_y, float m_size, float m_mass, double eccentricity)
+	  public void add_moon(float m_x, float m_z, float m_y, float m_size, float m_mass, double eccentricity, PImage texture)
 	  {
-		  Planet p = new Planet(parent, this.mass, m_x, m_z, m_y, m_size, m_mass, eccentricity);
+		  Planet p = new Planet(parent, this.mass, m_x, m_z, m_y, m_size, m_mass, eccentricity, texture);
 		  moons.add(p);
 	  }
 	  
@@ -158,13 +163,16 @@ public class Planet extends Sun
 	      parent.rotateX((float) sigma);
 	      trails();
 	      parent.translate(location.x, location.y, location.z);
+	      parent.pushMatrix();
+	      parent.rotateY(rot);
 	      parent.shape(planet);
+	      parent.popMatrix();
 	      for(Planet p : moons)
 		  {
-	    	  parent.rotateX((float) (Math.PI/4));
 	    	  p.update();
 			  p.display();
 		  }  
-	      parent.popMatrix();      
+	      parent.popMatrix();
+	      rot += .0006;
 	  }
 }

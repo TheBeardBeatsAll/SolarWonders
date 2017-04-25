@@ -8,7 +8,6 @@ import processing.core.PConstants;
 
 public class Textures 
 {
-
 	PApplet parent;
 	PFont font;
 	PImage[] imgs;
