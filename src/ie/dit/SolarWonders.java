@@ -27,7 +27,6 @@ public class SolarWonders extends PApplet
 			imgs[i] = loadImage(fnames[i] + ".png");
 		}
 		
-		
 		font = createFont("font.ttf", 25);
 		
 		// Make Mover object
@@ -55,8 +54,8 @@ public class SolarWonders extends PApplet
 	{
 		//background(45, 20, 55);
 		background(0);
-		//menu.menu();
-		tex.planet();
+		menu.menu();
+		//tex.planet();
 	}
 	
 	public void settings()

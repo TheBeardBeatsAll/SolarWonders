@@ -31,7 +31,7 @@ public class Menu
 		
 		parent.noStroke();
 		rplanet = parent.createShape(parent.SPHERE, 200);
-		rplanet.setTexture(textures[6]);
+		rplanet.setTexture(textures[8]);
 		
 		parent.noStroke();
 		bplanet = parent.createShape(parent.SPHERE, 450);
@@ -39,7 +39,7 @@ public class Menu
 		
 		parent.noStroke();
 		moon = parent.createShape(parent.SPHERE, 50);
-		moon.setTexture(textures[8]);
+		moon.setTexture(textures[11]);
 	}
 	
 	public void menu()
