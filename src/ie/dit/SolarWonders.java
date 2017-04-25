@@ -33,7 +33,7 @@ public class SolarWonders extends PApplet
 	String[] fnames = {"earth", "blue", "brown", "magma", "water", "gas", "ice", "red", "coarse", "sun", "moon", "moon2", "moon3"};
 	
 	Star star, comet, trail;
-	Planet menu1, menu2, menu3;
+	Planet rPlanet, lPlanet;
 	float startposx,  startposy;
 	
 	boolean starCheck, fade, cometCheck, musicCheck;
@@ -44,9 +44,9 @@ public class SolarWonders extends PApplet
 		smooth();
 		sun = new Sun(this);
 		loadData();
-		menu1 = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8]);
-		menu2 = new Planet(this, sun.mass, width/27, width/7, 0, 450, 100, 0, imgs[4]);
-		menu3 = new Planet(this, sun.mass, width - width/5, 0, 0, 50, 100, 0, imgs[11]);
+		rPlanet = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8]);
+		lPlanet = new Planet(this, sun.mass, width/27, width/6, 0, 450, 100, 0, imgs[4]);
+		rPlanet.add_moon(0, width/7, 0, 50, 100, 0, imgs[11]);
 		playing = music[6];
 		music_menu = -1;
 		pause = timer = 0;
@@ -100,12 +100,11 @@ public class SolarWonders extends PApplet
 		directionalLight(255, 255 , 255, 0, 5, -10);
 		pushMatrix();
 		translate(0, height/2 - 150, 0);
-		menu1.display();
-		menu3.display();
+		rPlanet.display();
 		popMatrix();
 		pushMatrix();
 		translate(0, height, 0);
-		menu2.display();
+		lPlanet.display();
 		popMatrix();
 		
 		star();

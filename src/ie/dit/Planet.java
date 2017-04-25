@@ -14,6 +14,7 @@ public class Planet extends Sun
 	  PShape planet;
 	  PImage texture;
 	  int x_start, z_start, x_accel, z_accel, trailSize;
+	  float r_c, g_c, b_c;
 	  float x_coord, z_coord, y_coord;
 	  float period_acc, parent_mass, period_vel, rot;
 	  double major, acc, eccentricity;
@@ -59,6 +60,9 @@ public class Planet extends Sun
 		  {
 			  sigma *= -1;
 		  }
+		  r_c = parent.random(100, 255);
+		  g_c = parent.random(100, 255);
+		  b_c = parent.random(100, 255);
 	  }
 	  
 	  public void add_moon(float m_x, float m_z, float m_y, float m_size, float m_mass, double eccentricity, PImage texture)
@@ -147,7 +151,7 @@ public class Planet extends Sun
 	        trailPosition = trail.get(i);
 	        adjacent = trail.get(i + 1);
 
-	        parent.stroke(255, 255*i/trailLength);
+	        parent.stroke(r_c, g_c, b_c,255*i/trailLength);
 	        parent.line(trailPosition.x, 0, trailPosition.z,
 	        		adjacent.x, 0, adjacent.z);
 	      }
@@ -170,9 +174,10 @@ public class Planet extends Sun
 	      for(Planet p : moons)
 		  {
 	    	  p.update();
+	    	  parent.rotateX(PConstants.PI/4);
 			  p.display();
 		  }  
 	      parent.popMatrix();
-	      rot += .0006;
+	      rot += .001;
 	  }
 }
