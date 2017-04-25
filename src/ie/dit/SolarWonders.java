@@ -39,12 +39,15 @@ public class SolarWonders extends PApplet
 	
 	public void mousePressed()
 	{
-		//mover.check();
+		// checks if the add planet button is pressed
 		button.check();
+		
+		// when there is at least 1 planet created
 		if (solarSystem.size() > 0)
 		{
 			for (int i = solarSystem.size() - 1; i >= 0; i--)
 		    {
+				// check if a planet has been clicked
 				Planet p = solarSystem.get(i);
 				p.check(i);
 		    }
@@ -63,35 +66,41 @@ public class SolarWonders extends PApplet
 	{
 		int count = 0;
 		background(0);
-		//mover.update();
-		//mover.checkEdges();
-		//mover.display();
-		//mover.info();
+		
+		// display add planet button
 		button.display();
+		
+		// display created planets
 		for (int i = solarSystem.size() - 1; i >= 0; i--)
 	    {
 			Planet p = solarSystem.get(i);
 			p.display();
-			//p.info();
 	    }
+		
+		// checks which planet has been clicked
 		for (int i = solarSystem.size() - 1; i >= 0; i--)
 	    {
 			Planet p = solarSystem.get(i);
 			if (p.clicked)
 			{
+				// the info box of the clicked planet is displayed
 				p.info();
 				System.out.println("Planet " + i + " is clicked");
 			}
 			else
 			{
+				// counter increments if a planet's clicked value is false
 				count++;
 			}
 			
+			// if all planets' clicked value is false, reset the camera to the way it was before a planet was clicked
 			if (count == solarSystem.size())
 			{
 				p.adjustCamera();
 			}
 	    }
+		
+		// if there is at least 1 planet created, allow the abilty to zoom in and out on planets
 		if (solarSystem.size() > 0)
 		{
 			Planet p = solarSystem.get(0);
