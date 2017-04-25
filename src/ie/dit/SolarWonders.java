@@ -23,7 +23,7 @@ public class SolarWonders extends PApplet
 	PFont font;
 	
 	int music_menu, pause, timer;
-	int play, ins, exit;
+	int play, ins, exit, menu_choice;
 	int[] mouse_change = new int[7];
 
 	String playing;
@@ -33,7 +33,7 @@ public class SolarWonders extends PApplet
 	String[] fnames = {"earth", "blue", "brown", "magma", "water", "gas", "ice", "red", "coarse", "sun", "moon", "moon2", "moon3"};
 	
 	Star star, comet, trail;
-	Planet rPlanet, lPlanet;
+	Planet rPlanet, lPlanet, next;
 	float startposx,  startposy;
 	
 	boolean starCheck, fade, cometCheck, musicCheck;
@@ -42,7 +42,7 @@ public class SolarWonders extends PApplet
 	public void setup()
 	{
 		smooth();
-		sun = new Sun(this);
+		sun = new Sun(this, imgs[9]);
 		loadData();
 		rPlanet = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8]);
 		lPlanet = new Planet(this, sun.mass, width/27, width/6, 0, 450, 100, 0, imgs[4]);
@@ -53,6 +53,7 @@ public class SolarWonders extends PApplet
 		startposx = startposy = 0;
 		starCheck = cometCheck = fade = false;
 		musicCheck = true;
+		menu_choice = 1;
 		play = ins = exit = 255;
 		textFont(font);
 	}
@@ -75,28 +76,42 @@ public class SolarWonders extends PApplet
 	
 	public void draw()
 	{
-		menu();
-		
-		
-//		mouseOver();
-//		pushMatrix();
-//		translate(width/2f, height * 3f/4f, -width * 2f/3f);
-//		sun.display();
-//		test.update();
-//		test.display();
-//		popMatrix();
-//		songMenu();
+		switch(menu_choice)
+		{
+			case 1:
+			{
+				if(musicCheck)
+				{
+					playSound(songs[6]);
+					musicCheck = false;
+				}
+				menu_background();
+				text_menu();
+				mouseOver();
+				break;
+			}
+			case 2:
+			{
+				menu_background();
+				break;
+			}
+			case 3:
+			{
+				background(0);
+				pushMatrix();
+				translate(width/2f, height * 3f/4f, -width * 2f/3f);
+				sun.display();
+				popMatrix();
+				songMenu();
+				mouseOver();
+				break;
+			}
+		}
 	}
 	
-	public void menu()
+	public void menu_background()
 	{
-		if(musicCheck)
-		{
-			playSound(songs[6]);
-			musicCheck = false;
-		}
 		background(0);
-
 		directionalLight(255, 255 , 255, 0, 5, -10);
 		pushMatrix();
 		translate(0, height/2 - 150, 0);
@@ -109,7 +124,6 @@ public class SolarWonders extends PApplet
 		
 		star();
 		comets();
-		text();
 	}
 	
 	public void star()
@@ -251,7 +265,7 @@ public class SolarWonders extends PApplet
 	}
 
 	
-	public void text()
+	public void text_menu()
 	{
 		fill(255, 75);
 		rect(width/2 - 200, height/2 - 150, 400, 275);
@@ -270,82 +284,6 @@ public class SolarWonders extends PApplet
 		text("Instructions", width/2-130, height/2+25);
 		fill(255, exit);
 		text("Exit", width/2-42, height/2+75);
-		
-		if((mouseX > width/2-50 && mouseX < width/2+55) && (mouseY > height/2-55 && mouseY < height/2-20) )
-		{
-			if(fade == false)
-			{
-				play = play - 4;
-				
-				if(play < 50)
-				{
-					fade = true;
-				}
-			}
-			else
-			{
-				play = play + 4;
-				
-				if(play > 250)
-				{
-					fade = false;
-				}
-			}
-		}
-		else
-		{
-			play = 255;
-		}
-		if((mouseX > width/2-130 && mouseX < width/2+140) && (mouseY > height/2-5 && mouseY < height/2+30))
-		{
-			if(fade == false)
-			{
-				ins = ins - 4;
-				
-				if(ins < 50)
-				{
-					fade = true;
-				}
-			}
-			else
-			{
-				ins = ins + 4;
-				
-				if(ins > 250)
-				{
-					fade = false;
-				}
-			}
-		}
-		else
-		{
-			ins = 255;
-		}
-		if((mouseX > width/2-42 && mouseX < width/2+48) && (mouseY > height/2+45 && mouseY < height/2+80) )
-		{
-			if(fade == false)
-			{
-				exit = exit - 4;
-				
-				if(exit < 50)
-				{
-					fade = true;
-				}
-			}
-			else
-			{
-				exit = exit + 4;
-				
-				if(exit > 250)
-				{
-					fade = false;
-				}
-			}
-		}
-		else
-		{
-			exit = 255;
-		}
 	}
 	
 	//method to play the sounds
@@ -361,41 +299,141 @@ public class SolarWonders extends PApplet
 	
 	public void mouseOver()
 	{
-		for(int i = 0; i < 7; i++)
+		if(menu_choice == 3)
 		{
-			if(mouseCheck(width * 0.8f, (width * 0.2f) - (height * 0.025f), (height * 0.055f) + (i * (height * 0.03f)), (height * 0.03f)))
+			for(int i = 0; i < 7; i++)
 			{
-				mouse_change[i] = 100;
+				if(mouseCheck(width * 0.8f, (width * 0.2f) - (height * 0.025f), (height * 0.055f) + (i * (height * 0.03f)), (height * 0.03f)))
+				{
+					mouse_change[i] = 100;
+				}
+				else
+				{
+					mouse_change[i] = 150;
+				}
+			}
+		}
+		
+		if(menu_choice == 1)
+		{
+			if(mouseCheck(width/2-50, 105, height/2-55, 35))
+			{
+				if(fade == false)
+				{
+					play = play - 4;
+					
+					if(play < 50)
+					{
+						fade = true;
+					}
+				}
+				else
+				{
+					play = play + 4;
+					
+					if(play > 250)
+					{
+						fade = false;
+					}
+				}
 			}
 			else
 			{
-				mouse_change[i] = 150;
+				play = 255;
+			}
+			if(mouseCheck(width/2-130, 270, height/2-5, 35))
+			{
+				if(fade == false)
+				{
+					ins = ins - 4;
+					
+					if(ins < 50)
+					{
+						fade = true;
+					}
+				}
+				else
+				{
+					ins = ins + 4;
+					
+					if(ins > 250)
+					{
+						fade = false;
+					}
+				}
+			}
+			else
+			{
+				ins = 255;
+			}
+			if(mouseCheck(width/2-42, 90, height/2+45, 35))
+			{
+				if(fade == false)
+				{
+					exit = exit - 4;
+					
+					if(exit < 50)
+					{
+						fade = true;
+					}
+				}
+				else
+				{
+					exit = exit + 4;
+					
+					if(exit > 250)
+					{
+						fade = false;
+					}
+				}
+			}
+			else
+			{
+				exit = 255;
 			}
 		}
 	}
 	
 	public void mousePressed()
 	{
-		if(mouseCheck(width * 0.8f, width * 0.02f, height * 0.025f, height * 0.03f))
+		if(menu_choice == 3)
 		{
-			music_menu = -music_menu;
-		}
-		else if(music_menu == 1)
-		{
-			music_menu = -music_menu;
-			for(int i = 0; i < 7; i++)
+			if(mouseCheck(width * 0.8f, width * 0.02f, height * 0.025f, height * 0.03f))
 			{
-				if(mouseCheck(width * 0.8f, (width * 0.2f) - (height * 0.025f), (height * 0.055f) + (i * (height * 0.03f)), (height * 0.03f)))
+				music_menu = -music_menu;
+			}
+			else if(music_menu == 1)
+			{
+				music_menu = -music_menu;
+				for(int i = 0; i < 7; i++)
 				{
-					songs[pause].pause();
-					playSound(songs[i]);
-					pause = i;
-					if(i == 6)
+					if(mouseCheck(width * 0.8f, (width * 0.2f) - (height * 0.025f), (height * 0.055f) + (i * (height * 0.03f)), (height * 0.03f)))
 					{
-						songs[6].pause();
+						songs[pause].pause();
+						playSound(songs[i]);
+						pause = i;
+						if(i == 6)
+						{
+							songs[6].pause();
+						}
+						playing = music[i];
 					}
-					playing = music[i];
 				}
+			}
+		}
+		if(menu_choice == 1)
+		{
+			if(mouseCheck(width/2-50, 105, height/2-55, 35))
+			{
+				menu_choice = 3;
+			}
+			else if(mouseCheck(width/2-130, 270, height/2-5, 35))
+			{
+				menu_choice = 2;
+			}
+			else if(mouseCheck(width/2-42, 90, height/2+45, 35))
+			{
+				exit();
 			}
 		}
 	}

@@ -25,7 +25,7 @@ public class Planet extends Sun
 	  Planet(PApplet parent, float parent_mass, float x_coord, float z_coord,
 			  float y_coord, float size, float mass, double eccentricity, PImage texture) 
 	  {
-		  super(parent);
+		  super(parent, texture);
 		  this.parent = parent;
 		  this.x_coord = x_coord;
 		  this.z_coord = z_coord;
