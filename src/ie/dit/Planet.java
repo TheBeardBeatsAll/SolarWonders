@@ -22,7 +22,7 @@ public class Planet
 	  ArrayList<Planet> sSystem;
 	  ArrayList<Scrollbar> sBars;
 	  int current;
-	  int addPos, checkAddPos, addZoom, checkAddZoom;
+	  int addZoom, checkAddZoom;
 	  PVector infoEscLoc, infoEscSize;
 	  float zoom, zoomSize;
 	  float notFocused = 1;
@@ -42,7 +42,6 @@ public class Planet
 	    infoSize = new PVector(width*.15f, height*.5f);
 	    this.sSystem = sSystem;
 	    this.sBars = sBars;
-	    addPos = checkAddPos;
 	    addZoom = checkAddZoom;
 	    infoEscLoc = new PVector(infoLocation.x*1.1f, infoLocation.y*1.01f);
 	    infoEscSize = new PVector(width*.03f, width*.03f);
@@ -66,45 +65,58 @@ public class Planet
 	    parent.translate(location.x, location.y, location.z);
 	    parent.noFill();
 	    parent.stroke(255);
-	    // exception must be made for second planet in the ArrayList
-	    if (current == 1)
-    	{
-	    	Scrollbar s = sBars.get(current + 1);
-	    	parent.strokeWeight(1);
-		    parent.sphere(size_w + (s.sPos - s.sliderStart()));
-    	}
-	    else
-	    {
-	    	Scrollbar s = sBars.get(current * 2);
-	    	parent.strokeWeight(1);
-		    parent.sphere(size_w + (s.sPos - s.sliderStart()));
-	    }
-	    // to change distances between planets
+	    
+	    // to determine the size of the planets
+	    
+	    /* accessing the first scroll bar of the currently selected planet
+	       by multiplying by 2 as there are 2 scroll bars per planet */
+    	Scrollbar s = sBars.get(current * 2);
+    	
+    	parent.strokeWeight(1);
+    	
+    	// drawing the sphere which can be changed in size
+    	// size_w is set to an initial value in constructor
+    	/* adding to size_w is the current slider position of the first scroll bar 
+    	   minus the initial starting position of the slider, i.e. the mid-point of the scroll bar */
+	    parent.sphere(size_w + (s.sPos - s.sliderStart()));
+	    
+	    
+	    // to change distances between planets, i.e. location of current planet
+	    
+	    /* accessing the second scroll bar of the currently selected planet
+	       by multiplying by 2 and adding 1 as there are 2 scroll bars per planet */
 	    Scrollbar s2 = sBars.get(current * 2 + 1);
+	    
+	    // accessing current planet selected
 	    Planet p = sSystem.get(current);
+	    
+	    /* because location couldn't be changed as easily as size, the following mechanism isn't
+	       slows down the rate it is incremented */
+	    // the planet's location value will only be incremented when the slider is selected
 	    if (s2.locked)
 	    {
-	    	addPos = 1;
-	    }
-	    else
-	    {
-	    	addPos = 0;
-	    	checkAddPos = addPos;
-	    }
-	    
-	    if (addPos == 1 && addPos != checkAddPos)
-		{
+	    	/* s2.sPos = slider position of second scroll bar, i.e. distance scroll bar
+	    	 * s2.sliderStart() = mid-point of second scroll bar
+	    	 * s2.sPos - s2.sliderStart() is divided by 10 to slow down increment rate*/
 			p.location.x = p.location.x + (s2.sPos - s2.sliderStart()) / 10;
-		}
+	    }
 	    parent.popMatrix();
 	  }
 	  
+	  // only called when the mouse is pressed
 	  public void check(int selected)
 	  {
 		  parent.pushMatrix();
 		  parent.translate(location.x, location.y, location.z);
+		  
+		  // current = position of planet in array list that is being checked 
 		  current = selected;
+		  // accessing current planet
 		  Planet pCurrent = sSystem.get(current);
+		  
+		  // not really sure how this is working
+		  // basically it checks where the mouse was when you clicked and if it is within the radius of a planet
+		  // seems too vague to work accurately but it does somehow...
 		  if (parent.mouseX > 0 - size_w + (parent.screenX(0, 0))
 				  && parent.mouseX < 0 + size_w + (parent.screenX(0, 0)) 
 				  && parent.mouseY > 0 - size_w + (parent.screenY(0, 0))
