@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PShape;
+import processing.core.PConstants;
 
 public class Textures 
 {
@@ -30,7 +31,7 @@ public class Textures
 		parent.fill(255, 255);
 		
 		parent.noStroke();
-		planet = parent.createShape(parent.SPHERE, 200);
+		planet = parent.createShape(PConstants.SPHERE, 200);
 		planet.setTexture(imgs[check]);
 
 		
@@ -38,7 +39,7 @@ public class Textures
 		{
 			for(int i=0; i < 9; i++)
 			{
-				textures[i] = parent.createShape(parent.RECT, 58 + j, 65 + rec, 75, 50);
+				textures[i] = parent.createShape(PConstants.RECT, 58 + j, 65 + rec, 75, 50);
 				textures[i].setTexture(imgs[i]);
 			
 				j += 80;

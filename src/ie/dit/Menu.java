@@ -2,6 +2,7 @@ package ie.dit;
 
 import java.util.ArrayList;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PShape;
@@ -31,15 +32,15 @@ public class Menu
 		rot = 0;
 		
 		parent.noStroke();
-		rplanet = parent.createShape(parent.SPHERE, 200);
+		rplanet = parent.createShape(PConstants.SPHERE, 200);
 		rplanet.setTexture(textures[8]);
 		
 		parent.noStroke();
-		bplanet = parent.createShape(parent.SPHERE, 450);
+		bplanet = parent.createShape(PConstants.SPHERE, 450);
 		bplanet.setTexture(textures[4]);
 		
 		parent.noStroke();
-		moon = parent.createShape(parent.SPHERE, 50);
+		moon = parent.createShape(PConstants.SPHERE, 50);
 		moon.setTexture(textures[11]);
 	}
 	

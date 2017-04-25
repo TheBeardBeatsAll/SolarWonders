@@ -1,6 +1,7 @@
 package ie.dit;
 
 import java.util.ArrayList;
+import java.awt.Image;
 
 import ddf.minim.*;
 import processing.core.PApplet;
@@ -26,26 +27,6 @@ public class SolarWonders extends PApplet
 	PImage[] imgs = new PImage[15];
 	PFont font;
 	boolean check = false;
-	public void loadSounds()
-	{
-	  minim = new Minim(this);       
-	  
-	  for(int i = 0; i < 7; i++)
-	  {
-		  songs[i] = minim.loadFile("song" + i + ".mp3");
-	  }
-	}//end loadSounds
-
-	//method to play the sounds
-	public void playSound(AudioPlayer sound)
-	{
-	  if(sound == null)
-	  {
-	    return;
-	  }
-	  sound.rewind();
-	  sound.loop(); 
-	}//end playSound
 	
 	public void setup()
 	{
@@ -72,31 +53,51 @@ public class SolarWonders extends PApplet
 		
 		font = createFont("font.ttf", 25);
 
-		menu = new Menu(this, imgs, font);
+		//menu = new Menu(this, imgs, font);
 		tex = new Textures(this, imgs);
 	}
 	
 	public void draw()
 	{
 		background(0);
-		menu.menu();
-		//tex.planet();
+		//menu.menu();
+		tex.planet();
 		
-		mouseOver();
-		background(0);
-		pushMatrix();
-		translate(width/2f, height * 3f/4f, -width * 2f/3f);
-		sun.display();
-		test.update();
-		if(moon)
-		{
-			test.add_moon(width/12f, width/12f, 0, 10, 10, 0);
-			moon = false;
-		}
-		test.display();
-		popMatrix();
-		songMenu();
+//		mouseOver();
+//		pushMatrix();
+//		translate(width/2f, height * 3f/4f, -width * 2f/3f);
+//		sun.display();
+//		test.update();
+//		if(moon)
+//		{
+//			test.add_moon(width/12f, width/12f, 0, 10, 10, 0);
+//			moon = false;
+//		}
+//		test.display();
+//		popMatrix();
+//		songMenu();
 	}
+	
+	public void loadSounds()
+	{
+	  minim = new Minim(this);       
+	  
+	  for(int i = 0; i < 7; i++)
+	  {
+		  songs[i] = minim.loadFile("song" + i + ".mp3");
+	  }
+	}//end loadSounds
+
+	//method to play the sounds
+	public void playSound(AudioPlayer sound)
+	{
+	  if(sound == null)
+	  {
+	    return;
+	  }
+	  sound.rewind();
+	  sound.loop(); 
+	}//end playSound
 	
 	public void mouseOver()
 	{
