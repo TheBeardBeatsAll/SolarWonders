@@ -13,6 +13,7 @@ public class Planet extends Sun
 	  PVector velocity, acceleration, adjacent, trailPosition;
 	  PShape planet;
 	  PImage texture;
+	  int addPos, checkAddPos, add , checkAdd, current;
 	  int x_start, z_start, x_accel, z_accel, trailSize;
 	  float r_c, g_c, b_c;
 	  float x_coord, z_coord, y_coord;
@@ -21,13 +22,9 @@ public class Planet extends Sun
 	  double theta, grav, vel, sigma;
 	  ArrayList<Planet> moons = new ArrayList<Planet>();
 	  ArrayList<PVector> trail = new ArrayList<PVector>();
-
-	  boolean clicked;
-	  PVector location, infoLocation, infoSize, infoEscLoc, infoEscSize;
-	  ArrayList<Scrollbar> sBars;
-	  int current;
-	  int addPos, checkAddPos, add , checkAdd ;
+	  ArrayList<Scrollbar> sBars = new ArrayList<Scrollbar>();
 	  
+	  PVector location, infoLocation, infoSize, infoEscLoc, infoEscSize;
 	  
 	  Planet(PApplet parent, float parent_mass, float x_coord, float z_coord,
 			  float y_coord, float size, float mass, double eccentricity, PImage texture, ArrayList<Planet> sSystem) 
@@ -55,7 +52,6 @@ public class Planet extends Sun
 	      grav = 6.67384;
 	      trailSize = 200;
 	      rot = 0;
-	      clicked = false;
 	      
 	      parent.noStroke();
 	      parent.noFill();
@@ -203,80 +199,56 @@ public class Planet extends Sun
 	  
 	  public void display2() 
 	  {
-	    parent.pushMatrix();
-	    parent.translate(location.x, location.y, location.z);
-	    parent.noFill();
-	    parent.stroke(255);
-	    // exception must be made for second planet in the ArrayList
-	    if (current == 1)
-    	{
-	    	Scrollbar s = sBars.get(current + 1);
-	    	parent.strokeWeight(1);
-		    parent.sphere(size + (s.sPos - s.sliderStart()));
-    	}
-	    else
-	    {
-	    	Scrollbar s = sBars.get(current * 2);
-	    	parent.strokeWeight(1);
-		    parent.sphere(size + (s.sPos - s.sliderStart()));
-	    }
-	    // to change distances between planets
-	    Scrollbar s2 = sBars.get(current * 2 + 1);
-	    Planet p = sSystem.get(current);
-	    if (s2.locked)
-	    {
-	    	addPos = 1;
-	    }
-	    else
-	    {
-	    	addPos = 0;
-	    	checkAddPos = addPos;
-	    }
+	      parent.pushMatrix();
+	      parent.translate(width/2, height/2, -50);
+	      parent.shape(planet);
+	      parent.noFill();
+	      parent.stroke(255);
+	      // exception must be made for second planet in the ArrayList
+	      if (current == 1)
+          {
+	    	  Scrollbar s = sBars.get(current + 1);
+	    	  parent.strokeWeight(1);
+		      parent.sphere(size + (s.sPos - s.sliderStart()));
+    	  }
+	      else
+	      {
+	    	  Scrollbar s = sBars.get(current * 2);
+	    	  parent.strokeWeight(1);
+		      parent.sphere(size + (s.sPos - s.sliderStart()));
+	      }
+	      // to change distances between planets
+	      Scrollbar s2 = sBars.get(current * 2 + 1);
+	      Planet p = sSystem.get(current);
+	      if (s2.locked)
+	      {
+	       	  addPos = 1;
+	      }
+	      else
+	      {
+	    	  addPos = 0;
+	    	  checkAddPos = addPos;
+	      }
 	    
-	    if (addPos == 1 && addPos != checkAddPos)
-		{
-			p.location.x = p.location.x + (s2.sPos - s2.sliderStart()) / 10;
-		}
-	    parent.popMatrix();
+	      if (addPos == 1 && addPos != checkAddPos)
+		  {
+			  p.location.x = p.location.x + (s2.sPos - s2.sliderStart()) / 10;
+		  }
+	      parent.popMatrix();
+	      info();
 	  }
 	  
 	  public void bars()
 	  {
-//			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
-//			infoLocation.y + infoSize.y * .2f);
-//	Scrollbar scrollbar2 = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
-//			infoLocation.y + infoSize.y * .4f);
-//	sBars.add(scrollbar);
-//	sBars.add(scrollbar2);
-	  }
-
-	  public void check()
-	  {
-		  parent.pushMatrix();
-		  parent.translate(location.x, location.y, location.z);
-		  if (parent.mouseX > 0 - size + (parent.screenX(0, 0))
-				  && parent.mouseX < 0 + size + (parent.screenX(0, 0)) 
-				  && parent.mouseY > 0 - size + (parent.screenY(0, 0))
-				  && parent.mouseY < 0 + size + (parent.screenY(0, 0)))
-		  {
-			  if (clicked)
-			  {
-				  clicked = false;
-			  }
-			  else
-			  {
-				  for (int i = sSystem.size() - 1; i >= 0; i--)
-				  {
-					  Planet p = sSystem.get(i);
-					  p.clicked = false;
-				  }
-				  clicked = true;
-			  }
-		  }
-		  parent.popMatrix();
+			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
+			infoLocation.y + infoSize.y * .2f);
+			Scrollbar scrollbar2 = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
+			infoLocation.y + infoSize.y * .4f);
+			sBars.add(scrollbar);
+			sBars.add(scrollbar2);
 	  }
 	  
-	  public void info()
+      private void info()
 	  {
 		  parent.noStroke();
 		  parent.fill(0, 157, 219);
@@ -292,43 +264,40 @@ public class Planet extends Sun
 		  parent.textSize((height / 40));
 		  parent.text("Planet No. " + current, infoLocation.x + infoSize.x / 2, 
 				  infoLocation.y + infoSize.y * .75f);
-		  if (parent.mouseX > infoEscLoc.x && parent.mouseX < infoEscLoc.x + infoEscSize.x 
-				  && parent.mouseY > infoEscLoc.y && parent.mouseY < infoEscLoc.y + infoEscSize.y)
-		  {
-			  parent.stroke(255, 0, 0);
-			  parent.fill(255, 0, 0);
-			  parent.rect(infoEscLoc.x, infoEscLoc.y,
-					  infoEscSize.x, infoEscSize.y);
-			  parent.stroke(255);
-			  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
-					  infoEscLoc.y + (infoEscSize.y * .25f),
-					  infoEscLoc.x + (infoEscSize.x * .75f), 
-					  infoEscLoc.y + (infoEscSize.y * .75f));
-			  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
-					  infoEscLoc.y + (infoEscSize.y * .75f),
-					  infoEscLoc.x + (infoEscSize.x * .75f), 
-					  infoEscLoc.y + (infoEscSize.y * .25f));
-			  if (parent.mousePressed)
-			  {
-				  clicked = false;
-			  }
-		  }
-		  else
-		  {
-			  parent.stroke(255, 0, 0);
-			  parent.fill(255, 0, 0);
-			  parent.rect(infoEscLoc.x, infoEscLoc.y,
-					  infoEscSize.x, infoEscSize.y);
-			  parent.stroke(255, 0, 0);
-			  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
-					  infoEscLoc.y + (infoEscSize.y * .25f),
-					  infoEscLoc.x + (infoEscSize.x * .75f), 
-					  infoEscLoc.y + (infoEscSize.y * .75f));
-			  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
-					  infoEscLoc.y + (infoEscSize.y * .75f),
-					  infoEscLoc.x + (infoEscSize.x * .75f), 
-					  infoEscLoc.y + (infoEscSize.y * .25f));
-		  }
+		  
+//		  if (parent.mouseX > infoEscLoc.x && parent.mouseX < infoEscLoc.x + infoEscSize.x 
+//				  && parent.mouseY > infoEscLoc.y && parent.mouseY < infoEscLoc.y + infoEscSize.y)
+//		  {
+//			  parent.stroke(255, 0, 0);
+//			  parent.fill(255, 0, 0);
+//			  parent.rect(infoEscLoc.x, infoEscLoc.y,
+//					  infoEscSize.x, infoEscSize.y);
+//			  parent.stroke(255);
+//			  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
+//					  infoEscLoc.y + (infoEscSize.y * .25f),
+//					  infoEscLoc.x + (infoEscSize.x * .75f), 
+//					  infoEscLoc.y + (infoEscSize.y * .75f));
+//			  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
+//					  infoEscLoc.y + (infoEscSize.y * .75f),
+//					  infoEscLoc.x + (infoEscSize.x * .75f), 
+//					  infoEscLoc.y + (infoEscSize.y * .25f));
+//		  }
+//		  else
+//		  {
+//		  parent.stroke(255, 0, 0);
+//		  parent.fill(255, 0, 0);
+//		  parent.rect(infoEscLoc.x, infoEscLoc.y,
+//				  infoEscSize.x, infoEscSize.y);
+//		  parent.stroke(255, 0, 0);
+//		  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
+//				  infoEscLoc.y + (infoEscSize.y * .25f),
+//				  infoEscLoc.x + (infoEscSize.x * .75f), 
+//				  infoEscLoc.y + (infoEscSize.y * .75f));
+//		  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
+//				  infoEscLoc.y + (infoEscSize.y * .75f),
+//				  infoEscLoc.x + (infoEscSize.x * .75f), 
+//				  infoEscLoc.y + (infoEscSize.y * .25f));
+//		  }
 		  
 		  for (int i = sBars.size() - 1; i >= 0; i--)
 		  {

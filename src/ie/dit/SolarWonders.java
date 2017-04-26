@@ -29,20 +29,19 @@ public class SolarWonders extends PApplet
 	int play, ins, exit, menu_choice;
 	int[] mouse_change = new int[7];
 
+	int planet_choice;
+	
 	String playing;
 	String[] music = {"Out of Space - The Prodigy", "Life on Mars - David Bowie", 
 			"Intergalactic - Beastie Boys", "Supernaut - Black Sabbath", 
 			"Man on the Moon - R.E.M.", "Only of the Universe - F. Y.", "Nothing Selected"};
 	String[] fnames = {"earth", "blue", "brown", "magma", "water", "gas", "ice", "red", "coarse", "sun", "moon", "moon2", "moon3"};
 	
-	float startposx,  startposy;
+	float startposx, startposy, tSize;
 	
 	boolean starCheck, fade, cometCheck, musicCheck;
 	
-	/////////////
 	PVector infoLocation, infoSize, location, size;
-	float tSize, zoom, focus, set;
-	/////////////
 	
 	public void setup()
 	{
@@ -61,14 +60,12 @@ public class SolarWonders extends PApplet
 		menu_choice = 1;
 		play = ins = exit = 255;
 		textFont(font);
-
-		////////////
+		planet_choice = 0;
 		location = new PVector(width*.01f, width*.01f, 0f);
 		size = new PVector(width*.1f, height*.075f);
 		infoLocation = new PVector(width*.01f, width*.1f);
 	    infoSize = new PVector(width*.15f, height*.5f);
 	    tSize = height / 45;
-		///////////
 	}
 	
 	public void loadData()
@@ -111,17 +108,26 @@ public class SolarWonders extends PApplet
 			case 3:
 			{
 				songs[6].close();
-				background(0);
-				pushMatrix();
-				translate(width/2f, height * 3f/4f, -width * 2f/3f);
-				sun.display();
-				for(Planet p: sSystem)
+				if(planet_choice == 0)
 				{
-					p.update();
-					p.display();
+					background(0);
+					pushMatrix();
+					translate(width/2f, height * 3f/4f, -width);
+					sun.display();
+					for(Planet p: sSystem)
+					{
+						p.update();
+						p.display();
+					}
+					popMatrix();
 				}
-				popMatrix();
-				Lorcan();
+				else
+				{
+					background(0);
+					Planet p = sSystem.get(planet_choice - 1);
+					p.display2();
+				}
+				add_planet_b();
 				songMenu();
 				mouseOver();
 				break;
@@ -129,7 +135,28 @@ public class SolarWonders extends PApplet
 		}
 	}
 	
-	public void Lorcan()
+	public void keyPressed()
+	{
+		if(menu_choice == 3)
+		{
+			if(key == 'w')
+			{
+				if(planet_choice > 0)
+				{
+					planet_choice--;
+				}
+			}
+			if(key == 's')
+			{
+				if(planet_choice < sSystem.size() + 1)
+				{
+					planet_choice++;
+				}
+			}
+		}
+	}
+	
+	public void add_planet_b()
 	{
 		noStroke();
 		fill(0, 157, 219);
@@ -151,17 +178,8 @@ public class SolarWonders extends PApplet
 		textAlign(PConstants.CENTER, PConstants.CENTER);
 		textSize(tSize);
 		fill(247, 255, 28);
-		text("Add Planet", location.x + size.x,
+		text("Add Planet", location.x + size.x /2,
 				location.y + size.y / 2);
-		
-		for (int i = sSystem.size() - 1; i >= 0; i--)
-	    {
-			Planet p = sSystem.get(i);
-			if(p.clicked)
-			{
-				p.info();
-			}
-	    }
 	}
 	
 	public void menu_background()
@@ -477,18 +495,11 @@ public class SolarWonders extends PApplet
 				}
 			}
 			
-			if(mouseCheck(location.x, size.x, location.y, size.y) && sSystem.size() < 10)
+			if(mouseCheck(location.x, size.x, location.y, size.y) && sSystem.size() <= 10)
 			{
 				Planet planet = new Planet(this, sun.mass, width/3, width/3, 0, 50, 100, 0, imgs[(int) random(0, 8)], sSystem);
 				planet.bars();
 				sSystem.add(planet);
-			}
-			if(sSystem.size() > 0)
-			{
-				for(Planet p: sSystem)
-			    {
-					p.check();
-			    }
 			}
 		}
 		
