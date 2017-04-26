@@ -12,11 +12,10 @@ public class AddPlanet
 	float width, height;
 	PVector location;
 	PVector size;
-	int clicked, clickOnce;
 	ArrayList<Planet> sSystem;
 	ArrayList<Scrollbar> sBars;
 	PVector infoLocation, infoSize;
-	float tSize, zoom, focus;
+	float tSize, zoom, focus, cam;
 	PFont font;
 	
 	AddPlanet(PApplet p, ArrayList<Planet> sSystem, ArrayList<Scrollbar> sBars)
@@ -26,7 +25,6 @@ public class AddPlanet
 		height = p.height;
 		location = new PVector(width*.01f, width*.01f, 0f);
 		size = new PVector(width*.1f, height*.075f);
-		clicked = clickOnce;
 		this.sSystem = sSystem;
 		this.sBars = sBars;
 		infoLocation = new PVector(width*.01f, width*.1f);
@@ -37,11 +35,17 @@ public class AddPlanet
 	
 	public void display()
 	{
+		// boolean to check if a planet has been clicked on
 		boolean focused = false;
+		
+		// focus is equivalent to notFocused in Planet class
+		// if there are no planet objects, focus is set to 1
 		if (sSystem.size() == 0)
 		{
 			focus = 1;
 		}
+		// zoom is equivalent to zoom in Planet class
+		// focus value is updated as often as notFocused value is changed with Planet class
 		else
 		{
 			for (int i = sSystem.size() - 1; i >= 0; i--)
@@ -49,6 +53,7 @@ public class AddPlanet
 				Planet p = sSystem.get(i);
 				zoom = p.getZoom();
 				focus = p.getFocus();
+				// if a planet is clicked, focused boolean is set to true to update add planet button and position
 				if (p.clicked)
 				{
 					focused = true;
@@ -56,110 +61,69 @@ public class AddPlanet
 		    }
 		}
 		
+		// if a planet is clicked, adjust cam to zoom value from Planet class
 		if (focused)
 		{
-			parent.textFont(font);
-			parent.noStroke();
-			parent.fill(0, 157, 219);
-			parent.rect((location.x / 2 + -(parent.screenX(0, 0))) * zoom, (location.y / 2 + -(parent.screenY(0, 0))) * zoom,
-					(size.x + location.x) * zoom, (size.y + location.y) * zoom);
-			parent.strokeWeight(2);
-			parent.stroke(247, 255, 28);
-			if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
-					parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
-			{
-				parent.fill(200);
-			}
-			else
-			{
-				parent.fill(119, 112, 127);
-			}
-			parent.rect((location.x + -(parent.screenX(0, 0))) * zoom, (location.y + -(parent.screenY(0, 0))) * zoom,
-					size.x * zoom, size.y * zoom);
-			parent.textAlign(PConstants.CENTER, PConstants.CENTER);
-			parent.textSize(tSize * zoom);
-			parent.fill(247, 255, 28);
-			parent.text("Add Planet", (location.x + size.x / 2 + -(parent.screenX(0, 0))) * zoom,
-					(location.y + size.y / 2 + -(parent.screenY(0, 0))) * zoom);
+			cam = zoom;
 		}
+		// if not clicked, adjust cam to notFocused value from Planet class
 		else
 		{
-			parent.textFont(font);
-			parent.noStroke();
-			parent.fill(0, 157, 219);
-			parent.rect((location.x / 2 + -(parent.screenX(0, 0))) * focus, (location.y / 2 + -(parent.screenY(0, 0))) * focus,
-					(size.x + location.x) * focus, (size.y + location.y) * focus);
-			parent.strokeWeight(2);
-			parent.stroke(247, 255, 28);
-			if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
-					parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
-			{
-				parent.fill(200);
-			}
-			else
-			{
-				parent.fill(119, 112, 127);
-			}
-			parent.rect((location.x + -(parent.screenX(0, 0))) * focus, (location.y + -(parent.screenY(0, 0))) * focus,
-					size.x * focus, size.y * focus);
-			parent.textAlign(PConstants.CENTER, PConstants.CENTER);
-			parent.textSize(tSize * focus);
-			parent.fill(247, 255, 28);
-			parent.text("Add Planet", (location.x + size.x / 2 + -(parent.screenX(0, 0))) * focus,
-					(location.y + size.y / 2 + -(parent.screenY(0, 0))) * focus);
-			/*
-			parent.textFont(font);
-			parent.noStroke();
-			parent.fill(0, 157, 219);
-			parent.rect(location.x / 2 + -(parent.screenX(0, 0)), location.y / 2 + -(parent.screenY(0, 0)),
-					size.x + location.x, size.y + location.y);
-			parent.strokeWeight(2);
-			parent.stroke(247, 255, 28);
-			if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
-					parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
-			{
-				parent.fill(200);
-			}
-			else
-			{
-				parent.fill(119, 112, 127);
-			}
-			parent.rect(location.x + -(parent.screenX(0, 0)), location.y + -(parent.screenY(0, 0)), size.x, size.y);
-			parent.textAlign(PConstants.CENTER, PConstants.CENTER);
-			parent.textSize(tSize);
-			parent.fill(247, 255, 28);
-			parent.text("Add Planet", location.x + size.x / 2 + -(parent.screenX(0, 0)),
-					location.y + size.y / 2 + -(parent.screenY(0, 0)));*/
+			cam = focus;
 		}
-	}
-	
-	public void check()
-	{
+		parent.textFont(font);
+		parent.noStroke();
+		parent.fill(0, 157, 219);
+		// outer blue box
+		parent.rect((location.x / 2 + -(parent.screenX(0, 0))) * cam, (location.y / 2 + -(parent.screenY(0, 0))) * cam,
+				(size.x + location.x) * cam, (size.y + location.y) * cam);
+		parent.strokeWeight(2);
+		parent.stroke(247, 255, 28);
 		if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
 				parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
 		{
-			clicked = 1;
+			parent.fill(200);
 		}
 		else
 		{
-			clicked = 0;
-			clickOnce = clicked;
+			parent.fill(119, 112, 127);
 		}
-		
-		if (clicked == 1 && clicked != clickOnce)
+		// inner grey box
+		parent.rect((location.x + -(parent.screenX(0, 0))) * cam, (location.y + -(parent.screenY(0, 0))) * cam,
+				size.x * cam, size.y * cam);
+		parent.textAlign(PConstants.CENTER, PConstants.CENTER);
+		parent.textSize(tSize * cam);
+		parent.fill(247, 255, 28);
+		parent.text("Add Planet", (location.x + size.x / 2 + -(parent.screenX(0, 0))) * cam,
+				(location.y + size.y / 2 + -(parent.screenY(0, 0))) * cam);
+	}
+	
+	// gets called every time the mouse is pressed
+	public void check()
+	{
+		// if mouse is within the box when clicked
+		if (parent.mouseX >= location.x && parent.mouseX <= location.x + size.x &&
+				parent.mouseY >= location.y && parent.mouseY <= location.y + size.y)
 		{
+			// create a new planet and add to sSystem/solarSystem arraylist
 			Planet planet = new Planet(parent, sSystem, sBars);
 			sSystem.add(planet);
+			
+			// create 2 new scroll bar objects and add to sBars/scrollbars arraylist
+			// second parameter is its associated planet
+			// final parameter is the y position of the scrollbar
 			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
 					infoLocation.y + infoSize.y * .2f);
 			Scrollbar scrollbar2 = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
 					infoLocation.y + infoSize.y * .4f);
 			sBars.add(scrollbar);
 			sBars.add(scrollbar2);
+			// if there is more than 1 planet, change the x position of the most recently added planet
 			if (sSystem.size() >= 2)
 			{
 				Planet p = sSystem.get(sSystem.size() - 2);
 				planet.location.x = p.location.x + height * .5f;
+				// instantly adjust camera, reduces screen flickering
 				adjustCamera();
 			}
 		}

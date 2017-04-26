@@ -58,7 +58,6 @@ public class SolarWonders extends PApplet
 	{
 		background(0);
 		mover.update();
-		mover.checkEdges();
 		mover.display();
 	}
 	
