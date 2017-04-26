@@ -41,9 +41,14 @@ public class Scrollbar
 		r = 10;
 	}
 	
+	// displaying scroll bars
+	// barMinLoc = x position of the left most point of the line
+	// barMaxLoc = x position of the right most point of the line
+	// barYLoc = y position of the line
+	// infoLocation and infoSize PVectors are equal to those of the same name in Planet ( info() )
+	// sPos = x position if slider
 	public void display()
 	{
-		
 		parent.fill(247, 255, 28);
 		parent.textAlign(PConstants.CENTER);
 		parent.text("SIZE:", (infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0))) * zoom,
@@ -51,32 +56,29 @@ public class Scrollbar
 		parent.text("DIST:", (infoLocation.x + infoSize.x / 2 + -(parent.screenX(0, 0))) * zoom,
 				(infoLocation.y + infoSize.y * .3f + -(parent.screenY(0, 0))) * zoom);
 		
+		// displaying line
+		parent.stroke(0, 157, 219);
+		parent.strokeWeight(2);
+		parent.line((barMinLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom,
+				(barMaxLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom);
+		parent.strokeWeight(2);
+		parent.stroke(247, 255, 28);
+		// if hovering over slider or slider is clicked, change ellipse fill
 		if (over || locked)
 		{
-			parent.stroke(0, 157, 219);
-			parent.strokeWeight(2);
-			parent.line((barMinLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom,
-					(barMaxLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom);
-			parent.strokeWeight(2);
-			parent.stroke(247, 255, 28);
 			parent.fill(247, 255, 28);
-			parent.ellipse((sPos + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom, r * zoom, r * zoom);
 		}
 		else
 		{
-			parent.stroke(0, 157, 219);
-			parent.strokeWeight(2);
-			parent.line((barMinLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom,
-					(barMaxLoc + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom);
-			parent.strokeWeight(2);
-			parent.stroke(247, 255, 28);
 			parent.fill(119, 112, 127);
-			parent.ellipse((sPos + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom, r * zoom, r * zoom);
 		}
+		// draw slider
+		parent.ellipse((sPos + -(parent.screenX(0, 0))) * zoom, (barYLoc + -(parent.screenY(0, 0))) * zoom, r * zoom, r * zoom);
 	}
 	
 	public void update(float focus)
 	{
+		// zoom = equivalent to zoom in Planet class (bottom of planet class)
 		zoom = focus;
 		if (overEvent())
 		{
@@ -99,26 +101,32 @@ public class Scrollbar
 		
 		if (locked) 
 		{
+			// moving slider
 			newSPos = parent.mouseX;
 	    }
+		// permanently changing slider position
 		sPos = newSPos;
 		
+		// slider cannot extend past right most point of the line
 		if (sPos > barMaxLoc)
 		{
 			sPos = barMaxLoc;
 		}
 		
+		// slider cannot extend past left most point of the line
 		if (sPos < barMinLoc)
 		{
 			sPos = barMinLoc;
 		}
 	}
 	
+	// used to draw sphere
 	public float sliderStart()
 	{
 		return barMinLoc + barWidth / 2;
 	}
 	
+	// if the mouse is over the slider ellipse
 	public boolean overEvent()
 	{
 		if (parent.mouseX + -(parent.screenX(0, 0)) > sPos + -(parent.screenX(0, 0)) - r
