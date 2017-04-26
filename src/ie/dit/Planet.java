@@ -58,8 +58,10 @@ public class Planet extends Sun
 	      rot = rot2 = 0;
 	      add_m = textures = 255;
 	      parent.noStroke();
+	      parent.fill(255, 255);
 	      planet = parent.createShape(PConstants.SPHERE, size);
 		  planet.setTexture(texture);
+		  parent.noFill();
 		  fade = false;
 		  lock_t2 = -1;
 		  lock_t = lock_m = true;
@@ -81,10 +83,10 @@ public class Planet extends Sun
 		  rec = j = 0;
 		  for(int i=0; i < 9; i++)
 	      {
-			  parent.noStroke();
+			  parent.fill(255, 255);
 			  surfaces[i] = parent.createShape(PConstants.RECT, width * 0.0235f + j, height * 0.715f + rec, 75, 50);
 			  surfaces[i].setTexture(imgs[i]);
-			
+			  parent.noFill();
 		      j += 80;
 			
 			  if(j > 200)
@@ -199,7 +201,6 @@ public class Planet extends Sun
 	      parent.translate(location.x, location.y, location.z);
 	      parent.pushMatrix();
 	      parent.rotateY(rot);
-
 	      parent.shape(planet);
 	      parent.popMatrix();
 	      for(Planet p : moons)
@@ -217,6 +218,7 @@ public class Planet extends Sun
 	      parent.pushMatrix();
 	      parent.translate(width/2, height/2, 400);
 	      parent.rotateY(rot2);
+	      parent.fill(255, 255);
 	      parent.shape(planet);
 	      parent.popMatrix();
 	      update_bars();

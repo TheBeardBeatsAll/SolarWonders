@@ -87,6 +87,7 @@ public class SolarWonders extends PApplet
 	
 	public void draw()
 	{
+		println(width + "   " + height);
 		switch(menu_choice)
 		{
 			case 1:
@@ -425,19 +426,19 @@ public class SolarWonders extends PApplet
 		fill(255, 75);
 		rect(width/2 - 200, height/2 - 150, 400, 275);
 		
-		stroke(255);
+		stroke(247, 255, 28);
 		line(width/2 - 190, height/2 - 95, width/2 + 190, height/2 - 95);
 		
-		fill(255, 225);
+		fill(247, 255, 28);
 		textSize(45);
 		text("SolarWonders", width/2-190, height/2-100);
 		
 		textSize(40);
-		fill(255, play);
+		fill(247, 255, 28, play);
 		text("Play", width/2-50, height/2-25);
-		fill(255, ins);
+		fill(247, 255, 28, ins);
 		text("Instructions", width/2-130, height/2+25);
-		fill(255, exit);
+		fill(247, 255, 28, exit);
 		text("Exit", width/2-42, height/2+75);
 	}
 	
