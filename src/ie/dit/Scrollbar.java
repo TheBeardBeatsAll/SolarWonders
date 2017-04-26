@@ -1,7 +1,6 @@
 package ie.dit;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PVector;
 
 public class Scrollbar
@@ -15,7 +14,8 @@ public class Scrollbar
 	boolean over, locked;
 	float barWidth, barMinLoc, barMaxLoc, barYLoc;
 	
-	Scrollbar(PApplet parent, int id, float iLocX, float iLocY, float iSizeX, float iSizeY, float barYLoc)
+	Scrollbar(PApplet parent, int id, float iLocX, float iLocY, float iSizeX, 
+			float iSizeY, float barYLoc)
 	{
 		this.parent = parent;
 		width = parent.width;
@@ -35,36 +35,26 @@ public class Scrollbar
 	}
 	
 	public void display()
-	{	
+	{		
 		parent.fill(247, 255, 28);
-		parent.textAlign(PConstants.CENTER);
-		parent.text("SIZE:", infoLocation.x + infoSize.x / 2,
-				infoLocation.y + infoSize.y * .1f);
-		parent.text("DIST:", infoLocation.x + infoSize.x / 2,
-				infoLocation.y + infoSize.y * .3f);
-		
-		if(over || locked)
+		// displaying line
+		parent.stroke(0, 157, 219);
+		parent.strokeWeight(2);
+		parent.line(barMinLoc, barYLoc,
+				barMaxLoc, barYLoc);
+		parent.strokeWeight(2);
+		parent.stroke(247, 255, 28);
+		// if hovering over slider or slider is clicked, change ellipse fill
+		if (over || locked)
 		{
-			parent.stroke(0, 157, 219);
-			parent.strokeWeight(2);
-			parent.line(barMinLoc, barYLoc,
-					barMaxLoc, barYLoc);
-			parent.strokeWeight(2);
-			parent.stroke(247, 255, 28);
 			parent.fill(247, 255, 28);
-			parent.ellipse(sPos, barYLoc, r, r);
 		}
 		else
 		{
-			parent.stroke(0, 157, 219);
-			parent.strokeWeight(2);
-			parent.line(barMinLoc, barYLoc,
-					barMaxLoc, barYLoc);
-			parent.strokeWeight(2);
-			parent.stroke(247, 255, 28);
 			parent.fill(119, 112, 127);
-			parent.ellipse(sPos, barYLoc, r, r);
 		}
+		// draw slider
+		parent.ellipse(sPos, barYLoc, r, r);
 	}
 	
 	public void update()

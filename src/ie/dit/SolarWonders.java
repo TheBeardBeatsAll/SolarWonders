@@ -37,8 +37,8 @@ public class SolarWonders extends PApplet
 			"Man on the Moon - R.E.M.", "Only of the Universe - F. Y.", "Nothing Selected"};
 	String[] fnames = {"earth", "blue", "brown", "magma", "water", "gas", "ice", "red", "coarse", "sun", "moon", "moon2", "moon3"};
 	
-	float startposx, startposy, tSize;
-	
+	float startposx, startposy, tSize, interval;
+	double alpha, beta;
 	boolean starCheck, fade, cometCheck, musicCheck;
 	
 	PVector infoLocation, infoSize, location, size;
@@ -48,9 +48,9 @@ public class SolarWonders extends PApplet
 		smooth();
 		loadData();
 		sun = new Sun(this, imgs[9], sSystem);
-		rPlanet = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8], sSystem);
-		lPlanet = new Planet(this, sun.mass, width/27, width/6, 0, 450, 100, 0, imgs[4], sSystem);
-		rPlanet.add_moon(0, width/7, 0, 50, 100, 0, imgs[11], sSystem);
+		rPlanet = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8], imgs, sSystem);
+		lPlanet = new Planet(this, sun.mass, width/27, width/6, 0, 450, 100, 0, imgs[4], imgs, sSystem);
+		rPlanet.add_moon(0, width/7, 0, 50, 100, 0, imgs[11], imgs, sSystem);
 		playing = music[6];
 		music_menu = -1;
 		pause = timer = 0;
@@ -66,6 +66,8 @@ public class SolarWonders extends PApplet
 		infoLocation = new PVector(width*.01f, width*.1f);
 	    infoSize = new PVector(width*.15f, height*.5f);
 	    tSize = height / 45;
+	    alpha = beta = 0;
+	    interval = 0;
 	}
 	
 	public void loadData()
@@ -113,6 +115,8 @@ public class SolarWonders extends PApplet
 					background(0);
 					pushMatrix();
 					translate(width/2f, height * 3f/4f, -width);
+					rotateX((float) alpha);
+					rotateY((float) beta);
 					sun.display();
 					for(Planet p: sSystem)
 					{
@@ -141,10 +145,15 @@ public class SolarWonders extends PApplet
 		{
 			if(key == 'w')
 			{
-				if(planet_choice > 0)
+				if(planet_choice > -1)
 				{
 					planet_choice--;
 				}
+				if(planet_choice == -1)
+				{
+					planet_choice = sSystem.size();
+				}
+
 			}
 			if(key == 's')
 			{
@@ -152,7 +161,30 @@ public class SolarWonders extends PApplet
 				{
 					planet_choice++;
 				}
+				if(planet_choice == sSystem.size() + 1)
+				{
+					planet_choice = 0;
+				}
 			}
+			if(key == '1')
+			{
+				alpha = 0;
+				beta = 0;
+			}
+			if(key == '2')
+			{
+				alpha = -0.785;
+				beta = 3.927;
+			}
+			if(key == '3')
+			{
+				alpha = 0.785;
+				beta = 2.356;
+			}
+		}
+		if(key == 'b')
+		{
+			menu_choice = 1;
 		}
 	}
 	
@@ -497,9 +529,11 @@ public class SolarWonders extends PApplet
 			
 			if(mouseCheck(location.x, size.x, location.y, size.y) && sSystem.size() <= 10)
 			{
-				Planet planet = new Planet(this, sun.mass, width/3, width/3, 0, 50, 100, 0, imgs[(int) random(0, 8)], sSystem);
+				Planet planet = new Planet(this, sun.mass, width/4 + interval, 0, 0, 50, 100, 0, imgs[0], imgs, sSystem);
 				planet.bars();
 				sSystem.add(planet);
+				planet_choice = sSystem.size();
+				interval += width/11;
 			}
 		}
 		
@@ -543,9 +577,12 @@ public class SolarWonders extends PApplet
 	{
 		hint(DISABLE_DEPTH_TEST);
 		pushMatrix();
+		noStroke();
 		translate(width * 0.8f, height * 0.025f);
-		fill(200);
-		stroke(255);
+		fill(0, 157, 219);
+		rect(-(height * 0.005f), -(height * 0.005f), (width * 0.2f) - (height * 0.015f), height * 0.04f);
+		fill(119, 112, 127);
+		stroke(247, 255, 28);
 		rect(0, 0, (width * 0.2f) - (height * 0.025f), height * 0.03f);
 		
 		textSize(14);
@@ -554,10 +591,9 @@ public class SolarWonders extends PApplet
 			for(int i = 0; i < 7; i++)
 			{
 				fill(mouse_change[i]);
-				stroke(255);
-				rect(0, (height * 0.03f) + (i * (height * 0.03f)), (width * 0.2f) - (height * 0.025f), height * 0.03f);
-				fill(0);
 				stroke(0);
+				rect(0, (height * 0.03f) + (i * (height * 0.03f)), (width * 0.2f) - (height * 0.025f), height * 0.03f);
+				fill(247, 255, 28);
 				
 				textAlign(CENTER, CENTER);
 				text(music[i], ((width * 0.2f) - (height * 0.025f))/2f, (height * 0.045f) + (i * (height * 0.03f)));
@@ -565,7 +601,7 @@ public class SolarWonders extends PApplet
 		}
 		
 		fill(100);
-		stroke(255);
+		stroke(247, 255, 28);
 		rect(0, 0, width * 0.02f, height * 0.03f);
 		
 		fill(0);
@@ -574,8 +610,7 @@ public class SolarWonders extends PApplet
 				width * 0.019f, height * 0.001f,
 				width * 0.01f, height * 0.029f);
 		
-		fill(0);
-		stroke(0);
+		fill(247, 255, 28);
 		textAlign(CENTER, CENTER);
 		text("Music: " + playing, (((width * 0.2f) - (height * 0.025f) - (width * 0.02f))/2f) + (width * 0.02f), height * 0.015f);
 		popMatrix();

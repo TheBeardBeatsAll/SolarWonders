@@ -14,18 +14,18 @@ public class Sun
 	  PShape sun;
 	  PImage texture;
 	  float width, height;	 
-	  float size, mass, rot;
+	  float size_s, mass, rot;
 	  
 	  Sun(PApplet p, PImage texture, ArrayList<Planet> sSystem) 
 	  {
 	      this.sSystem = sSystem;
 		  parent = p;
-		  size = 50;
+		  size_s = 70;
 		  mass = 1000;
 		  rot = 0;
 		  this.texture = texture;
 		  parent.noStroke();
-		  sun = parent.createShape(PConstants.SPHERE, size);
+		  sun = parent.createShape(PConstants.SPHERE, size_s);
 		  sun.setTexture(texture);
 		  
 		  width = parent.width;
@@ -39,7 +39,5 @@ public class Sun
 	      parent.shape(sun);
 	      parent.popMatrix();
 	      rot += 0.001;
-	  }
-	  
-	  
+	  }  
 }

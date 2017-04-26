@@ -13,21 +13,24 @@ public class Planet extends Sun
 	  PVector velocity, acceleration, adjacent, trailPosition;
 	  PShape planet;
 	  PImage texture;
-	  int addPos, checkAddPos, add , checkAdd, current;
+	  int addPos, checkAddPos, add , checkAdd, current, max_moons;
 	  int x_start, z_start, x_accel, z_accel, trailSize;
+	  int textures, add_m, j, rec, lock_t2;
 	  float r_c, g_c, b_c;
-	  float x_coord, z_coord, y_coord;
-	  float period_acc, parent_mass, period_vel, rot;
+	  float x_coord, z_coord, y_coord, size;
+	  float period_acc, parent_mass, period_vel, rot, rot2;
 	  double major, acc, eccentricity;
 	  double theta, grav, vel, sigma;
+	  boolean fade, lock_t, lock_m;
 	  ArrayList<Planet> moons = new ArrayList<Planet>();
 	  ArrayList<PVector> trail = new ArrayList<PVector>();
 	  ArrayList<Scrollbar> sBars = new ArrayList<Scrollbar>();
-	  
+	  PImage[] imgs = new PImage[13];
+	  PShape[] surfaces = new PShape[12];
 	  PVector location, infoLocation, infoSize, infoEscLoc, infoEscSize;
 	  
 	  Planet(PApplet parent, float parent_mass, float x_coord, float z_coord,
-			  float y_coord, float size, float mass, double eccentricity, PImage texture, ArrayList<Planet> sSystem) 
+			  float y_coord, float size, float mass, double eccentricity, PImage texture, PImage[] imgs, ArrayList<Planet> sSystem) 
 	  {
 		  super(parent, texture, sSystem);
 		  this.parent = parent;
@@ -39,6 +42,7 @@ public class Planet extends Sun
 		  this.eccentricity = eccentricity;
 		  this.parent_mass = parent_mass;
 		  this.texture = texture;
+		  this.imgs = imgs;
 		  init_planet();
 		  calculate_theta();
 		  init_vel();  
@@ -51,16 +55,17 @@ public class Planet extends Sun
 	      acceleration = new PVector(0f, 0f, 0f);
 	      grav = 6.67384;
 	      trailSize = 200;
-	      rot = 0;
-	      
+	      rot = rot2 = 0;
+	      add_m = textures = 255;
 	      parent.noStroke();
-	      parent.noFill();
 	      planet = parent.createShape(PConstants.SPHERE, size);
 		  planet.setTexture(texture);
-		  
+		  fade = false;
+		  lock_t2 = -1;
+		  lock_t = lock_m = true;
+		  max_moons = 5;
 		  period_acc = 3f;
 		  period_vel = (float) Math.sqrt(period_acc);//you multiply acc by x then you multiply vel by sqrt(x)
-		  
 		  adjacent = new PVector(0, y_coord, 0);
 		  sigma = Math.asin(adjacent.mag()/location.mag());
 		  if(y_coord > 0)
@@ -71,20 +76,28 @@ public class Planet extends Sun
 		  g_c = parent.random(100, 255);
 		  b_c = parent.random(100, 255);
 		  
-		  size = height / 10;
 		  infoLocation = new PVector(width*.01f, width*.1f);
 		  infoSize = new PVector(width*.15f, height*.5f);
 		  addPos = checkAddPos;
 		  add  = checkAdd ;
 		  infoEscLoc = new PVector(infoLocation.x*1.1f, infoLocation.y*1.01f);
-		  infoEscSize = new PVector(width*.03f, width*.03f);
-	  }
-	  
-	  public void add_moon(float m_x, float m_z, float m_y, float m_size, float m_mass, 
-			  double eccentricity, PImage texture, ArrayList<Planet> sSystem)
-	  {
-		  Planet p = new Planet(parent, this.mass, m_x, m_z, m_y, m_size, m_mass, eccentricity, texture, sSystem);
-		  moons.add(p);
+		  infoEscSize = new PVector(width*.03f, width*.03f); 
+		  
+		  rec = j = 0;
+		  for(int i=0; i < 9; i++)
+	      {
+			  parent.noStroke();
+			  surfaces[i] = parent.createShape(PConstants.RECT, width * 0.0235f + j, height * 0.715f + rec, 75, 50);
+			  surfaces[i].setTexture(imgs[i]);
+			
+		      j += 80;
+			
+			  if(j > 200)
+			  {
+				  j = 0;
+				  rec += 60;
+			  }
+		  }
 	  }
 	  
 	  private void calculate_theta()
@@ -93,7 +106,7 @@ public class Planet extends Sun
 		  theta = Math.acos(adjacent.mag()/location.mag());
 	  }
 	  
-	  private void init_vel()
+	  public void init_vel()
 	  {
 		  major = location.mag() / (1 + eccentricity);
 		  //a = v*v/d --> v = sqrt(a*d)
@@ -177,6 +190,12 @@ public class Planet extends Sun
 	      }
 	  }
 	  
+	  public void add_moon(float m_x, float m_z, float m_y, float m_size, float m_mass, 
+			  double eccentricity, PImage texture, PImage[] imgs, ArrayList<Planet> sSystem)
+	  {
+		  Planet p = new Planet(parent, this.mass, m_x, m_z, m_y, m_size, m_mass, eccentricity, texture, imgs, sSystem);
+		  moons.add(p);
+	  }
 	  public void display() 
 	  {
 	      parent.pushMatrix();
@@ -185,6 +204,7 @@ public class Planet extends Sun
 	      parent.translate(location.x, location.y, location.z);
 	      parent.pushMatrix();
 	      parent.rotateY(rot);
+
 	      parent.shape(planet);
 	      parent.popMatrix();
 	      for(Planet p : moons)
@@ -200,52 +220,32 @@ public class Planet extends Sun
 	  public void display2() 
 	  {
 	      parent.pushMatrix();
-	      parent.translate(width/2, height/2, -50);
+	      parent.translate(width/2, height/2, 600);
+	      parent.rotateY(rot2);
+
 	      parent.shape(planet);
-	      parent.noFill();
-	      parent.stroke(255);
-	      // exception must be made for second planet in the ArrayList
-	      if (current == 1)
-          {
-	    	  Scrollbar s = sBars.get(current + 1);
-	    	  parent.strokeWeight(1);
-		      parent.sphere(size + (s.sPos - s.sliderStart()));
-    	  }
-	      else
-	      {
-	    	  Scrollbar s = sBars.get(current * 2);
-	    	  parent.strokeWeight(1);
-		      parent.sphere(size + (s.sPos - s.sliderStart()));
-	      }
-	      // to change distances between planets
-	      Scrollbar s2 = sBars.get(current * 2 + 1);
-	      Planet p = sSystem.get(current);
-	      if (s2.locked)
-	      {
-	       	  addPos = 1;
-	      }
-	      else
-	      {
-	    	  addPos = 0;
-	    	  checkAddPos = addPos;
-	      }
-	    
-	      if (addPos == 1 && addPos != checkAddPos)
-		  {
-			  p.location.x = p.location.x + (s2.sPos - s2.sliderStart()) / 10;
-		  }
 	      parent.popMatrix();
 	      info();
+	      rot2 += .001f;
 	  }
 	  
 	  public void bars()
 	  {
 			Scrollbar scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
-			infoLocation.y + infoSize.y * .2f);
-			Scrollbar scrollbar2 = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
-			infoLocation.y + infoSize.y * .4f);
+			infoLocation.y + infoSize.y * .175f);
 			sBars.add(scrollbar);
-			sBars.add(scrollbar2);
+			scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
+			infoLocation.y + infoSize.y * .325f);
+			sBars.add(scrollbar);
+			scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
+			infoLocation.y + infoSize.y * .475f);
+			sBars.add(scrollbar);
+			scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
+			infoLocation.y + infoSize.y * .625f);
+			sBars.add(scrollbar);
+			scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
+			infoLocation.y + infoSize.y * .775f);
+			sBars.add(scrollbar);
 	  }
 	  
       private void info()
@@ -254,59 +254,164 @@ public class Planet extends Sun
 		  parent.fill(0, 157, 219);
 		  parent.rect(infoLocation.x / 2, infoLocation.y * .95f,
 					infoSize.x + infoLocation.x, infoSize.y + infoLocation.y * .1f);
-		  parent.strokeWeight(2);
 		  parent.stroke(247, 255, 28);
 		  parent.fill(119, 112, 127);
 		  parent.rect(infoLocation.x, infoLocation.y,
 				  infoSize.x, infoSize.y);
 		  parent.fill(247, 255, 28);
 		  parent.textAlign(PConstants.CENTER);
-		  parent.textSize((height / 40));
-		  parent.text("Planet No. " + current, infoLocation.x + infoSize.x / 2, 
-				  infoLocation.y + infoSize.y * .75f);
+		  parent.textSize((height / 50));  
+		  parent.text("SIZE:", infoLocation.x + infoSize.x / 2,
+					infoLocation.y + infoSize.y * .1f);
+		  parent.text("X_Coord:", infoLocation.x + infoSize.x / 2,
+					infoLocation.y + infoSize.y * .25f);
+		  parent.text("Y_Coord:", infoLocation.x + infoSize.x / 2,
+					infoLocation.y + infoSize.y * .4f);
+		  parent.text("Z_Coord:", infoLocation.x + infoSize.x / 2,
+					infoLocation.y + infoSize.y * .55f);
+		  parent.text("Eccentricity:", infoLocation.x + infoSize.x / 2,
+					infoLocation.y + infoSize.y * .7f);
+		  parent.fill(247, 255, 28, add_m);
+		  parent.text("Add Moon", infoLocation.x + infoSize.x / 2,
+					infoLocation.y + infoSize.y * .875f);
+		  parent.fill(247, 255, 28, textures);
+		  parent.text("Textures", infoLocation.x + infoSize.x / 2,
+					infoLocation.y + infoSize.y * .95f);
 		  
-//		  if (parent.mouseX > infoEscLoc.x && parent.mouseX < infoEscLoc.x + infoEscSize.x 
-//				  && parent.mouseY > infoEscLoc.y && parent.mouseY < infoEscLoc.y + infoEscSize.y)
-//		  {
-//			  parent.stroke(255, 0, 0);
-//			  parent.fill(255, 0, 0);
-//			  parent.rect(infoEscLoc.x, infoEscLoc.y,
-//					  infoEscSize.x, infoEscSize.y);
-//			  parent.stroke(255);
-//			  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
-//					  infoEscLoc.y + (infoEscSize.y * .25f),
-//					  infoEscLoc.x + (infoEscSize.x * .75f), 
-//					  infoEscLoc.y + (infoEscSize.y * .75f));
-//			  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
-//					  infoEscLoc.y + (infoEscSize.y * .75f),
-//					  infoEscLoc.x + (infoEscSize.x * .75f), 
-//					  infoEscLoc.y + (infoEscSize.y * .25f));
-//		  }
-//		  else
-//		  {
-//		  parent.stroke(255, 0, 0);
-//		  parent.fill(255, 0, 0);
-//		  parent.rect(infoEscLoc.x, infoEscLoc.y,
-//				  infoEscSize.x, infoEscSize.y);
-//		  parent.stroke(255, 0, 0);
-//		  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
-//				  infoEscLoc.y + (infoEscSize.y * .25f),
-//				  infoEscLoc.x + (infoEscSize.x * .75f), 
-//				  infoEscLoc.y + (infoEscSize.y * .75f));
-//		  parent.line(infoEscLoc.x + (infoEscSize.x * .25f),
-//				  infoEscLoc.y + (infoEscSize.y * .75f),
-//				  infoEscLoc.x + (infoEscSize.x * .75f), 
-//				  infoEscLoc.y + (infoEscSize.y * .25f));
-//		  }
-		  
-		  for (int i = sBars.size() - 1; i >= 0; i--)
+		  if(mouseCheck(infoLocation.x + infoSize.x / 2 - 70, 135, infoLocation.y + infoSize.y * .875f - 20, 27))
 		  {
-			  Scrollbar s = sBars.get(i);
-			  if (s.id == current)
+			  if(parent.mousePressed)
 			  {
+				  if(moons.size() < max_moons)
+				  {
+					  if(lock_m)
+					  {
+						  add_moon(width * 0.08f, 0, 0, 10, 40, 
+							  parent.random(0f, 0.2f), imgs[(int)parent.random(10,12)], this.imgs, sSystem);
+						  lock_m = false;
+					  }
+			  	  }
+			  }
+			  
+			  if(fade == false)
+			  {
+		 		  add_m = add_m - 4;
+					
+				  if(add_m < 50)
+				  {
+				   	fade = true;
+					}
+				  }
+				  else
+				  {
+				      add_m = add_m + 4;
+					
+					  if(add_m > 250)
+					  {
+						  fade = false;
+						  lock_m = true;
+					  }
+				  }
+			  }
+			  else
+			  {
+				  add_m = 255;
+			  }
+			  if(mouseCheck(infoLocation.x + infoSize.x / 2 - 60, 110, infoLocation.y + infoSize.y * .95f - 20, 27))
+			  {
+				  if(parent.mousePressed)
+				  {
+					  if(lock_t)
+					  { 
+						  lock_t2 = -lock_t2;
+						  lock_t = false;
+					  }
+				  }
+				  
+				  if(fade == false)
+				  {
+					  textures = textures - 4;
+					
+					  if(textures < 50)
+					  {
+						  fade = true;
+					  }
+				  }
+				  else
+				  {
+					  textures = textures + 4;
+					
+					  if(textures > 250)
+					  {
+						  fade = false;
+						  lock_t = true;
+					  }
+				  }
+			  }
+			  else
+			  {
+				  textures = 255;
+			  }
+			  if(lock_t2 == 1)
+			  {
+				  parent.fill(119, 112, 127);
+				  parent.rect(width * 0.02f, height * 0.7f, 250, 200);
+							
+				  for(int i=0; i < 9; i++)
+				  {
+					  parent.noStroke();
+					  parent.shape(surfaces[i]);
+				  }
+				  //width * 0.0235f + j, height * 0.715f + rec
+				  rec = j = 0;
+				  if(parent.mousePressed && ( (parent.mouseX > width * 0.02f && parent.mouseX < width * 0.02f + 250) && (parent.mouseY > height * 0.7f && parent.mouseY < height * 0.7f + 200) ) )
+					{
+						for(int i=0; i < 9; i++)
+						{	
+							if(((parent.mouseX > width * 0.0235f + j && parent.mouseX < (width * 0.0235f+j) + 75) && (parent.mouseY > height * 0.715f+rec && parent.mouseY < (height * 0.715f+rec) + 50 ) ) )
+							{
+								parent.noStroke();
+								planet = parent.createShape(PConstants.SPHERE, size);
+								planet.setTexture(imgs[i]);
+								break;
+							}
+							else
+							{
+								j += 80;
+							
+								if(j > 200)
+								{
+									j = 0;
+									rec += 60;
+								}
+							}
+						}//end for
+					}//end mousePressed if	
+			  }
+		  
+		  for(Scrollbar s: sBars)
+		  {
 				  s.update();
 				  s.display();
-			  }
 		  }
 	  }
+      
+      boolean mouseCheck(float x1, float x2, float y1, float y2)
+  	  {
+  	      if(parent.mouseX > x1 && parent.mouseX < (x1 + x2))
+  	      {
+  		      if(parent.mouseY > y1 && parent.mouseY < (y1 + y2))
+  		      {
+  		        return true;
+  		      }//end if
+  		      else 
+  		      {
+  		        return false;
+  		      }//end else
+  	      }//end if
+  	      else 
+  	      {
+  	        return false;
+  	      }//end else
+  	  }//end mouseCheck
 }
