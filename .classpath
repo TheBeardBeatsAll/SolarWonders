@@ -2,14 +2,14 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/processing-3.3/core/library/core.jar"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/processing-3.3/core/library/jogl-all.jar"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/processing-3.3/core/library/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/Object Oriented Programming - Semester 1/libraries/old/2017-03-05 minim/library/jl1.0.1.jar"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/Object Oriented Programming - Semester 1/libraries/old/2017-03-05 minim/library/jsminim.jar"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/Object Oriented Programming - Semester 1/libraries/old/2017-03-05 minim/library/minim.jar"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/Object Oriented Programming - Semester 1/libraries/old/2017-03-05 minim/library/mp3spi1.9.5.jar"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/Object Oriented Programming - Semester 1/libraries/old/2017-03-05 minim/library/tritonus_aos.jar"/>
-	<classpathentry kind="lib" path="E:/College/2nd year/Object Oriented Programming - Semester 1/libraries/old/2017-03-05 minim/library/tritonus_share.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/processing-3.2.4/core/library/core.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/processing-3.2.4/core/library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/processing-3.2.4/core/library/jogl-all.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/Processing/libraries/minim/library/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/Processing/libraries/minim/library/jsminim.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/Processing/libraries/minim/library/minim.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/Processing/libraries/minim/library/mp3spi1.9.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/Processing/libraries/minim/library/tritonus_aos.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/Documents/Processing/libraries/minim/library/tritonus_share.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

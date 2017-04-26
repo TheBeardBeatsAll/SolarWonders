@@ -215,7 +215,7 @@ public class Planet extends Sun
 	  public void display2() 
 	  {
 	      parent.pushMatrix();
-	      parent.translate(width/2, height/2, 600);
+	      parent.translate(width/2, height/2, 400);
 	      parent.rotateY(rot2);
 	      parent.shape(planet);
 	      parent.popMatrix();

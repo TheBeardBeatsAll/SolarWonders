@@ -49,7 +49,7 @@ public class SolarWonders extends PApplet
 		sun = new Sun(this, imgs[9], sSystem);
 		rPlanet = new Planet(this, sun.mass, width - width/5, -width/7, 0, 200, 100, 0, imgs[8], imgs, sSystem);
 		lPlanet = new Planet(this, sun.mass, width/27, width/6, 0, 450, 100, 0, imgs[4], imgs, sSystem);
-		rPlanet.add_moon(0, width/7, 0, 50, 100, 0, imgs[11], imgs, sSystem);
+		rPlanet.add_moon(0, width/5, 0, 50, 100, 0, imgs[11], imgs, sSystem);
 		playing = music[6];
 		music_menu = -1;
 		pause = timer = 0;
