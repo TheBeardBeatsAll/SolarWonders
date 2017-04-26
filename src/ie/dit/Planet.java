@@ -20,7 +20,7 @@ public class Planet extends Sun
 	  float x_coord, z_coord, y_coord, size;
 	  float period_acc, parent_mass, period_vel, rot, rot2;
 	  double major, acc, eccentricity;
-	  double theta, grav, vel, sigma;
+	  double theta, grav, vel;
 	  boolean fade, lock_t, lock_m;
 	  ArrayList<Planet> moons = new ArrayList<Planet>();
 	  ArrayList<PVector> trail = new ArrayList<PVector>();
@@ -66,12 +66,7 @@ public class Planet extends Sun
 		  max_moons = 5;
 		  period_acc = 3f;
 		  period_vel = (float) Math.sqrt(period_acc);//you multiply acc by x then you multiply vel by sqrt(x)
-		  adjacent = new PVector(0, y_coord, 0);
-		  sigma = Math.asin(adjacent.mag()/location.mag());
-		  if(y_coord > 0)
-		  {
-			  sigma *= -1;
-		  }
+		  
 		  r_c = parent.random(100, 255);
 		  g_c = parent.random(100, 255);
 		  b_c = parent.random(100, 255);
@@ -171,7 +166,7 @@ public class Planet extends Sun
 	  
 	  private void trails()
 	  {
-		  trailPosition = new PVector(location.x, 0, location.z);
+		  trailPosition = new PVector(location.x, location.y, location.z);
 	      trail.add(trailPosition);
 	      int trailLength = trail.size() - 2;
 
@@ -180,9 +175,10 @@ public class Planet extends Sun
 	        trailPosition = trail.get(i);
 	        adjacent = trail.get(i + 1);
 
+	        parent.noFill();
 	        parent.stroke(r_c, g_c, b_c,255*i/trailLength);
-	        parent.line(trailPosition.x, 0, trailPosition.z,
-	        		adjacent.x, 0, adjacent.z);
+	        parent.line(trailPosition.x, trailPosition.y, trailPosition.z,
+	        		adjacent.x, adjacent.y, adjacent.z);
 	      }
 	      if (trailLength >= trailSize)
 	      {
@@ -199,7 +195,6 @@ public class Planet extends Sun
 	  public void display() 
 	  {
 	      parent.pushMatrix();
-	      parent.rotateX((float) sigma);
 	      trails();
 	      parent.translate(location.x, location.y, location.z);
 	      parent.pushMatrix();
@@ -222,11 +217,57 @@ public class Planet extends Sun
 	      parent.pushMatrix();
 	      parent.translate(width/2, height/2, 600);
 	      parent.rotateY(rot2);
-
 	      parent.shape(planet);
 	      parent.popMatrix();
+	      update_bars();
 	      info();
 	      rot2 += .001f;
+	  }
+	  
+	  public void update_bars()
+	  {
+		  for(int i = 0; i < sBars.size(); i++)
+		  {
+			  Scrollbar s = sBars.get(i);
+			  switch(i)
+			  {
+			  	case 0:
+			  	{
+			  		if(size + (s.sPos - s.sliderStart()) > 10 && size + (s.sPos - s.sliderStart()) < 100)
+			  		{
+				  		parent.noStroke();
+					    planet = parent.createShape(PConstants.SPHERE, size + (s.sPos - s.sliderStart()));
+						planet.setTexture(texture);
+			  		}
+			  		break;
+			  	}
+			  	case 1:
+			  	{
+			  		if(location.x + (s.sPos - s.sliderStart()) > 150 && location.x + (s.sPos - s.sliderStart()) < 10000)
+			  		{
+			  			location.x = (float) (location.x + (s.sPos - s.sliderStart()) * 0.1);
+			  		}
+			  		break;
+			  	}
+			  	case 2:
+			  	{
+			  		if(location.z + (s.sPos - s.sliderStart()) > 150 && location.z + (s.sPos - s.sliderStart()) < 10000)
+			  		{
+			  			location.z = (float) (location.z + (s.sPos - s.sliderStart()) * 0.1);
+			  		}
+			  		break;
+			  	}
+			  	case 3:
+			  	{
+			  		if(eccentricity + ((s.sPos - s.sliderStart()) * 0.01) > 0.000000001 && eccentricity + ((s.sPos - s.sliderStart()) * 0.01) < 0.4)
+			  		{
+			  			eccentricity = eccentricity + ((s.sPos - s.sliderStart()) * 0.01);
+			  		}
+			  		break;
+			  	}
+			  }
+		  }
+		  init_vel();
 	  }
 	  
 	  public void bars()
@@ -242,9 +283,6 @@ public class Planet extends Sun
 			sBars.add(scrollbar);
 			scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
 			infoLocation.y + infoSize.y * .625f);
-			sBars.add(scrollbar);
-			scrollbar = new Scrollbar(parent, sSystem.size() - 1, infoLocation.x, infoLocation.y, infoSize.x, infoSize.y, 
-			infoLocation.y + infoSize.y * .775f);
 			sBars.add(scrollbar);
 	  }
 	  
@@ -265,12 +303,10 @@ public class Planet extends Sun
 					infoLocation.y + infoSize.y * .1f);
 		  parent.text("X_Coord:", infoLocation.x + infoSize.x / 2,
 					infoLocation.y + infoSize.y * .25f);
-		  parent.text("Y_Coord:", infoLocation.x + infoSize.x / 2,
-					infoLocation.y + infoSize.y * .4f);
 		  parent.text("Z_Coord:", infoLocation.x + infoSize.x / 2,
-					infoLocation.y + infoSize.y * .55f);
+					infoLocation.y + infoSize.y * .4f);
 		  parent.text("Eccentricity:", infoLocation.x + infoSize.x / 2,
-					infoLocation.y + infoSize.y * .7f);
+					infoLocation.y + infoSize.y * .55f);
 		  parent.fill(247, 255, 28, add_m);
 		  parent.text("Add Moon", infoLocation.x + infoSize.x / 2,
 					infoLocation.y + infoSize.y * .875f);
@@ -359,7 +395,6 @@ public class Planet extends Sun
 							
 				  for(int i=0; i < 9; i++)
 				  {
-					  parent.noStroke();
 					  parent.shape(surfaces[i]);
 				  }
 				  //width * 0.0235f + j, height * 0.715f + rec
@@ -370,9 +405,10 @@ public class Planet extends Sun
 						{	
 							if(((parent.mouseX > width * 0.0235f + j && parent.mouseX < (width * 0.0235f+j) + 75) && (parent.mouseY > height * 0.715f+rec && parent.mouseY < (height * 0.715f+rec) + 50 ) ) )
 							{
+								texture = imgs[i];
 								parent.noStroke();
 								planet = parent.createShape(PConstants.SPHERE, size);
-								planet.setTexture(imgs[i]);
+								planet.setTexture(texture);
 								break;
 							}
 							else

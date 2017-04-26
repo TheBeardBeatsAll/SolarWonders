@@ -14,7 +14,6 @@ public class SolarWonders extends PApplet
 	Sun sun;
 	Star star, comet, trail;
 	Planet rPlanet, lPlanet;
-	
 	ArrayList<Planet> sSystem = new ArrayList<Planet>();
 	ArrayList<Star> stars = new ArrayList<Star>();
 	ArrayList<Star> comets = new ArrayList<Star>();
@@ -105,6 +104,55 @@ public class SolarWonders extends PApplet
 			case 2:
 			{
 				menu_background();
+				textAlign(LEFT, BOTTOM);
+				fill(255, 125);
+				pushMatrix();
+				translate(0, 0, 480);
+				rect(width/2-150, height/2-50, 300, 115);
+				
+				textSize(15);
+				fill(247, 255, 28);
+				text("Instructions", width/2-145, height/2-35);
+				textSize(10);
+				fill(247, 255, 28, ins);
+				text("Return to Menu", width/2+45, height/2+60);			
+				textSize(5);
+				textAlign(LEFT, TOP);
+				fill(247, 255, 28);
+				text("* Add Planet : To add a planet, press the Add Planet button in the top left corner"
+						+ "\n* Customise Planets :\t - Press W or S to cycle through the planets. "
+						+ "\n                  \t- Within a planet's info box, you can customise the planet's size,\nthe planet's x, y and z coordinates, the eccentricity of a planet's orbit, the texture\nof the planet, and an option to add a moon to the planet. "
+						+ "\n                  \t- To add a moon, click the Add Moon button. "
+						+ "\n                  \t- To change the texture of the planet, click the Textures button."
+						+ "\n* Change Camera Angle : Press 1, 2, or 3 to cycle through the camera angles"
+						+ "\n* Change Music : To change the song, click the drop down menu in the top right\ncorner and select a song ", width/2-145, height/2-25);
+				popMatrix();
+				
+				if((mouseX > width/2+155 && mouseX < width/2+520) && (mouseY > height/2+185 && mouseY < height/2+220))
+				{
+					if(fade == false)
+					{
+						ins = ins - 4;
+						
+						if(ins < 50)
+						{
+							fade = true;
+						}
+					}
+					else
+					{
+						ins = ins + 4;
+						
+						if(ins > 250)
+						{
+							fade = false;
+						}
+					}
+				}
+				else
+				{
+					ins = 255;
+				}
 				break;
 			}
 			case 3:
@@ -373,6 +421,7 @@ public class SolarWonders extends PApplet
 	
 	public void text_menu()
 	{
+		textAlign(LEFT, BOTTOM);
 		fill(255, 75);
 		rect(width/2 - 200, height/2 - 150, 400, 275);
 		
@@ -529,14 +578,19 @@ public class SolarWonders extends PApplet
 			
 			if(mouseCheck(location.x, size.x, location.y, size.y) && sSystem.size() <= 10)
 			{
-				Planet planet = new Planet(this, sun.mass, width/4 + interval, 0, 0, 50, 100, 0, imgs[0], imgs, sSystem);
+				Planet planet = new Planet(this, sun.mass, width/4 + interval, 0, 0, 50, 100, 0.2, imgs[0], imgs, sSystem);
 				planet.bars();
 				sSystem.add(planet);
 				planet_choice = sSystem.size();
 				interval += width/11;
 			}
 		}
-		
+		if((mouseX > width/2+155 && mouseX < width/2+520) && (mouseY > height/2+185 && mouseY < height/2+220) && menu_choice == 2)
+		{
+			menu_choice = 1;
+		}
+
+
 		if(menu_choice == 1)
 		{
 			if(mouseCheck(width/2-50, 105, height/2-55, 35))
